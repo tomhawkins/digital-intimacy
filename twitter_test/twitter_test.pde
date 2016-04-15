@@ -10,11 +10,21 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import java.net.URL; 
+import java.net.URLEncoder;
+import java.net.MalformedURLException; 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
+
+
 import java.util.*;
 
 
 
 Twitter twitter;
+URL url;
 
 String searchString = "#i7226684";
 int currentTweet;
@@ -68,20 +78,20 @@ void getNewTweets()
     Query query = new Query(searchString);
     QueryResult result = twitter.search(query);
     tweets = result.getTweets();
-
   }
   catch (TwitterException te)
   {
     System.out.println("Failed to search tweets: " + te.getMessage());
     System.exit(-1);
   }
-
 }
 
 void getScreenName()
 {
   Status status = tweets.get(currentTweet);
   User user = status.getUser();
+
+  delay(15000);
 
   status.getUser();
   user.getLocation();
@@ -98,11 +108,18 @@ void getScreenName()
 
 void refreshTweets()
 {
+
+
   while (true)
   {
+
+
+
     getNewTweets();
 
     println("Updated Tweets");
+    dump();
+    delay(15000);
   }
 }
 
@@ -148,7 +165,11 @@ void getDetails()
   text(userFollowers + " followers", (width/2), 450);
 }
 
-void mousePressed() {
+void getImage()
+{
+}
+
+void dump() {
   Status status = tweets.get(currentTweet);
   User user = status.getUser();
 
@@ -157,7 +178,16 @@ void mousePressed() {
   user.getFollowersCount();
   status.getText();
   status.getCreatedAt();
+  
+  String name = user.getScreenName();
+  String location = user.getLocation();
+  int followers = user.getFollowersCount();
+  String tweet = status.getText();
+  
+  String encodedTweet = URLEncoder.encode(tweet);
 
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/?screename=" + user.getScreenName() + "&location=" + user.getLocation() + "&followers=" + user.getFollowersCount() + "&tweet=" + status.getText());
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet);
   get.send();
+  println("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet);
+  println("Dumped");
 }
