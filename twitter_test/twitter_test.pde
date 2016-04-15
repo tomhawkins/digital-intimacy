@@ -1,3 +1,5 @@
+import http.requests.*;
+
 import twitter4j.conf.*;
 import twitter4j.*;
 import twitter4j.auth.*;
@@ -9,6 +11,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import java.util.*;
+
+
 
 Twitter twitter;
 
@@ -64,12 +68,14 @@ void getNewTweets()
     Query query = new Query(searchString);
     QueryResult result = twitter.search(query);
     tweets = result.getTweets();
+
   }
   catch (TwitterException te)
   {
     System.out.println("Failed to search tweets: " + te.getMessage());
     System.exit(-1);
   }
+
 }
 
 void getScreenName()
@@ -97,8 +103,6 @@ void refreshTweets()
     getNewTweets();
 
     println("Updated Tweets");
-
-    delay(10000);
   }
 }
 
@@ -144,6 +148,16 @@ void getDetails()
   text(userFollowers + " followers", (width/2), 450);
 }
 
-void getImage()
-{
+void mousePressed() {
+  Status status = tweets.get(currentTweet);
+  User user = status.getUser();
+
+  status.getUser();
+  user.getLocation();
+  user.getFollowersCount();
+  status.getText();
+  status.getCreatedAt();
+
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/?screename=" + user.getScreenName() + "&location=" + user.getLocation() + "&followers=" + user.getFollowersCount() + "&tweet=" + status.getText());
+  get.send();
 }
