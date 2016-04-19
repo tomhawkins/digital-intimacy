@@ -25,6 +25,7 @@ URL url;
 
 String searchString = "#i7226684";
 Status currentTweet;
+Status newTweet;
 User user;
 PFont f;
 
@@ -47,7 +48,7 @@ void setup()
 
   getNewTweets();
 
-  thread("refreshTweets");
+  //thread("refreshTweets");
 }
 
 void draw()
@@ -60,17 +61,21 @@ void draw()
   getTweet();
   getDetails();
   getImage();
-  delay(15000);
+  delay(7000);
+
+  refreshTweets();
 }
 
 void getNewTweets()
 {
   try
   {
+    println("Getting Tweet");
     Query query = new Query(searchString);
     QueryResult result = twitter.search(query);
     currentTweet = result.getTweets().get(0);
     user = currentTweet.getUser();
+    draw();
   }
   catch (TwitterException te)
   {
@@ -83,10 +88,38 @@ void refreshTweets()
 {
   while (true)
   {
-    getNewTweets();
+    try
+    {
+      //println(currentTweet.getText());
+
+      Query query = new Query(searchString);
+      QueryResult result = twitter.search(query);
+
+      newTweet = result.getTweets().get(0);
+
+      println(currentTweet.getText());
+      println(newTweet.getText());
+
+      if (currentTweet.getText().equals(newTweet.getText()) == true) {
+        println("No New Tweets");
+        draw();
+      } else {
+        println("New Tweet Found");
+        currentTweet = newTweet;
+        user = currentTweet.getUser();
+        println("Focus currentTweet Updated");
+        dump();
+        draw();
+      }
+    }
+    catch (TwitterException te)
+    {
+      System.out.println("Failed to search tweets: " + te.getMessage());
+      System.exit(-1);
+    }
+
     println("Updated Tweets");
-    dump();
-    delay(15000);
+    delay(7000);
   }
 }
 
