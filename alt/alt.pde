@@ -1,4 +1,4 @@
-import http.requests.*; //<>//
+import http.requests.*; //<>// //<>//
 
 import twitter4j.conf.*;
 import twitter4j.*;
@@ -56,13 +56,12 @@ void draw()
   textFont(f);
   fill(255);
   background(0);
-
+  println("not locked");
   getScreenName();
   getTweet();
   getDetails();
   getImage();
   delay(7000);
-
   refreshTweets();
 }
 
@@ -75,7 +74,6 @@ void getNewTweets()
     QueryResult result = twitter.search(query);
     currentTweet = result.getTweets().get(0);
     user = currentTweet.getUser();
-    draw();
   }
   catch (TwitterException te)
   {
@@ -85,43 +83,40 @@ void getNewTweets()
 }
 
 void refreshTweets()
+
 {
-  while (true)
+  try
   {
-    try
-    {
-      //println(currentTweet.getText());
+    //println(currentTweet.getText());
 
-      Query query = new Query(searchString);
-      QueryResult result = twitter.search(query);
+    Query query = new Query(searchString);
+    QueryResult result = twitter.search(query);
 
-      newTweet = result.getTweets().get(0);
+    newTweet = result.getTweets().get(0);
 
-      println(currentTweet.getText());
-      println(newTweet.getText());
+    println(currentTweet.getText());
+    println(newTweet.getText());
 
-      if (currentTweet.getText().equals(newTweet.getText()) == true) {
-        println("No New Tweets");
-        draw();
-      } else {
-        println("New Tweet Found");
-        currentTweet = newTweet;
-        user = currentTweet.getUser();
-        println("Focus currentTweet Updated");
-        dump();
-        draw();
-      }
+    if (currentTweet.getText().equals(newTweet.getText()) == true) {
+      println("No New Tweets");
+    } else {
+      println("New Tweet Found");
+      currentTweet = newTweet;
+      user = currentTweet.getUser();
+      println("Focus currentTweet Updated");
+      dump();
     }
-    catch (TwitterException te)
-    {
-      System.out.println("Failed to search tweets: " + te.getMessage());
-      System.exit(-1);
-    }
-
-    println("Updated Tweets");
-    delay(7000);
   }
+  catch (TwitterException te)
+  {
+    System.out.println("Failed to search tweets: " + te.getMessage());
+    System.exit(-1);
+  }
+
+  println("Updated Tweets");
+  delay(7000);
 }
+
 
 void getScreenName()
 {
@@ -217,13 +212,16 @@ void mousePressed() {
   //processing.data.JSONObject values = json.getJSONObject("entries");
 
   for (int i = 0; i < values.size(); i++) {
+    for (int s = 50; s < values.size(); s+=50) {
 
-    processing.data.JSONObject entry = values.getJSONObject(i); 
+      processing.data.JSONObject entry = values.getJSONObject(i); 
 
-    int entry_id = entry.getInt("intimacy_id");
-    String entry_screename = entry.getString("intimacy_screename");
-    String entry_location = entry.getString("intimacy_location");
+      int entry_id = entry.getInt("intimacy_id");
+      String entry_screename = entry.getString("intimacy_screename");
+      String entry_location = entry.getString("intimacy_location");
 
-    println(entry_id + ", " + entry_screename + ", " + entry_location);
+      println(entry_screename + ", " + entry_location);
+      text((entry_screename + ", " + entry_location), 300, s);
+    }
   }
 }
