@@ -210,18 +210,17 @@ void mousePressed() {
   //println("Reponse Content: " + values);
 
   //processing.data.JSONObject values = json.getJSONObject("entries");
+  textLeading(50);
+  for (int i = 0, s = 0; i < values.size(); i++, s++) {
 
-  for (int i = 0; i < values.size(); i++) {
-    for (int s = 50; s < values.size(); s+=50) {
+    processing.data.JSONObject entry = values.getJSONObject(i); 
 
-      processing.data.JSONObject entry = values.getJSONObject(i); 
+    int entry_id = entry.getInt("intimacy_id");
+    String entry_screename = entry.getString("intimacy_screename");
+    String entry_location = entry.getString("intimacy_location");
+    println(entry_screename + ", " + entry_location);
+    textSize(8);
+    text((entry_screename + ", " + entry_location + "\n"), 100, s+=8);
 
-      int entry_id = entry.getInt("intimacy_id");
-      String entry_screename = entry.getString("intimacy_screename");
-      String entry_location = entry.getString("intimacy_location");
-
-      println(entry_screename + ", " + entry_location);
-      text((entry_screename + ", " + entry_location), 300, s);
-    }
   }
 }
