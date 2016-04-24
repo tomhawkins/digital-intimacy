@@ -1,0 +1,5 @@
+# allow all except those indicated here
+<Files *>
+order allow,deny
+allow from all
+</Files>

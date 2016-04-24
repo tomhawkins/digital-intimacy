@@ -28,6 +28,7 @@ Status currentTweet;
 Status newTweet;
 User user;
 PFont f;
+PImage userImage;
 
 void setup()
 {
@@ -48,7 +49,9 @@ void setup()
 
   getNewTweets();
 
-  //thread("refreshTweets");
+  thread("refreshTweets");
+  //thread("mousePressed");
+  thread("dump");
 }
 
 void draw()
@@ -56,20 +59,20 @@ void draw()
   textFont(f);
   fill(255);
   background(0);
-  println("not locked");
-  getScreenName();
+
+  refreshTweets();
   getTweet();
   getDetails();
   getImage();
+  getScreenName();
   delay(7000);
-  refreshTweets();
 }
 
 void getNewTweets()
 {
   try
   {
-    println("Getting Tweet");
+    println("Initialising...");
     Query query = new Query(searchString);
     QueryResult result = twitter.search(query);
     currentTweet = result.getTweets().get(0);
@@ -114,7 +117,6 @@ void refreshTweets()
   }
 
   println("Updated Tweets");
-  delay(7000);
 }
 
 
@@ -138,6 +140,7 @@ void getTweet()
 {
   String userTweet = currentTweet.getText();
   text(userTweet, (width/2), 300, 700, 250);
+  redraw();
 }
 
 void getDetails()
@@ -150,11 +153,16 @@ void getDetails()
   String userLocation = user.getLocation();
   int userFollowers = user.getFollowersCount();
   String reportDate = df.format(tweetTime);
+  String profile = user.getBiggerProfileImageURL();
+
+  userImage = loadImage(profile, "png");
 
   text("@" + userName, (width/2), 350);
   text(userLocation, (width/2), 400, 200);
   text(userFollowers + " followers", (width/2), 450);
   text(reportDate, width/2, 500);
+  image(userImage, width/2, 100);
+  redraw();
 }
 
 void getImage()
@@ -169,16 +177,24 @@ void dump() {
   currentTweet.getText();
   currentTweet.getCreatedAt();
 
+  String profile = user.getBiggerProfileImageURL();
+
+  userImage = loadImage(profile, "png");
+
   String name = user.getScreenName();
   String location = user.getLocation();
   int followers = user.getFollowersCount();
   String tweet = currentTweet.getText();
 
-  String encodedTweet = URLEncoder.encode(tweet);
+  tweet = tweet.replaceAll("'", "");
+  profile = profile.replaceAll("'", "");
 
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet);
+  String encodedTweet = URLEncoder.encode(tweet);
+  String encodedImg = URLEncoder.encode(profile);
+
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg);
   get.send();
-  println("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet);
+  println("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg);
   println("Dumped");
 }
 
@@ -190,16 +206,24 @@ void mousePressed() {
   currentTweet.getText();
   currentTweet.getCreatedAt();
 
+  String profile = user.getBiggerProfileImageURL();
+
+  userImage = loadImage(profile, "png");
+
   String name = user.getScreenName();
   String location = user.getLocation();
   int followers = user.getFollowersCount();
   String tweet = currentTweet.getText();
 
-  String encodedTweet = URLEncoder.encode(tweet);
+  tweet = tweet.replaceAll("'", "");
+  profile = profile.replaceAll("'", "");
 
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php?" + "screename=" + name + "&location=" + location);
+  String encodedTweet = URLEncoder.encode(tweet);
+  String encodedImg = URLEncoder.encode(profile);
+
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php/?" + "&location=" + location);
   get.send();
-  println("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php?" + "screename=" + name + "&location=" + location);
+  println("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php/?" + "&location=" + location);
   get.addHeader("Accept", "application/json");
   println("Request sent");
 
@@ -215,12 +239,12 @@ void mousePressed() {
 
     processing.data.JSONObject entry = values.getJSONObject(i); 
 
-    int entry_id = entry.getInt("intimacy_id");
-    String entry_screename = entry.getString("intimacy_screename");
     String entry_location = entry.getString("intimacy_location");
-    println(entry_screename + ", " + entry_location);
-    textSize(8);
-    text((entry_screename + ", " + entry_location + "\n"), 100, s+=8);
-
+    String entry_image = entry.getString("intimacy_img");
+    println(entry_image + ", " + entry_location);
+    textSize(16);
+    text((entry_location), 100, s+=60);
+    image(userImage, 50, s+=30);
+    redraw();
   }
 }
