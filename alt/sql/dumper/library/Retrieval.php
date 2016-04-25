@@ -26,37 +26,39 @@ class Retrieval {
         
         
 			";
-//		print($sql."\n"); # used for testing purposes only
+		//print($sql."\n"); # used for testing purposes only
 		$result = $this->db->select($sql);
+        
+        //return $result;
         
         $objTmp = (object) array('aFlat' => array());
 array_walk_recursive($result, create_function('&$v, $k, &$t', '$t->aFlat[] = $v;'), $objTmp);
 
 //return($objTmp->aFlat);
-        
-        $array = json_decode(json_encode($objTmp), True);
-        $locationlist = "'".implode("', '", $objTmp->aFlat)."'"; //makes format 'hi', 'there', 'everybody'
-
-        return $locationlist;
-        
-        $list = "
-
-        SELECT 
-                        intimacy_screename 
-        FROM 
-                        intimacy 
-        WHERE 
-                        intimacy_location
-        IN 
-                        ($locationlist);
-        ";
-            
-        $userloc = $this->db->select($list);
-        
+//        
+//        $array = json_decode(json_encode($objTmp), True);
+//        $locationlist = "'".implode("', '", $objTmp->aFlat)."'"; //makes format 'hi', 'there', 'everybody'
+//
+//        return $locationlist;
+//        
+//        $list = "
+//
+//        SELECT 
+//                        intimacy_screename 
+//        FROM 
+//                        intimacy 
+//        WHERE 
+//                        intimacy_location
+//        IN 
+//                        ($locationlist);
+//        ";
+//            
+//        $userloc = $this->db->select($list);
+//        
 //JSON encode for processing parser
-//        $encoded = json_encode($userloc);
-//		print_r($encoded);
-		//return $userloc;
+        $encoded = json_encode($result);
+		print_r($encoded);
+		return $userloc;
 	}
 
     

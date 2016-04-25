@@ -23,6 +23,7 @@ import java.util.*;
 Twitter twitter;
 URL url;
 
+processing.data.JSONArray locationlist;
 String searchString = "#i7226684";
 Status currentTweet;
 Status newTweet;
@@ -221,30 +222,33 @@ void mousePressed() {
   String encodedTweet = URLEncoder.encode(tweet);
   String encodedImg = URLEncoder.encode(profile);
 
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php/?" + "&location=" + location);
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/index.php");
+  GetRequest locationlist = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php");
   get.send();
-  println("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php/?" + "&location=" + location);
+  locationlist.send();
   get.addHeader("Accept", "application/json");
   println("Request sent");
+  
+  processing.data.JSONObject values = processing.data.JSONObject.parse(get.getContent());
+  processing.data.JSONArray locArray = processing.data.JSONArray.parse(locationlist.getContent());
+  
+  processing.data.JSONArray locations = values.getJSONArray("1");
+  processing.data.JSONArray list = locArray.getJSONArray(1);
+  println(locations);
+  
+  //String[] elementNames = values.getNames();
+  //for (int i = 0; i < locArray.size(); i++) {
+  //  locArray.getJSONObject(i);
+  //  String loc = locArray.getString(i);
+  //  println(loc);
+  //}
+  //processing.data.JSONArray bournemouth = values.getJSONArray("Bournemouth");
+  //processing.data.JSONArray frankfurt = values.getJSONArray("Frankfurt");
+  //processing.data.JSONArray springfield = values.getJSONArray("Springfield");
+  //println(bournemouth);
+  //println(frankfurt);
+  //println(springfield);
 
-  String object = get.getContent();
 
-  processing.data.JSONArray values = processing.data.JSONArray.parse(object);
-
-  //println("Reponse Content: " + values);
-
-  //processing.data.JSONObject values = json.getJSONObject("entries");
-  textLeading(50);
-  for (int i = 0, s = 0; i < values.size(); i++, s++) {
-
-    processing.data.JSONObject entry = values.getJSONObject(i); 
-
-    String entry_location = entry.getString("intimacy_location");
-    String entry_image = entry.getString("intimacy_img");
-    println(entry_image + ", " + entry_location);
-    textSize(16);
-    text((entry_location), 100, s+=60);
-    image(userImage, 50, s+=30);
-    redraw();
-  }
+  //println(loc);
 }

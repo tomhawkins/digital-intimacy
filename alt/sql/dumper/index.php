@@ -36,5 +36,8 @@ for($i=0; $i<count($locations); $i++){
     }
 }
 
-print_r($everything);
+        $encoded = json_encode($everything);
+		print_r($encoded);
+		return $encoded;
+
 ?>
