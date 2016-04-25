@@ -22,6 +22,8 @@ class Retrieval {
         SELECT DISTINCT intimacy_location 
         
         FROM intimacy
+        GROUP BY intimacy_location
+        
         
 			";
 //		print($sql."\n"); # used for testing purposes only
@@ -32,10 +34,10 @@ array_walk_recursive($result, create_function('&$v, $k, &$t', '$t->aFlat[] = $v;
 
 //return($objTmp->aFlat);
         
-        //$array = json_decode(json_encode($objTmp), True);
+        $array = json_decode(json_encode($objTmp), True);
         $locationlist = "'".implode("', '", $objTmp->aFlat)."'"; //makes format 'hi', 'there', 'everybody'
 
-        //return $locationlist;
+        return $locationlist;
         
         $list = "
 
@@ -54,7 +56,39 @@ array_walk_recursive($result, create_function('&$v, $k, &$t', '$t->aFlat[] = $v;
 //JSON encode for processing parser
 //        $encoded = json_encode($userloc);
 //		print_r($encoded);
-		return $userloc;
+		//return $userloc;
 	}
+
+    
+	public function get_locations(){
+        
+		# this method is used to query the database to retrieve specific data
+		$sql = "
+        
+        SELECT DISTINCT intimacy_location 
+        
+        FROM intimacy
+        GROUP BY intimacy_location;";
+        
+     $result = $this->db->select($sql);
+        return $result;
+    }
+    
+    
+    public function screenname_at_location($location){
+        
+		# this method is used to query the database to retrieve specific data
+		$sql = "
+        
+        SELECT
+                intimacy_screename
+        FROM
+                intimacy
+        WHERE
+                intimacy_location = '".$location."';";
+ //   print($sql);
+     $result = $this->db->select($sql);
+        return $result;
+    }
 }
 ?>

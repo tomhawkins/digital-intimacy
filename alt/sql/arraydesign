@@ -1,0 +1,20 @@
+Array
+(
+    [0] => Bournemouth
+        (
+            [intimacy_screename] => tomdlr
+            [intimacy_screename] => tomdlr
+            [intimacy_screename] => tomdlr
+        )
+
+    [1] => Frankfurt
+        (
+            [intimacy_screename] => amityRIOT
+            [intimacy_screename] => amityRIOT
+        )
+
+    [2] => Springfield
+        (
+            [intimacy_screename] => charlietc
+        )
+)
