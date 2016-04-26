@@ -62,7 +62,7 @@ void draw()
   background(0);
 
   refreshTweets();
-  dump();
+  //dump();
   //listUsers();
   getTweet();
   getDetails();
@@ -149,7 +149,7 @@ void getTweet()
 void getDetails()
 {
 
-  DateFormat df = new SimpleDateFormat("hh:mm:ss");  
+  DateFormat df = new SimpleDateFormat("HH:mm:ss");  
   Date tweetTime = currentTweet.getCreatedAt();   
 
   String userName = user.getScreenName();
@@ -197,10 +197,11 @@ void dump() {
 
   String encodedTweet = URLEncoder.encode(tweet);
   String encodedImg = URLEncoder.encode(profile);
+  String encodedTime = URLEncoder.encode(reportDate);
 
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg + reportDate);
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg + "&time=" + encodedTime);
   get.send();
-  println("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg + reportDate);
+  println("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg + "&time=" + encodedTime);
   println("Dumped");
 }
 
