@@ -62,6 +62,7 @@ void draw()
   background(0);
 
   refreshTweets();
+  listUsers();
   getTweet();
   getDetails();
   getImage();
@@ -199,56 +200,64 @@ void dump() {
   println("Dumped");
 }
 
-void mousePressed() {
-
-  currentTweet.getUser();
-  user.getLocation();
-  user.getFollowersCount();
-  currentTweet.getText();
-  currentTweet.getCreatedAt();
-
-  String profile = user.getBiggerProfileImageURL();
-
-  userImage = loadImage(profile, "png");
-
-  String name = user.getScreenName();
-  String location = user.getLocation();
-  int followers = user.getFollowersCount();
-  String tweet = currentTweet.getText();
-
-  tweet = tweet.replaceAll("'", "");
-  profile = profile.replaceAll("'", "");
-
-  String encodedTweet = URLEncoder.encode(tweet);
-  String encodedImg = URLEncoder.encode(profile);
-
+void listUsers() {
+  
   GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/index.php");
-  GetRequest locationlist = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php");
+  GetRequest locationRequest = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php");
   get.send();
-  locationlist.send();
+  locationRequest.send();
   get.addHeader("Accept", "application/json");
   println("Request sent");
-  
+
   processing.data.JSONObject values = processing.data.JSONObject.parse(get.getContent());
-  processing.data.JSONArray locArray = processing.data.JSONArray.parse(locationlist.getContent());
-  
-  processing.data.JSONArray locations = values.getJSONArray("1");
-  processing.data.JSONArray list = locArray.getJSONArray(1);
-  println(locations);
-  
-  //String[] elementNames = values.getNames();
-  //for (int i = 0; i < locArray.size(); i++) {
-  //  locArray.getJSONObject(i);
-  //  String loc = locArray.getString(i);
-  //  println(loc);
-  //}
-  //processing.data.JSONArray bournemouth = values.getJSONArray("Bournemouth");
-  //processing.data.JSONArray frankfurt = values.getJSONArray("Frankfurt");
-  //processing.data.JSONArray springfield = values.getJSONArray("Springfield");
-  //println(bournemouth);
-  //println(frankfurt);
-  //println(springfield);
+  processing.data.JSONArray locArray = processing.data.JSONArray.parse(locationRequest.getContent());
 
+  for (int i = 0; i < locArray.size(); i++) {
+    processing.data.JSONObject locObject = locArray.getJSONObject(i);
+    String locString = locObject.getString("intimacy_location");
+    println("Location: " + locString + "\n Users:");
+    processing.data.JSONArray currentLoc = values.getJSONArray(locString);
 
-  //println(loc);
+    for (int ii = 0; ii < currentLoc.size(); ii++) {
+
+      String user = currentLoc.getString(ii);
+      println(user);
+    }
+  }
 }
+
+    void mousePressed() {
+
+      currentTweet.getUser();
+      user.getLocation();
+      user.getFollowersCount();
+      currentTweet.getText();
+      currentTweet.getCreatedAt();
+
+      String profile = user.getBiggerProfileImageURL();
+
+      userImage = loadImage(profile, "png");
+
+      String name = user.getScreenName();
+      String location = user.getLocation();
+      int followers = user.getFollowersCount();
+      String tweet = currentTweet.getText();
+
+      tweet = tweet.replaceAll("'", "");
+      profile = profile.replaceAll("'", "");
+
+      String encodedTweet = URLEncoder.encode(tweet);
+      String encodedImg = URLEncoder.encode(profile);
+    }
+
+
+
+    //processing.data.JSONArray bournemouth = values.getJSONArray("Bournemouth");
+    //processing.data.JSONArray frankfurt = values.getJSONArray("Frankfurt");
+    //processing.data.JSONArray springfield = values.getJSONArray("Springfield");
+    //println(bournemouth);
+    //println(frankfurt);
+    //println(springfield);
+
+
+    //println(loc);
