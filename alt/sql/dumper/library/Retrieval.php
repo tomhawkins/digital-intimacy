@@ -58,7 +58,7 @@ array_walk_recursive($result, create_function('&$v, $k, &$t', '$t->aFlat[] = $v;
 //JSON encode for processing parser
         $encoded = json_encode($result);
 		print_r($encoded);
-		return $userloc;
+		return $result;
 	}
 
 
@@ -93,19 +93,30 @@ array_walk_recursive($result, create_function('&$v, $k, &$t', '$t->aFlat[] = $v;
         return $result;
     }
 
-		public function get_post_times(){
+    public function get_post_times(){
 
 		# this method is used to query the database to retrieve specific data
 		$sql = "
 
-				SELECT
-								intimacy_time
-				FROM
-								intimacy;
-
+        SELECT
+                intimacy_time
+        FROM
+                intimacy;";
  //   print($sql);
-		 $result = $this->db->select($sql);
-				return $result;
-		}
+     $result = $this->db->select($sql);
+        return $result;
+    }
+    
+    public function check_time($start_date, $end_date, $todays_date)
+{
+
+  $start_timestamp = strtotime($start_date);
+  $end_timestamp = strtotime($end_date);
+  $today_timestamp = strtotime($todays_date);
+
+  return (($today_timestamp >= $start_timestamp) && ($today_timestamp <= $end_timestamp));
+
+}
+    
 }
 ?>
