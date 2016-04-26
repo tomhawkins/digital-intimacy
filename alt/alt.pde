@@ -62,7 +62,8 @@ void draw()
   background(0);
 
   refreshTweets();
-  listUsers();
+  dump();
+  //listUsers();
   getTweet();
   getDetails();
   getImage();
@@ -173,6 +174,9 @@ void getImage()
 
 void dump() {
 
+  DateFormat df = new SimpleDateFormat("hh:mm:ss");  
+  Date tweetTime = currentTweet.getCreatedAt(); 
+  String reportDate = df.format(tweetTime);
   currentTweet.getUser();
   user.getLocation();
   user.getFollowersCount();
@@ -194,14 +198,14 @@ void dump() {
   String encodedTweet = URLEncoder.encode(tweet);
   String encodedImg = URLEncoder.encode(profile);
 
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg);
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg + reportDate);
   get.send();
-  println("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg);
+  println("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg + reportDate);
   println("Dumped");
 }
 
 void listUsers() {
-  
+
   GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/index.php");
   GetRequest locationRequest = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php");
   get.send();
@@ -226,30 +230,28 @@ void listUsers() {
   }
 }
 
-    void mousePressed() {
+void mousePressed() {
 
-      currentTweet.getUser();
-      user.getLocation();
-      user.getFollowersCount();
-      currentTweet.getText();
-      currentTweet.getCreatedAt();
+  currentTweet.getUser();
+  user.getLocation();
+  user.getFollowersCount();
+  currentTweet.getText();
+  currentTweet.getCreatedAt();
 
-      String profile = user.getBiggerProfileImageURL();
+  String profile = user.getBiggerProfileImageURL();
 
-      userImage = loadImage(profile, "png");
+  userImage = loadImage(profile, "png");
 
-      String name = user.getScreenName();
-      String location = user.getLocation();
-      int followers = user.getFollowersCount();
-      String tweet = currentTweet.getText();
+  String name = user.getScreenName();
+  String location = user.getLocation();
+  int followers = user.getFollowersCount();
+  String tweet = currentTweet.getText();
 
-      tweet = tweet.replaceAll("'", "");
-      profile = profile.replaceAll("'", "");
+  tweet = tweet.replaceAll("'", "");
+  profile = profile.replaceAll("'", "");
 
-      String encodedTweet = URLEncoder.encode(tweet);
-      String encodedImg = URLEncoder.encode(profile);
-      
-      //--- DEVELOPMENT CODE GOES BELOW--
-      
+  String encodedTweet = URLEncoder.encode(tweet);
+  String encodedImg = URLEncoder.encode(profile);
 
-    }
+  //--- DEVELOPMENT CODE GOES BELOW--
+}
