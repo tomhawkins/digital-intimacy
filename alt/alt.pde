@@ -148,7 +148,7 @@ void getTweet()
 void getDetails()
 {
 
-  DateFormat df = new SimpleDateFormat("dd/MM" + " - " + "hh:mm:ss");  
+  DateFormat df = new SimpleDateFormat("hh:mm:ss");  
   Date tweetTime = currentTweet.getCreatedAt();   
 
   String userName = user.getScreenName();
@@ -248,16 +248,8 @@ void listUsers() {
 
       String encodedTweet = URLEncoder.encode(tweet);
       String encodedImg = URLEncoder.encode(profile);
+      
+      //--- DEVELOPMENT CODE GOES BELOW--
+      
+
     }
-
-
-
-    //processing.data.JSONArray bournemouth = values.getJSONArray("Bournemouth");
-    //processing.data.JSONArray frankfurt = values.getJSONArray("Frankfurt");
-    //processing.data.JSONArray springfield = values.getJSONArray("Springfield");
-    //println(bournemouth);
-    //println(frankfurt);
-    //println(springfield);
-
-
-    //println(loc);
