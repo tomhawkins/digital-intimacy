@@ -31,6 +31,13 @@ User user;
 PFont f;
 PImage userImage;
 
+float posX, posY;
+float radiusX, radiusY;
+float theta;
+float i;
+
+PImage userTime;
+
 void setup()
 {
   size(800, 600, P2D);
@@ -38,6 +45,14 @@ void setup()
   f = createFont("Raleway-ExtraLight.vlw", 32, true);
   textAlign(CENTER);
   rectMode(CENTER);
+
+  posX = posY = 0;
+
+  radiusX = 200;
+  radiusY = 200;
+
+  theta = 0;
+
   ConfigurationBuilder cb = new ConfigurationBuilder();
 
   cb.setOAuthConsumerKey("GIFUGcFWaxYfjXKZVa31SCZFb");
@@ -255,4 +270,27 @@ void mousePressed() {
   String encodedImg = URLEncoder.encode(profile);
 
   //--- DEVELOPMENT CODE GOES BELOW--
+
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=01:00:00.000000&end=03:00:00.000000");
+  get.send();
+  get.addHeader("Accept", "application/json");
+  println("Request sent");
+  
+  background( 0 );
+  translate( width / 2, height / 2 );
+  fill( 255 );
+  
+  processing.data.JSONArray values = processing.data.JSONArray.parse(get.getContent());
+
+  for (int i = 0; i < values.size(); i++) {
+    processing.data.JSONObject timesObject = values.getJSONObject(i);
+    String imgURL = timesObject.getString("intimacy_img");
+    //println(imgURL);
+    
+      userTime = loadImage(imgURL);
+      theta+=30;
+      image(userTime, radiusX * cos(theta), radiusY * sin(theta), 50, 50); 
+      //ellipse( radiusX * cos(theta), radiusY * sin(theta), 30, 30 );
+
+  }
 }

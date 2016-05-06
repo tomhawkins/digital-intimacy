@@ -93,8 +93,8 @@ array_walk_recursive($result, create_function('&$v, $k, &$t', '$t->aFlat[] = $v;
         return $result;
     }
 
-    public function get_post_times($start, $end){
-
+    public function get_post_times($start, $end, $location='Bournemouth'){
+        
 		# this method is used to query the database to retrieve specific data
 		$sql = "
 
@@ -102,9 +102,10 @@ array_walk_recursive($result, create_function('&$v, $k, &$t', '$t->aFlat[] = $v;
                 *
         FROM
                 intimacy
-        WHERE
+        WHERE 
                 intimacy_time >= '".$start."' AND
-                intimacy_time <= '".$end."'
+                intimacy_time <= '".$end."' AND
+                intimacy_location = '".$location."'
         ORDER BY
                 intimacy_time ASC;
                 ";
@@ -112,7 +113,7 @@ array_walk_recursive($result, create_function('&$v, $k, &$t', '$t->aFlat[] = $v;
      $result = $this->db->select($sql);
         return $result;
     }
-
+    
     public function check_time($start_date, $end_date, $todays_date)
 {
 
@@ -123,6 +124,6 @@ array_walk_recursive($result, create_function('&$v, $k, &$t', '$t->aFlat[] = $v;
   return (($today_timestamp >= $start_timestamp) && ($today_timestamp <= $end_timestamp));
 
 }
-
+    
 }
 ?>
