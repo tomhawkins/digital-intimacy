@@ -1,4 +1,4 @@
-import http.requests.*; //<>// //<>//
+import http.requests.*; //<>// //<>// //<>//
 
 import twitter4j.conf.*;
 import twitter4j.*;
@@ -36,6 +36,16 @@ float radiusX, radiusY;
 float theta;
 float i;
 
+float cx;
+float cy;
+float diameter;
+
+float lg_diam;
+float lg_rad;
+float lg_circ;
+
+float sm_diam;
+
 PImage userTime;
 
 void setup()
@@ -48,8 +58,17 @@ void setup()
 
   posX = posY = 0;
 
-  radiusX = 200;
-  radiusY = 200;
+  //radiusX = 200;
+  //radiusY = 200;
+
+  float diameter = width*.9;
+
+  float lg_diam = width * .85;
+  float lg_rad = lg_diam / 2;
+  float lg_circ = PI * lg_diam;
+
+  float cx = width/2.0;
+  float cy = height/2.0;
 
   theta = 0;
 
@@ -271,26 +290,35 @@ void mousePressed() {
 
   //--- DEVELOPMENT CODE GOES BELOW--
 
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=01:00:00.000000&end=03:00:00.000000");
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=23:00:00.000000");
   get.send();
   get.addHeader("Accept", "application/json");
   println("Request sent");
-  
+
   background( 0 );
   translate( width / 2, height / 2 );
-  fill( 255 );
-  
-  processing.data.JSONArray values = processing.data.JSONArray.parse(get.getContent());
 
-  for (int i = 0; i < values.size(); i++) {
+
+  processing.data.JSONArray values = processing.data.JSONArray.parse(get.getContent());
+  theta=0;
+  for (int i = 1; i < values.size(); i++) {
     processing.data.JSONObject timesObject = values.getJSONObject(i);
     String imgURL = timesObject.getString("intimacy_img");
     //println(imgURL);
-    
-      userTime = loadImage(imgURL);
-      theta+=30;
-      image(userTime, radiusX * cos(theta), radiusY * sin(theta), 50, 50); 
-      //ellipse( radiusX * cos(theta), radiusY * sin(theta), 30, 30 );
 
+    //userTime = loadImage(imgURL);
+    //theta+=30;
+    //image(userTime, radiusX * cos(theta), radiusY * sin(theta), 50, 50); 
+    //ellipse( radiusX * cos(theta), radiusY * sin(theta), 30, 30 );
+
+    float angle = a * TWO_PI / values.size();
+    float x = cx + cos(angle) * lg_rad;
+    float y = cy + sin(angle) * lg_rad;
+
+    float sm_diam = (lg_circ / values.size());
+    fill( 255 );
+    //ellipse(x, y, sm_diam, sm_diam);
+    ellipse(x, y, 50, 50);
   }
+  theta=0;
 }
