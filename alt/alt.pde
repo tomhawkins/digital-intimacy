@@ -1,4 +1,4 @@
-import http.requests.*; //<>// //<>// //<>// //<>// //<>//
+import http.requests.*; //<>// //<>// //<>// //<>// //<>// //<>//
 
 import twitter4j.conf.*;
 import twitter4j.*;
@@ -52,11 +52,12 @@ PGraphics graphicalMask;
 
 void setup()
 {
-  size(1280, 800);
+  size(1280, 700);
   smooth(8);
   f = createFont("Raleway-ExtraLight.vlw", 32, true);
   textAlign(CENTER);
   rectMode(CENTER);
+  ellipseMode(CENTER);
 
   //maskImage = loadImage("mask.png");
 
@@ -79,9 +80,9 @@ void setup()
 
   getNewTweets();
 
-  thread("refreshTweets");
+  //thread("refreshTweets");
   //thread("mousePressed");
-  thread("dump");
+  //thread("dump");
 }
 
 void draw()
@@ -90,15 +91,15 @@ void draw()
   fill(255);
   background(0);
 
-  refreshTweets();
-  userTimeRange();
+  //refreshTweets();
+  //userTimeRange();
   //dump();
-  //listUsers();
+  listUsers();
   //getTweet();
   //getDetails();
   //getImage();
   //getScreenName();
-  delay(7000);
+  //delay(7000);
 }
 
 void getNewTweets()
@@ -204,7 +205,7 @@ void getImage()
 
 void dump() {
 
-  DateFormat df = new SimpleDateFormat("hh:mm:ss");  
+  DateFormat df = new SimpleDateFormat("HH:mm:ss");  
   Date tweetTime = currentTweet.getCreatedAt(); 
   String reportDate = df.format(tweetTime);
   currentTweet.getUser();
@@ -228,10 +229,12 @@ void dump() {
   String encodedTweet = URLEncoder.encode(tweet);
   String encodedImg = URLEncoder.encode(profile);
   String encodedTime = URLEncoder.encode(reportDate);
+  String encodedName = URLEncoder.encode(name);
+  String encodedLocation = URLEncoder.encode(location);
 
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg + "&time=" + encodedTime);
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + encodedName + "&location=" + encodedLocation + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg + "&time=" + encodedTime);
   get.send();
-  println("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + name + "&location=" + location + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg + "&time=" + encodedTime);
+  println("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + encodedName + "&location=" + encodedLocation + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg + "&time=" + encodedTime);
   println("Dumped");
 }
 
@@ -258,29 +261,29 @@ void userTimeRange() {
   String encodedTweet = URLEncoder.encode(tweet);
   String encodedImg = URLEncoder.encode(profile);
 
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=03:00:00.000000");
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=07:30:00.000000&end=08:00:00.000000");
   get.send();
   get.addHeader("Accept", "application/json");
   println("Request sent");
 
   background( 0 );
-  //translate( width / 2, height / 2 );
+  //translate(width, height);
 
   //float diameter = width* .9;
 
-  float lg_diam = width * .5;
+  float lg_diam = height * .7;
   float lg_rad = lg_diam / 2;
   float lg_circ = PI * lg_diam;
 
-  float cx = width/2.0;
-  float cy = height/2.0;
+  float cx = 575;
+  float cy = 280;
 
 
 
   processing.data.JSONArray values = processing.data.JSONArray.parse(get.getContent());
-  int count = 10;
-  int threshold = 18;
-  int staticIconSize = 150;
+  int count = values.size();
+  int threshold = 8;
+  int staticIconSize = 100;
   //int count = values.size();
 
   for (int i = 0; i < count; i++) {
@@ -348,8 +351,8 @@ void userTimeRange() {
 
 void listUsers() {
 
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/index.php");
-  GetRequest locationRequest = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php");
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php");
+  GetRequest locationRequest = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/location.php");
   get.send();
   locationRequest.send();
   get.addHeader("Accept", "application/json");
