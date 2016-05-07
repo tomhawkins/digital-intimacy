@@ -1,4 +1,4 @@
-import http.requests.*; //<>// //<>// //<>//
+import http.requests.*; //<>// //<>// //<>// //<>// //<>//
 
 import twitter4j.conf.*;
 import twitter4j.*;
@@ -48,17 +48,17 @@ float angle;
 float sm_diam;
 
 PImage userTime;
-PGraphics maskImage;
+PGraphics graphicalMask;
 
 void setup()
 {
-  size(800, 600, P2D);
+  size(1280, 800);
   smooth(8);
   f = createFont("Raleway-ExtraLight.vlw", 32, true);
   textAlign(CENTER);
   rectMode(CENTER);
 
-  maskImage = loadImage("mask.png");
+  //maskImage = loadImage("mask.png");
 
   posX = posY = 0;
 
@@ -91,12 +91,13 @@ void draw()
   background(0);
 
   refreshTweets();
+  userTimeRange();
   //dump();
   //listUsers();
-  getTweet();
-  getDetails();
-  getImage();
-  getScreenName();
+  //getTweet();
+  //getDetails();
+  //getImage();
+  //getScreenName();
   delay(7000);
 }
 
@@ -234,6 +235,117 @@ void dump() {
   println("Dumped");
 }
 
+void userTimeRange() {
+
+  currentTweet.getUser();
+  user.getLocation();
+  user.getFollowersCount();
+  currentTweet.getText();
+  currentTweet.getCreatedAt();
+
+  String profile = user.getBiggerProfileImageURL();
+
+  userImage = loadImage(profile, "png");
+
+  String name = user.getScreenName();
+  String location = user.getLocation();
+  int followers = user.getFollowersCount();
+  String tweet = currentTweet.getText();
+
+  tweet = tweet.replaceAll("'", "");
+  profile = profile.replaceAll("'", "");
+
+  String encodedTweet = URLEncoder.encode(tweet);
+  String encodedImg = URLEncoder.encode(profile);
+
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=03:00:00.000000");
+  get.send();
+  get.addHeader("Accept", "application/json");
+  println("Request sent");
+
+  background( 0 );
+  //translate( width / 2, height / 2 );
+
+  //float diameter = width* .9;
+
+  float lg_diam = width * .5;
+  float lg_rad = lg_diam / 2;
+  float lg_circ = PI * lg_diam;
+
+  float cx = width/2.0;
+  float cy = height/2.0;
+
+
+
+  processing.data.JSONArray values = processing.data.JSONArray.parse(get.getContent());
+  int count = 10;
+  int threshold = 18;
+  int staticIconSize = 150;
+  //int count = values.size();
+
+  for (int i = 0; i < count; i++) {
+    processing.data.JSONObject timesObject = values.getJSONObject(i);
+    String imgURL = timesObject.getString("intimacy_img");
+    userTime = loadImage(imgURL);
+
+    angle = i * TWO_PI / count;
+    float x = cx + cos(angle) * lg_rad;
+    float y = cy + sin(angle) * lg_rad;
+
+    float sm_diam = (lg_circ / count);
+    int masksize = (int)sm_diam;
+
+    int imgX;
+    int imgY;
+
+    //static sizes------------
+    if (count < threshold == true) {
+      graphicalMask=createGraphics(staticIconSize, staticIconSize);
+    } else {
+      graphicalMask=createGraphics(masksize, masksize);
+    }
+
+    graphicalMask.beginDraw();
+
+    graphicalMask.background(0);
+
+    if (count < threshold == true) {
+      imgX = staticIconSize/2;
+      imgY = staticIconSize/2;
+    } else {
+      imgX = masksize/2;
+      imgY = masksize/2;
+    }
+
+    graphicalMask.fill(255);
+    graphicalMask.noStroke();
+
+    if (count < threshold == true) {
+      graphicalMask.ellipse(imgX, imgY, staticIconSize, staticIconSize);
+    } else {
+      graphicalMask.ellipse(imgX, imgY, masksize, masksize);
+    }
+
+    graphicalMask.endDraw();
+
+    if (count < threshold == true) {
+
+      userTime.resize(staticIconSize, staticIconSize);
+    } else {
+      userTime.resize(masksize, masksize);
+    }
+
+    userTime.mask(graphicalMask);
+
+    if (count < threshold == true) {
+
+      image(userTime, x, y, staticIconSize, staticIconSize);
+    } else {
+      image(userTime, x, y, masksize, masksize);
+    }
+  }
+}
+
 void listUsers() {
 
   GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/index.php");
@@ -284,43 +396,4 @@ void mousePressed() {
   String encodedImg = URLEncoder.encode(profile);
 
   //--- DEVELOPMENT CODE GOES BELOW--
-
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=23:00:00.000000");
-  get.send();
-  get.addHeader("Accept", "application/json");
-  println("Request sent");
-
-  background( 0 );
-  //translate( width / 2, height / 2 );
-
-  float diameter = width*.9;
-
-  float lg_diam = width * .65;
-  float lg_rad = lg_diam / 2;
-  float lg_circ = PI * lg_diam;
-
-  float cx = width/2.0;
-  float cy = height/2.0;
-
-  processing.data.JSONArray values = processing.data.JSONArray.parse(get.getContent());
-  for (int i = 1; i < values.size(); i++) {
-    processing.data.JSONObject timesObject = values.getJSONObject(i);
-    String imgURL = timesObject.getString("intimacy_img");
-    userTime = loadImage(imgURL);
-
-    angle = i * TWO_PI / values.size();
-    float x = cx + cos(angle) * lg_rad;
-    float y = cy + sin(angle) * lg_rad;
-
-    float sm_diam = (lg_circ / values.size());
-    //int masksize = (int)sm_diam;
-
-    maskImage=createGraphics(sm_diam, sm_diam)
-
-    //fill( 255 );
-    //maskImage.resize(masksize, masksize);
-    userTime.resize(masksize, masksize);
-    image(userTime, x, y, sm_diam, sm_diam);
-    userTime.mask(maskImage);
-  }
 }
