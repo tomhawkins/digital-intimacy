@@ -43,10 +43,12 @@ float diameter;
 float lg_diam;
 float lg_rad;
 float lg_circ;
+float angle;
 
 float sm_diam;
 
 PImage userTime;
+PGraphics maskImage;
 
 void setup()
 {
@@ -56,19 +58,12 @@ void setup()
   textAlign(CENTER);
   rectMode(CENTER);
 
+  maskImage = loadImage("mask.png");
+
   posX = posY = 0;
 
   //radiusX = 200;
   //radiusY = 200;
-
-  float diameter = width*.9;
-
-  float lg_diam = width * .85;
-  float lg_rad = lg_diam / 2;
-  float lg_circ = PI * lg_diam;
-
-  float cx = width/2.0;
-  float cy = height/2.0;
 
   theta = 0;
 
@@ -296,29 +291,36 @@ void mousePressed() {
   println("Request sent");
 
   background( 0 );
-  translate( width / 2, height / 2 );
+  //translate( width / 2, height / 2 );
 
+  float diameter = width*.9;
+
+  float lg_diam = width * .65;
+  float lg_rad = lg_diam / 2;
+  float lg_circ = PI * lg_diam;
+
+  float cx = width/2.0;
+  float cy = height/2.0;
 
   processing.data.JSONArray values = processing.data.JSONArray.parse(get.getContent());
-  theta=0;
   for (int i = 1; i < values.size(); i++) {
     processing.data.JSONObject timesObject = values.getJSONObject(i);
     String imgURL = timesObject.getString("intimacy_img");
-    //println(imgURL);
+    userTime = loadImage(imgURL);
 
-    //userTime = loadImage(imgURL);
-    //theta+=30;
-    //image(userTime, radiusX * cos(theta), radiusY * sin(theta), 50, 50); 
-    //ellipse( radiusX * cos(theta), radiusY * sin(theta), 30, 30 );
-
-    float angle = a * TWO_PI / values.size();
+    angle = i * TWO_PI / values.size();
     float x = cx + cos(angle) * lg_rad;
     float y = cy + sin(angle) * lg_rad;
 
     float sm_diam = (lg_circ / values.size());
-    fill( 255 );
-    //ellipse(x, y, sm_diam, sm_diam);
-    ellipse(x, y, 50, 50);
+    //int masksize = (int)sm_diam;
+
+    maskImage=createGraphics(sm_diam, sm_diam)
+
+    //fill( 255 );
+    //maskImage.resize(masksize, masksize);
+    userTime.resize(masksize, masksize);
+    image(userTime, x, y, sm_diam, sm_diam);
+    userTime.mask(maskImage);
   }
-  theta=0;
 }
