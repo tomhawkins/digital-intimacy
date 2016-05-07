@@ -22,10 +22,8 @@ $retrieval = new Retrieval(); # content object and methods
      }
  }
 
-//      $encoded = json_encode($everything);
-//// 		print_r($encoded);
-//// 		return $encoded;
-        print_r($everything);
-        return $everything;
+      $encoded = json_encode($everything);
+ 		print_r($encoded);
+ 		return $encoded;
 
 ?>

@@ -8,7 +8,11 @@ require("perkinss/importClassLibrary.php");
 $retrieval = new Retrieval(); # content object and methods
 
 $all_sorted_dumps = $retrieval->get_sorted_dumps();
-print_r($all_sorted_dumps);
+//print_r($all_sorted_dumps);
+
+
+      $encoded = json_encode($all_sorted_dumps);
+        return $encoded;
 
 //$timelist = $retrieval->get_post_times();
 //print_r($timelist);

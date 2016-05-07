@@ -351,8 +351,8 @@ void userTimeRange() {
 
 void listUsers() {
 
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php");
-  GetRequest locationRequest = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/location.php");
+  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/location.php");
+  GetRequest locationRequest = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php");
   get.send();
   locationRequest.send();
   get.addHeader("Accept", "application/json");
