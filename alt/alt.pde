@@ -1,4 +1,4 @@
-import http.requests.*; //<>// //<>// //<>// //<>// //<>// //<>//
+import http.requests.*; //<>// //<>//
 
 import twitter4j.conf.*;
 import twitter4j.*;
@@ -28,25 +28,12 @@ String searchString = "#i7226684";
 Status currentTweet;
 Status newTweet;
 User user;
+
+UserTimeCircle userTimeRange1;
+UserTimeCircle userTimeRange2;
+
 PFont f;
 PImage userImage;
-
-float posX, posY;
-float radiusX, radiusY;
-float theta;
-float i;
-
-float cx;
-float cy;
-float diameter;
-
-float lg_diam;
-float lg_rad;
-float lg_circ;
-float angle;
-
-float sm_diam;
-
 PImage userTime;
 PGraphics graphicalMask;
 
@@ -58,15 +45,6 @@ void setup()
   textAlign(CENTER);
   rectMode(CENTER);
   ellipseMode(CENTER);
-
-  //maskImage = loadImage("mask.png");
-
-  posX = posY = 0;
-
-  //radiusX = 200;
-  //radiusY = 200;
-
-  theta = 0;
 
   ConfigurationBuilder cb = new ConfigurationBuilder();
 
@@ -80,6 +58,10 @@ void setup()
 
   getNewTweets();
 
+  userTimeRange1 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=10:00:00.000000", (height * .8), 575, 300, 8, 100); 
+  userTimeRange2 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=10:00:01.000000&end=14:00:00.000000", (height * .5), 575, 300, 16, 50); 
+
+
   //thread("refreshTweets");
   //thread("mousePressed");
   //thread("dump");
@@ -92,14 +74,16 @@ void draw()
   background(0);
 
   //refreshTweets();
-  //userTimeRange();
+  userTimeRange1.buildRange();
+  userTimeRange2.buildRange();
   //dump();
-  listUsers();
+  //listUsers();
   //getTweet();
   //getDetails();
   //getImage();
   //getScreenName();
-  //delay(7000);
+  //delay(7000); //<>//
+  println("working");
 }
 
 void getNewTweets()
@@ -107,8 +91,9 @@ void getNewTweets()
   try
   {
     println("Initialising...");
+
     Query query = new Query(searchString);
-    QueryResult result = twitter.search(query);
+    QueryResult result = twitter.search(query); //<>//
     currentTweet = result.getTweets().get(0);
     user = currentTweet.getUser();
   }
@@ -238,117 +223,6 @@ void dump() {
   println("Dumped");
 }
 
-void userTimeRange() {
-
-  currentTweet.getUser();
-  user.getLocation();
-  user.getFollowersCount();
-  currentTweet.getText();
-  currentTweet.getCreatedAt();
-
-  String profile = user.getBiggerProfileImageURL();
-
-  userImage = loadImage(profile, "png");
-
-  String name = user.getScreenName();
-  String location = user.getLocation();
-  int followers = user.getFollowersCount();
-  String tweet = currentTweet.getText();
-
-  tweet = tweet.replaceAll("'", "");
-  profile = profile.replaceAll("'", "");
-
-  String encodedTweet = URLEncoder.encode(tweet);
-  String encodedImg = URLEncoder.encode(profile);
-
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=07:30:00.000000&end=08:00:00.000000");
-  get.send();
-  get.addHeader("Accept", "application/json");
-  println("Request sent");
-
-  background( 0 );
-  //translate(width, height);
-
-  //float diameter = width* .9;
-
-  float lg_diam = height * .7;
-  float lg_rad = lg_diam / 2;
-  float lg_circ = PI * lg_diam;
-
-  float cx = 575;
-  float cy = 280;
-
-
-
-  processing.data.JSONArray values = processing.data.JSONArray.parse(get.getContent());
-  int count = values.size();
-  int threshold = 8;
-  int staticIconSize = 100;
-  //int count = values.size();
-
-  for (int i = 0; i < count; i++) {
-    processing.data.JSONObject timesObject = values.getJSONObject(i);
-    String imgURL = timesObject.getString("intimacy_img");
-    userTime = loadImage(imgURL);
-
-    angle = i * TWO_PI / count;
-    float x = cx + cos(angle) * lg_rad;
-    float y = cy + sin(angle) * lg_rad;
-
-    float sm_diam = (lg_circ / count);
-    int masksize = (int)sm_diam;
-
-    int imgX;
-    int imgY;
-
-    //static sizes------------
-    if (count < threshold == true) {
-      graphicalMask=createGraphics(staticIconSize, staticIconSize);
-    } else {
-      graphicalMask=createGraphics(masksize, masksize);
-    }
-
-    graphicalMask.beginDraw();
-
-    graphicalMask.background(0);
-
-    if (count < threshold == true) {
-      imgX = staticIconSize/2;
-      imgY = staticIconSize/2;
-    } else {
-      imgX = masksize/2;
-      imgY = masksize/2;
-    }
-
-    graphicalMask.fill(255);
-    graphicalMask.noStroke();
-
-    if (count < threshold == true) {
-      graphicalMask.ellipse(imgX, imgY, staticIconSize, staticIconSize);
-    } else {
-      graphicalMask.ellipse(imgX, imgY, masksize, masksize);
-    }
-
-    graphicalMask.endDraw();
-
-    if (count < threshold == true) {
-
-      userTime.resize(staticIconSize, staticIconSize);
-    } else {
-      userTime.resize(masksize, masksize);
-    }
-
-    userTime.mask(graphicalMask);
-
-    if (count < threshold == true) {
-
-      image(userTime, x, y, staticIconSize, staticIconSize);
-    } else {
-      image(userTime, x, y, masksize, masksize);
-    }
-  }
-}
-
 void listUsers() {
 
   GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/location.php");
@@ -373,8 +247,6 @@ void listUsers() {
       println(user);
     }
   }
-  
-  
 }
 
 void mousePressed() {
