@@ -93,7 +93,6 @@ class UserTimeCircle {
       } else {
         image(userTime, x, y, masksize, masksize);
       }
-      println("Range completed");
     }
   }
 }

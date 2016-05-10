@@ -1,4 +1,4 @@
-import http.requests.*; //<>// //<>//
+import http.requests.*; //<>// //<>// //<>// //<>//
 
 import twitter4j.conf.*;
 import twitter4j.*;
@@ -31,11 +31,20 @@ User user;
 
 UserTimeCircle userTimeRange1;
 UserTimeCircle userTimeRange2;
+UserTimeCircle userTimeRange3;
+UserTimeCircle userTimeRange4;
 
 PFont f;
 PImage userImage;
 PImage userTime;
 PGraphics graphicalMask;
+
+int widthPosMod = 600;
+int heightPosMod = 310;
+float sizeModLarge = 0.85;
+float sizeModMed = 0.65;
+float sizeModSmall = 0.45;
+float sizeModXS = 0.25;
 
 void setup()
 {
@@ -57,12 +66,14 @@ void setup()
   twitter = tf.getInstance();
 
   getNewTweets();
+  userTimeRange1 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=10:00:00.000000", (height * sizeModLarge), widthPosMod, heightPosMod, 20, 60); 
+  userTimeRange2 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=10:00:01.000000&end=14:00:00.000000", (height * sizeModMed), widthPosMod, heightPosMod, 40, 60); 
+  userTimeRange3 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=14:00:01.000000&end=18:00:00.000000", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
+  userTimeRange4 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=18:00:01.000000&end=23:59:59.000000", (height * sizeModXS), widthPosMod, heightPosMod, 80, 60); 
 
-  userTimeRange1 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=10:00:00.000000", (height * .8), 575, 300, 8, 100); 
-  userTimeRange2 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=10:00:01.000000&end=14:00:00.000000", (height * .5), 575, 300, 16, 50); 
 
 
-  //thread("refreshTweets");
+  thread("refreshTweets");
   //thread("mousePressed");
   //thread("dump");
 }
@@ -70,24 +81,39 @@ void setup()
 void draw()
 {
   textFont(f);
-  fill(255);
+  fill(255, 180);
+  rect(0, 0, width, height); //<>//
   background(0);
 
-  //refreshTweets();
+  refreshTweets();
+  noFill();
+  stroke(153);
+  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
+  fill(255, 10);
   userTimeRange1.buildRange();
+  noFill();
+  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
+  fill(255, 10); //<>//
   userTimeRange2.buildRange();
-  //dump();
+  noFill();
+  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
+  fill(255, 10);
+  userTimeRange3.buildRange();
+  noFill();
+  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
+  fill(255, 10);
+  userTimeRange4.buildRange();
+  //dump(); //<>//
   //listUsers();
   //getTweet();
   //getDetails();
   //getImage();
   //getScreenName();
-  //delay(7000); //<>//
-  println("working");
+  delay(7000);
 }
 
 void getNewTweets()
-{
+{ //<>//
   try
   {
     println("Initialising...");
