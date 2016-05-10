@@ -49,10 +49,10 @@ float sizeModXS = 0.25;
 void setup()
 {
   size(1280, 700);
+  frameRate(60);
   smooth(8);
   f = createFont("Raleway-ExtraLight.vlw", 32, true);
   textAlign(CENTER);
-  rectMode(CENTER);
   ellipseMode(CENTER);
 
   ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -66,50 +66,48 @@ void setup()
   twitter = tf.getInstance();
 
   getNewTweets();
-  userTimeRange1 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=10:00:00.000000", (height * sizeModLarge), widthPosMod, heightPosMod, 20, 60); 
+  userTimeRange1 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=10:00:00.000000", (height * sizeModLarge), widthPosMod, heightPosMod, 30, 60); 
   userTimeRange2 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=10:00:01.000000&end=14:00:00.000000", (height * sizeModMed), widthPosMod, heightPosMod, 40, 60); 
   userTimeRange3 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=14:00:01.000000&end=18:00:00.000000", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
-  userTimeRange4 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=18:00:01.000000&end=23:59:59.000000", (height * sizeModXS), widthPosMod, heightPosMod, 80, 60); 
+  userTimeRange4 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=18:00:01.000000&end=23:59:59.000000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
 
 
 
   thread("refreshTweets");
+  //thread("userTimeRange");
   //thread("mousePressed");
   //thread("dump");
 }
 
 void draw()
 {
-  textFont(f);
-  fill(255, 180);
-  rect(0, 0, width, height); //<>//
-  background(0);
 
-  refreshTweets();
-  noFill();
-  stroke(153);
-  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
-  fill(255, 10);
-  userTimeRange1.buildRange();
-  noFill();
-  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
-  fill(255, 10); //<>//
-  userTimeRange2.buildRange();
-  noFill();
-  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
-  fill(255, 10);
-  userTimeRange3.buildRange();
-  noFill();
-  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
-  fill(255, 10);
-  userTimeRange4.buildRange();
-  //dump(); //<>//
+  //background(0); //<>//
+  //refreshTweets();
+  userTimeRangeBackground();
+  userTimeRange();
+  //dump();
   //listUsers();
   //getTweet();
   //getDetails();
   //getImage();
   //getScreenName();
-  delay(7000);
+}
+ //<>//
+void userTimeRangeBackground() {
+  noFill();
+  stroke(153);
+  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
+  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
+  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
+  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
+}
+
+void userTimeRange() {
+  userTimeRange1.buildRange();
+  userTimeRange2.buildRange();
+  userTimeRange3.buildRange();
+  userTimeRange4.buildRange();
 }
 
 void getNewTweets()

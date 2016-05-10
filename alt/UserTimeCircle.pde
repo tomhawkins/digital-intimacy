@@ -45,8 +45,7 @@ class UserTimeCircle {
 
       int imgX;
       int imgY;
-      
-      
+
 
       //static sizes------------
       if (count < threshold == true) {
@@ -86,6 +85,10 @@ class UserTimeCircle {
       }
 
       userTime.mask(graphicalMask);
+
+      fill(0, 10);
+      rect(0, 0, width, height);
+      //fill(0);
 
       if (count < threshold == true) {
 
