@@ -18,6 +18,7 @@ class UserTimeCircle {
     threshold = t;
     staticIconSize = s;
   }
+
   void buildRange()
   {
 

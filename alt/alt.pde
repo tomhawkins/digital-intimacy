@@ -39,6 +39,8 @@ UserFollowerCircle userFollowerRange2;
 UserFollowerCircle userFollowerRange3;
 UserFollowerCircle userFollowerRange4;
 
+UserLocation userLocation1;
+
 PFont f;
 PImage userImage;
 PImage userTime;
@@ -77,23 +79,45 @@ void setup()
   userTimeRange3 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=14:00:01.000000&end=18:00:00.000000", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
   userTimeRange4 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=18:00:01.000000&end=23:59:59.000000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
 
-  //Repeat the above for userFollowerRange!!!
-
-
+  userFollowerRange1 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=0&end=100", (height * sizeModLarge), widthPosMod, heightPosMod, 30, 60); 
+  userFollowerRange2 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=101&end=400", (height * sizeModMed), widthPosMod, heightPosMod, 40, 60); 
+  userFollowerRange3 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=401&end=700", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
+  userFollowerRange4 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=1000&end=2000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60);  //<>//
+  
+  userLocation1 = new UserLocationCircle("", (height*?), widthPosMod, heightPosMod, 30, 60);
+  
   thread("refreshTweets");
   //thread("userTimeRange");
-  //thread("mousePressed"); //<>//
+  //thread("mousePressed");
   //thread("dump");
 }
 
 void draw()
-{
+{ //<>//
 
   background(0);
-  //refreshTweets();
+  
+  //take logic from kinect prototype... if/else, and, if depth range 1, then int switch = 0, depth range 2, int switch = 1, range 3, int switch = 2, etc
+  //each switch changes the data visualisation being shown
+
+  switch(num) {
+  case 0: 
+  userFollowerRangeBackground();
+  userFollowerRange();
+    break;
+  case 1: 
   userTimeRangeBackground();
   userTimeRange();
-  //dump(); //<>//
+    break;
+  case 2:
+  userLocationBackground();
+  userLocation();
+  }
+
+  //refreshTweets();
+
+
+  //dump();
   //listUsers();
   //getTweet();
   //getDetails();
@@ -127,10 +151,10 @@ void userTimeRange() {
 }
 
 void userFollowerRange() {
-  userTimeRange1.buildRange();
-  userTimeRange2.buildRange();
-  userTimeRange3.buildRange();
-  userTimeRange4.buildRange();
+  userFollowerRange1.buildRange();
+  userFollowerRange2.buildRange();
+  userFollowerRange3.buildRange();
+  userFollowerRange4.buildRange();
 }
 
 void getNewTweets()
@@ -268,32 +292,6 @@ void dump() {
   get.send();
   println("https://i7226684.budmd.uk/intimacy/dumper/?" + "screename=" + encodedName + "&location=" + encodedLocation + "&followers=" + followers + "&tweet=" + encodedTweet + "&img=" + encodedImg + "&time=" + encodedTime);
   println("Dumped");
-}
-
-void listUsers() {
-
-  GetRequest get = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/location.php");
-  GetRequest locationRequest = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/retrieve.php");
-  get.send();
-  locationRequest.send();
-  get.addHeader("Accept", "application/json");
-  println("Request sent");
-
-  processing.data.JSONObject values = processing.data.JSONObject.parse(get.getContent());
-  processing.data.JSONArray locArray = processing.data.JSONArray.parse(locationRequest.getContent());
-
-  for (int i = 0; i < locArray.size(); i++) {
-    processing.data.JSONObject locObject = locArray.getJSONObject(i);
-    String locString = locObject.getString("intimacy_location");
-    println("Location: " + locString + "\n Users:");
-    processing.data.JSONArray currentLoc = values.getJSONArray(locString);
-
-    for (int ii = 0; ii < currentLoc.size(); ii++) {
-
-      String user = currentLoc.getString(ii);
-      println(user);
-    }
-  }
 }
 
 void mousePressed() {
