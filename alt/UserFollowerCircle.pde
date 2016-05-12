@@ -1,4 +1,4 @@
-class UserTimeCircle {
+class UserFollowerCircle {
   String getlink;
   float lg_diam;
   float cx;
@@ -10,7 +10,7 @@ class UserTimeCircle {
   processing.data.JSONArray values;
 
   // The Constructor is defined with arguments.
-  UserTimeCircle(String link, float diam, float locX, float locY, int t, int s) {
+  UserFollowerCircle(String link, float diam, float locX, float locY, int t, int s) {
     getlink = link;
     lg_diam = diam;
     cx = locX;
@@ -32,9 +32,9 @@ class UserTimeCircle {
     int count = values.size();
 
     for (int i = 0; i < count; i++) {
-      processing.data.JSONObject timesObject = values.getJSONObject(i);
-      String imgURL = timesObject.getString("intimacy_img");
-      userTime = loadImage(imgURL);
+      processing.data.JSONObject followersObject = values.getJSONObject(i);
+      String imgURL = followersObject.getString("intimacy_img");
+      userFollowers = loadImage(imgURL);
 
       angle = i * TWO_PI / count;
       float x = cx + cos(angle) * lg_rad;
@@ -79,12 +79,12 @@ class UserTimeCircle {
 
       if (count < threshold == true) {
 
-        userTime.resize(staticIconSize, staticIconSize);
+        userFollowers.resize(staticIconSize, staticIconSize);
       } else {
-        userTime.resize(masksize, masksize);
+        userFollowers.resize(masksize, masksize);
       }
 
-      userTime.mask(graphicalMask);
+      userFollowers.mask(graphicalMask);
 
       //fill(0, 10);
       //rect(0, 0, width, height);
@@ -92,9 +92,9 @@ class UserTimeCircle {
 
       if (count < threshold == true) {
 
-        image(userTime, x, y, staticIconSize, staticIconSize);
+        image(userFollowers, x, y, staticIconSize, staticIconSize);
       } else {
-        image(userTime, x, y, masksize, masksize);
+        image(userFollowers, x, y, masksize, masksize);
       }
     }
   }

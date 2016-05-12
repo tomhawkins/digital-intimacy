@@ -7,9 +7,9 @@ require("perkinss/importClassLibrary.php");
 $dumper = new Dumper(); # content object and methods
 $retrieval = new Retrieval(); # content object and methods
 
-$stamp_range = $retrieval->get_post_times($_GET['start'], $_GET['end']);
+$follower_range = $retrieval->get_user_followers($_GET['start'], $_GET['end']);
 
-         $encoded = json_encode($stamp_range);
+         $encoded = json_encode($follower_range);
  		print_r($encoded);
        var_dump($encoded);
 		return $encoded;

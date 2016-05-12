@@ -34,9 +34,15 @@ UserTimeCircle userTimeRange2;
 UserTimeCircle userTimeRange3;
 UserTimeCircle userTimeRange4;
 
+UserFollowerCircle userFollowerRange1;
+UserFollowerCircle userFollowerRange2;
+UserFollowerCircle userFollowerRange3;
+UserFollowerCircle userFollowerRange4;
+
 PFont f;
 PImage userImage;
 PImage userTime;
+PImage userFollowers;
 PGraphics graphicalMask;
 
 int widthPosMod = 600;
@@ -67,33 +73,34 @@ void setup()
 
   getNewTweets();
   userTimeRange1 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=10:00:00.000000", (height * sizeModLarge), widthPosMod, heightPosMod, 30, 60); 
-  userTimeRange2 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=10:00:01.000000&end=14:00:00.000000", (height * sizeModMed), widthPosMod, heightPosMod, 40, 60); 
+  userTimeRange2 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=b0", (height * sizeModMed), widthPosMod, heightPosMod, 40, 60); 
   userTimeRange3 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=14:00:01.000000&end=18:00:00.000000", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
   userTimeRange4 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=18:00:01.000000&end=23:59:59.000000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
 
+  //Repeat the above for userFollowerRange!!!
 
 
   thread("refreshTweets");
   //thread("userTimeRange");
-  //thread("mousePressed");
+  //thread("mousePressed"); //<>//
   //thread("dump");
 }
 
 void draw()
 {
 
-  //background(0); //<>//
+  background(0);
   //refreshTweets();
   userTimeRangeBackground();
   userTimeRange();
-  //dump();
+  //dump(); //<>//
   //listUsers();
   //getTweet();
   //getDetails();
   //getImage();
   //getScreenName();
 }
- //<>//
+
 void userTimeRangeBackground() {
   noFill();
   stroke(153);
@@ -103,7 +110,23 @@ void userTimeRangeBackground() {
   ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
 }
 
+void userFollowerRangeBackground() {
+  noFill();
+  stroke(153);
+  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
+  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
+  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
+  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
+}
+
 void userTimeRange() {
+  userTimeRange1.buildRange();
+  userTimeRange2.buildRange();
+  userTimeRange3.buildRange();
+  userTimeRange4.buildRange();
+}
+
+void userFollowerRange() {
   userTimeRange1.buildRange();
   userTimeRange2.buildRange();
   userTimeRange3.buildRange();

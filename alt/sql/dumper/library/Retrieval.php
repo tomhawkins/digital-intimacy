@@ -112,6 +112,26 @@ array_walk_recursive($result, create_function('&$v, $k, &$t', '$t->aFlat[] = $v;
      $result = $this->db->select($sql);
         return $result;
     }
+    
+    public function get_user_followers($start, $end){
+
+		# this method is used to query the database to retrieve specific data
+		$sql = "
+
+        SELECT
+                *
+        FROM
+                intimacy
+        WHERE
+                intimacy_followercount >= '".$start."' AND
+                intimacy_followercount <= '".$end."'
+        ORDER BY
+                intimacy_followercount ASC;
+                ";
+ //   print($sql);
+     $result = $this->db->select($sql);
+        return $result;
+    }
 
     public function check_time($start_date, $end_date, $todays_date)
 {
