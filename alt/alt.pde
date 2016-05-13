@@ -19,10 +19,10 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 
 import java.util.*;
-import org.openkinect.*;
-import org.openkinect.processing.*;
+//import org.openkinect.*;
+//import org.openkinect.processing.*;
 
-Kinect kinect;
+//Kinect kinect;
 
 Twitter twitter;
 URL url;
@@ -43,13 +43,15 @@ UserFollowerCircle userFollowerRange2;
 UserFollowerCircle userFollowerRange3;
 UserFollowerCircle userFollowerRange4;
 
-//UserLocation userLocation1;
+UserLocationCircle userLocationCircle1;
 
 PFont f;
 PImage userImage;
 PImage userTime;
 PImage userFollowers;
 PGraphics graphicalMask;
+
+float circleSizeMod;
 
 int widthPosMod = 600;
 int heightPosMod = 310;
@@ -77,12 +79,12 @@ void setup()
   textAlign(CENTER);
   ellipseMode(CENTER);
 
-  kinect = new Kinect(this);
-  kinect.start();
-  kinect.enableDepth(depth);
-  kinect.enableRGB(rgb);
-  kinect.enableIR(ir);
-  kinect.tilt(deg);
+  //kinect = new Kinect(this);
+  //kinect.start();
+  //kinect.enableDepth(depth);
+  //kinect.enableRGB(rgb);
+  //kinect.enableIR(ir);
+  //kinect.tilt(deg);
 
   ConfigurationBuilder cb = new ConfigurationBuilder();
 
@@ -105,55 +107,57 @@ void setup()
   userFollowerRange3 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=401&end=700", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
   userFollowerRange4 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=1000&end=2000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
 
-  //userLocation1 = new UserLocationCircle("", (height*?), widthPosMod, heightPosMod, 30, 60);
+  userLocationCircle1 = new UserLocationCircle("https://i7226684.budmd.uk/intimacy/dumper/location.php", "https://i7226684.budmd.uk/intimacy/dumper/retrieve.php", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
 
   thread("refreshTweets");
   //thread("userTimeRange");
   //thread("mousePressed");
   //thread("dump");
+  background(0);
 }
 
 void draw()
 {
-
-  background(0);
-  int[] depth = kinect.getRawDepth();
+  //int[] depth = kinect.getRawDepth();
   //Colour thresholds
-  for (int i=0; i < depth.length; i++) {
-    if (depth[i] < 900) {
-      println("Case 0 switch");
-      switchData = 1;
-      break;
-    } else if (depth[i] < 1200 && depth[i] > 901) {
-      println("Case 1 switch");
-      switchData = 2;
-      break;
-    } else if (depth[i] < 1600 && depth[i] > 1201) {
-      switchData = 3;
-      println("Case 2 switch");
-      break;
-    } else {
-      switchData = 4;
-      println("Case 3 switch");
-      break;
-    }
-  }
+  //for (int i=0; i < depth.length; i++) {
+  //  if (depth[i] < 900) {
+  //    println("Case 0 switch");
+  //    switchData = 1;
+  //    break;
+  //  } else if (depth[i] < 1200 && depth[i] > 901) {
+  //    println("Case 1 switch");
+  //    switchData = 2;
+  //    break;
+  //  } else if (depth[i] < 1600 && depth[i] > 1201) {
+  //    switchData = 3;
+  //    println("Case 2 switch");
+  //    break;
+  //  } else {
+  //    switchData = 4;
+  //    println("Case 3 switch");
+  //    break;
+  //  }
+  //}
 
-  if (switchData == 1) {
-    userFollowerRangeBackground();
-    userFollowerRange();
-  } else if (switchData == 2) {
-    userTimeRangeBackground();
-    userTimeRange();
-  } else if (switchData == 3) {
-    println("switchData is 3");
-  } else {
-    println("switchData is 4");
-    userTimeRangeBackground();
-    userTimeRange();
-  }
+  //if (switchData == 1) {
+  //  userFollowerRangeBackground();
+  //  userFollowerRange();
+  //} else if (switchData == 2) {
+  //  userTimeRangeBackground();
+  //  userTimeRange();
+  //} else if (switchData == 3) {
+  //  println("switchData is 3");
+  //} else {
+  //  println("switchData is 4");
+  //  userTimeRangeBackground();
+  //  userTimeRange();
+  //}
 
+  //userFollowerRangeBackground();
+  //userFollowerRange();
 
+  userLocationCircle1.buildUserRange();
 
 
   //take logic from kinect prototype... if/else, and, if depth range 1, then int switch = 0, depth range 2, int switch = 1, range 3, int switch = 2, etc
@@ -385,25 +389,25 @@ void mousePressed() {
   //--- DEVELOPMENT CODE GOES BELOW--
 }
 
-void keyPressed() {
-  if (key == 'd') {
-    depth = !depth;
-    kinect.enableDepth(depth);
-  } else if (key == 'r') {
-    rgb = !rgb;
-    if (rgb) ir = false;
-    kinect.enableRGB(rgb);
-  } else if (key == 'i') {
-    ir = !ir;
-    if (ir) rgb = false;
-    kinect.enableIR(ir);
-  } else if (key == CODED) {
-    if (keyCode == UP) {
-      deg++;
-    } else if (keyCode == DOWN) {
-      deg--;
-    }
-    deg = constrain(deg, 0, 30);
-    kinect.tilt(deg);
-  }
-}
+//void keyPressed() {
+//  if (key == 'd') {
+//    depth = !depth;
+//    kinect.enableDepth(depth);
+//  } else if (key == 'r') {
+//    rgb = !rgb;
+//    if (rgb) ir = false;
+//    kinect.enableRGB(rgb);
+//  } else if (key == 'i') {
+//    ir = !ir;
+//    if (ir) rgb = false;
+//    kinect.enableIR(ir);
+//  } else if (key == CODED) {
+//    if (keyCode == UP) {
+//      deg++;
+//    } else if (keyCode == DOWN) {
+//      deg--;
+//    }
+//    deg = constrain(deg, 0, 30);
+//    kinect.tilt(deg);
+//  }
+//}
