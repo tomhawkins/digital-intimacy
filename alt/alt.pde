@@ -1,4 +1,4 @@
-import http.requests.*; //<>// //<>// //<>// //<>//
+import http.requests.*; //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
 
 import twitter4j.conf.*;
 import twitter4j.*;
@@ -19,6 +19,10 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 
 import java.util.*;
+import org.openkinect.*;
+import org.openkinect.processing.*;
+
+Kinect kinect;
 
 Twitter twitter;
 URL url;
@@ -39,7 +43,7 @@ UserFollowerCircle userFollowerRange2;
 UserFollowerCircle userFollowerRange3;
 UserFollowerCircle userFollowerRange4;
 
-UserLocation userLocation1;
+//UserLocation userLocation1;
 
 PFont f;
 PImage userImage;
@@ -49,10 +53,20 @@ PGraphics graphicalMask;
 
 int widthPosMod = 600;
 int heightPosMod = 310;
+int switchData = 0;
 float sizeModLarge = 0.85;
 float sizeModMed = 0.65;
 float sizeModSmall = 0.45;
 float sizeModXS = 0.25;
+
+boolean depth = true;
+boolean rgb = false;
+boolean ir = false;
+
+int minDepth =  60;
+int maxDepth = 820;
+
+float deg;
 
 void setup()
 {
@@ -62,6 +76,13 @@ void setup()
   f = createFont("Raleway-ExtraLight.vlw", 32, true);
   textAlign(CENTER);
   ellipseMode(CENTER);
+
+  kinect = new Kinect(this);
+  kinect.start();
+  kinect.enableDepth(depth);
+  kinect.enableRGB(rgb);
+  kinect.enableIR(ir);
+  kinect.tilt(deg);
 
   ConfigurationBuilder cb = new ConfigurationBuilder();
 
@@ -82,10 +103,10 @@ void setup()
   userFollowerRange1 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=0&end=100", (height * sizeModLarge), widthPosMod, heightPosMod, 30, 60); 
   userFollowerRange2 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=101&end=400", (height * sizeModMed), widthPosMod, heightPosMod, 40, 60); 
   userFollowerRange3 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=401&end=700", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
-  userFollowerRange4 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=1000&end=2000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60);  //<>//
-  
-  userLocation1 = new UserLocationCircle("", (height*?), widthPosMod, heightPosMod, 30, 60);
-  
+  userFollowerRange4 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=1000&end=2000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
+
+  //userLocation1 = new UserLocationCircle("", (height*?), widthPosMod, heightPosMod, 30, 60);
+
   thread("refreshTweets");
   //thread("userTimeRange");
   //thread("mousePressed");
@@ -93,26 +114,70 @@ void setup()
 }
 
 void draw()
-{ //<>//
+{
 
   background(0);
-  
+  int[] depth = kinect.getRawDepth();
+  //Colour thresholds
+  for (int i=0; i < depth.length; i++) {
+    if (depth[i] < 900) {
+      println("Case 0 switch");
+      switchData = 1;
+      break;
+    } else if (depth[i] < 1200 && depth[i] > 901) {
+      println("Case 1 switch");
+      switchData = 2;
+      break;
+    } else if (depth[i] < 1600 && depth[i] > 1201) {
+      switchData = 3;
+      println("Case 2 switch");
+      break;
+    } else {
+      switchData = 4;
+      println("Case 3 switch");
+      break;
+    }
+  }
+
+  if (switchData == 1) {
+    userFollowerRangeBackground();
+    userFollowerRange();
+  } else if (switchData == 2) {
+    userTimeRangeBackground();
+    userTimeRange();
+  } else if (switchData == 3) {
+    println("switchData is 3");
+  } else {
+    println("switchData is 4");
+    userTimeRangeBackground();
+    userTimeRange();
+  }
+
+
+
+
   //take logic from kinect prototype... if/else, and, if depth range 1, then int switch = 0, depth range 2, int switch = 1, range 3, int switch = 2, etc
   //each switch changes the data visualisation being shown
 
-  switch(num) {
-  case 0: 
-  userFollowerRangeBackground();
-  userFollowerRange();
-    break;
-  case 1: 
-  userTimeRangeBackground();
-  userTimeRange();
-    break;
-  case 2:
-  userLocationBackground();
-  userLocation();
-  }
+  //switch(switchData) {
+  //case 0: 
+  // userFollowerRangeBackground();
+  // userFollowerRange();
+  // break;
+  //case 1: 
+  // userTimeRangeBackground();
+  // userTimeRange();
+  // break;
+  //case 2:
+  // //userLocationBackground();
+  // //userLocation();
+  // println("Case 2 switch");
+  // break;
+  //case 3:
+  // //userLocationBackground();
+  // //userLocation();
+  // println("Case 3 switch");
+  //}
 
   //refreshTweets();
 
@@ -158,13 +223,13 @@ void userFollowerRange() {
 }
 
 void getNewTweets()
-{ //<>//
+{
   try
   {
     println("Initialising...");
 
     Query query = new Query(searchString);
-    QueryResult result = twitter.search(query); //<>//
+    QueryResult result = twitter.search(query);
     currentTweet = result.getTweets().get(0);
     user = currentTweet.getUser();
   }
@@ -318,4 +383,27 @@ void mousePressed() {
   String encodedImg = URLEncoder.encode(profile);
 
   //--- DEVELOPMENT CODE GOES BELOW--
+}
+
+void keyPressed() {
+  if (key == 'd') {
+    depth = !depth;
+    kinect.enableDepth(depth);
+  } else if (key == 'r') {
+    rgb = !rgb;
+    if (rgb) ir = false;
+    kinect.enableRGB(rgb);
+  } else if (key == 'i') {
+    ir = !ir;
+    if (ir) rgb = false;
+    kinect.enableIR(ir);
+  } else if (key == CODED) {
+    if (keyCode == UP) {
+      deg++;
+    } else if (keyCode == DOWN) {
+      deg--;
+    }
+    deg = constrain(deg, 0, 30);
+    kinect.tilt(deg);
+  }
 }

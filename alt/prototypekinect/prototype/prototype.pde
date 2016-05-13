@@ -90,7 +90,7 @@ void draw () {
   //Colour thresholds
   for (int i=0; i < depth.length; i++) {
     if (depth[i] < 720) {
-      display = date;
+      //display = date;
       //display_1 = close_1;
       //display_2 = close_2; 
       //display_3 = close_3;
@@ -98,7 +98,7 @@ void draw () {
 
 
     } else if (depth[i] < 880 && depth[i] > 721) {
-      display = followers;
+      //display = followers;
       //display_1 = medium_1;
       //display_2 = medium_2; 
       //display_3 = medium_3;
@@ -106,7 +106,7 @@ void draw () {
 
 
     } else if (depth[i] < 940 && depth[i] > 841) {
-      display = location;
+      //display = location;
       //display_1 = long_1;
       //display_2 = long_2; 
       //display_3 = long_3;
@@ -126,7 +126,7 @@ void draw () {
   //image(depthImg, 0, 0);
   //image(kinect.getVideoImage(),640,300);
   tint(255,20);
-  image(display, 0, 0);
+  //image(display, 0, 0);
   //image(display_2, 250, 250);
   //image(display_3, 350, 100);
 
