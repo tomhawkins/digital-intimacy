@@ -24,8 +24,11 @@ class UserLocationCircle {
   }
 
   void buildUserRange() {
+    
+    background(0);
 
     circleSizeMod = 0.2;
+    iconRadiMod = 0.01;
 
     GetRequest get = new GetRequest(getlink);
     GetRequest locationRequest = new GetRequest(locList);
@@ -40,7 +43,6 @@ class UserLocationCircle {
     processing.data.JSONObject values = processing.data.JSONObject.parse(get.getContent());
     processing.data.JSONArray locArray = processing.data.JSONArray.parse(locationRequest.getContent());
 
-    int count = values.size();
 
     for (int i = 0; i < locArray.size(); i++) {
       processing.data.JSONObject locObject = locArray.getJSONObject(i);
@@ -50,26 +52,32 @@ class UserLocationCircle {
       stroke(153);
       ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
       circleSizeMod += 0.2;
+      iconRadiMod += 0.393;
 
-      for (int ii = 0; ii < locArray.size(); ii++) {
+      String encodedLocString = URLEncoder.encode(locString);
+      GetRequest locGet = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/locentry.php?location=" + encodedLocString);
+      locGet.send();
+      locGet.addHeader("Accept", "application/json");
+      processing.data.JSONArray locEntry = processing.data.JSONArray.parse(locGet.getContent());
+      int count = locEntry.size();
 
-        String encodedLocString = URLEncoder.encode(locString);
-        GetRequest locGet = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/locentry.php?location=" + encodedLocString);
-        locGet.send();
-        locGet.addHeader("Accept", "application/json");
-        processing.data.JSONArray locEntry = processing.data.JSONArray.parse(locGet.getContent());
+      for (int ii = 0; ii < locEntry.size(); ii++) {
 
         //println(locEntry);
-        
+
+
+
         processing.data.JSONObject imgObject = locEntry.getJSONObject(ii);
         String imgURL = imgObject.getString("intimacy_img");
-        
+
         println(imgURL);
         userLocation = loadImage(imgURL);
 
-        angle = i * TWO_PI / count;
-        float x = cx + cos(angle) * lg_rad;
-        float y = cy + sin(angle) * lg_rad;
+
+
+        angle = ii * TWO_PI / count;
+        float x = cx + cos(angle) * (lg_diam * iconRadiMod);
+        float y = cy + sin(angle) * (lg_diam * iconRadiMod);
 
         float sm_diam = (lg_circ / count);
         int masksize = (int)sm_diam;

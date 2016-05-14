@@ -53,6 +53,7 @@ PImage userLocation;
 PGraphics graphicalMask;
 
 float circleSizeMod;
+float iconRadiMod;
 
 int widthPosMod = 600;
 int heightPosMod = 310;
