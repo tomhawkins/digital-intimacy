@@ -23,95 +23,6 @@ class UserLocationCircle {
     staticIconSize = s;
   }
 
-  //void buildUserLocation() {
-
-  //  circleSizeMod = 0;
-  //  //int count = locArray.size();
-
-  //  for (int l = 0; l <= 3; l++) {
-  //    noFill();
-  //    stroke(153);
-  //    ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
-  //    circleSizeMod += 0.2;
-  //    println(locArray.size());
-  //    processing.data.JSONArray currentLoc = values.getJSONArray(l);
-
-  //    //for (int ii = 0; ii < currentLoc.size(); ii++) {
-
-  //    //String user = currentLoc.getString(ii);
-  //    //println(user);
-  //    //}
-  //  }
-  //}
-
-  //for (int i = 0; i < count; i++) {
-  //  //processing.data.JSONObject locationObject = locArray.getJSONObject(i);
-  //  //String imgURL = locationObject.getString("intimacy_img");
-  //  //userLocation = loadImage(imgURL);
-
-  //  angle = i * TWO_PI / count;
-  //  float x = cx + cos(angle) * lg_rad;
-  //  float y = cy + sin(angle) * lg_rad;
-
-  //  float sm_diam = (lg_circ / count);
-  //  int masksize = (int)sm_diam;
-
-  //  int imgX;
-  //  int imgY;
-
-
-  //  //static sizes------------
-  //  if (count < threshold == true) {
-  //    graphicalMask=createGraphics(staticIconSize, staticIconSize);
-  //  } else {
-  //    graphicalMask=createGraphics(masksize, masksize);
-  //  }
-
-  //  graphicalMask.beginDraw();
-
-  //  graphicalMask.background(0);
-
-  //  if (count < threshold == true) {
-  //    imgX = staticIconSize/2;
-  //    imgY = staticIconSize/2;
-  //  } else {
-  //    imgX = masksize/2;
-  //    imgY = masksize/2;
-  //  }
-
-  //  graphicalMask.fill(255);
-  //  graphicalMask.noStroke();
-
-  //  if (count < threshold == true) {
-  //    graphicalMask.ellipse(imgX, imgY, staticIconSize, staticIconSize);
-  //  } else {
-  //    graphicalMask.ellipse(imgX, imgY, masksize, masksize);
-  //  }
-
-  //  graphicalMask.endDraw();
-
-  //  if (count < threshold == true) {
-
-  //    //userLocation.resize(staticIconSize, staticIconSize);
-  //  } else {
-  //    //userLocation.resize(masksize, masksize);
-  //  }
-
-  //  //userLocation.mask(graphicalMask);
-
-  //  //fill(0, 10);
-  //  //rect(0, 0, width, height);
-  //  //fill(0);
-
-  //  if (count < threshold == true) {
-
-  //    //image(userLocation, x, y, staticIconSize, staticIconSize);
-  //  } else {
-  //    //image(userLocation, x, y, masksize, masksize);
-  //  }
-  //}
-  //}
-
   void buildUserRange() {
 
     circleSizeMod = 0.2;
@@ -140,15 +51,76 @@ class UserLocationCircle {
       ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
       circleSizeMod += 0.2;
 
-      for (int ii = 0; ii < locArray.size(); ii++) {
-        
+      for (int ii = 0; ii < 1; ii++) {
+
         String encodedLocString = URLEncoder.encode(locString);
         GetRequest locGet = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/locentry.php?location=" + encodedLocString);
         locGet.send();
         locGet.addHeader("Accept", "application/json");
         processing.data.JSONArray locEntry = processing.data.JSONArray.parse(locGet.getContent());
-        
-        
+
+        println(locEntry);
+
+        angle = i * TWO_PI / count;
+        float x = cx + cos(angle) * lg_rad;
+        float y = cy + sin(angle) * lg_rad;
+
+        float sm_diam = (lg_circ / count);
+        int masksize = (int)sm_diam;
+
+        int imgX;
+        int imgY;
+
+
+        //static sizes------------
+        if (count < threshold == true) {
+          graphicalMask=createGraphics(staticIconSize, staticIconSize);
+        } else {
+          graphicalMask=createGraphics(masksize, masksize);
+        }
+
+        graphicalMask.beginDraw();
+
+        graphicalMask.background(0);
+
+        if (count < threshold == true) {
+          imgX = staticIconSize/2;
+          imgY = staticIconSize/2;
+        } else {
+          imgX = masksize/2;
+          imgY = masksize/2;
+        }
+
+        graphicalMask.fill(255);
+        graphicalMask.noStroke();
+
+        if (count < threshold == true) {
+          graphicalMask.ellipse(imgX, imgY, staticIconSize, staticIconSize);
+        } else {
+          graphicalMask.ellipse(imgX, imgY, masksize, masksize);
+        }
+
+        graphicalMask.endDraw();
+
+        if (count < threshold == true) {
+
+          //userLocation.resize(staticIconSize, staticIconSize);
+        } else {
+          //userLocation.resize(masksize, masksize);
+        }
+
+        //userLocation.mask(graphicalMask);
+
+        //fill(0, 10);
+        //rect(0, 0, width, height);
+        //fill(0);
+
+        if (count < threshold == true) {
+
+          //image(userLocation, x, y, staticIconSize, staticIconSize);
+        } else {
+          //image(userLocation, x, y, masksize, masksize);
+        }
       }
     }
   }
