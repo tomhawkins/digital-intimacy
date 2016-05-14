@@ -51,7 +51,7 @@ class UserLocationCircle {
       ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
       circleSizeMod += 0.2;
 
-      for (int ii = 0; ii < 1; ii++) {
+      for (int ii = 0; ii < locArray.size(); ii++) {
 
         String encodedLocString = URLEncoder.encode(locString);
         GetRequest locGet = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/locentry.php?location=" + encodedLocString);
@@ -59,7 +59,13 @@ class UserLocationCircle {
         locGet.addHeader("Accept", "application/json");
         processing.data.JSONArray locEntry = processing.data.JSONArray.parse(locGet.getContent());
 
-        println(locEntry);
+        //println(locEntry);
+        
+        processing.data.JSONObject imgObject = locEntry.getJSONObject(ii);
+        String imgURL = imgObject.getString("intimacy_img");
+        
+        println(imgURL);
+        userLocation = loadImage(imgURL);
 
         angle = i * TWO_PI / count;
         float x = cx + cos(angle) * lg_rad;
@@ -104,12 +110,12 @@ class UserLocationCircle {
 
         if (count < threshold == true) {
 
-          //userLocation.resize(staticIconSize, staticIconSize);
+          userLocation.resize(staticIconSize, staticIconSize);
         } else {
-          //userLocation.resize(masksize, masksize);
+          userLocation.resize(masksize, masksize);
         }
 
-        //userLocation.mask(graphicalMask);
+        userLocation.mask(graphicalMask);
 
         //fill(0, 10);
         //rect(0, 0, width, height);
@@ -117,9 +123,9 @@ class UserLocationCircle {
 
         if (count < threshold == true) {
 
-          //image(userLocation, x, y, staticIconSize, staticIconSize);
+          image(userLocation, x, y, staticIconSize, staticIconSize);
         } else {
-          //image(userLocation, x, y, masksize, masksize);
+          image(userLocation, x, y, masksize, masksize);
         }
       }
     }

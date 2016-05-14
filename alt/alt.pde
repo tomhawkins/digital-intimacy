@@ -49,6 +49,7 @@ PFont f;
 PImage userImage;
 PImage userTime;
 PImage userFollowers;
+PImage userLocation;
 PGraphics graphicalMask;
 
 float circleSizeMod;
