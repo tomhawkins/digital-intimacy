@@ -133,18 +133,23 @@ class UserLocationCircle {
 
     for (int i = 0; i < locArray.size(); i++) {
       processing.data.JSONObject locObject = locArray.getJSONObject(i);
-      //String locString = locObject.getString("intimacy_location");
-      //println("Location: " + locString);
-      //processing.data.JSONArray currentLoc = values.getJSONArray(i);
+      String locString = locObject.getString("intimacy_location");
+
       noFill();
       stroke(153);
       ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
       circleSizeMod += 0.2;
 
-      //for (int ii = 0; ii < currentLoc.size(); ii++) {
-
-      //  String user = currentLoc.getString(ii);
-      //  println(user);
+      for (int ii = 0; ii < locArray.size(); ii++) {
+        
+        String encodedLocString = URLEncoder.encode(locString);
+        GetRequest locGet = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/locentry.php?location=" + encodedLocString);
+        locGet.send();
+        locGet.addHeader("Accept", "application/json");
+        processing.data.JSONArray locEntry = processing.data.JSONArray.parse(locGet.getContent());
+        
+        
+      }
     }
   }
 }
