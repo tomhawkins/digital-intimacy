@@ -24,7 +24,8 @@ class UserLocationCircle {
   }
 
   void buildUserRange() {
-    
+
+
     background(0);
 
     circleSizeMod = 0.2;
@@ -63,9 +64,11 @@ class UserLocationCircle {
 
       for (int ii = 0; ii < locEntry.size(); ii++) {
 
+        fill(0, 5);
+        rect(0, 0, width, height);
+        fill(0);
+
         //println(locEntry);
-
-
 
         processing.data.JSONObject imgObject = locEntry.getJSONObject(ii);
         String imgURL = imgObject.getString("intimacy_img");
@@ -124,10 +127,6 @@ class UserLocationCircle {
         }
 
         userLocation.mask(graphicalMask);
-
-        //fill(0, 10);
-        //rect(0, 0, width, height);
-        //fill(0);
 
         if (count < threshold == true) {
 

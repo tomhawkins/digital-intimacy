@@ -45,6 +45,11 @@ UserFollowerCircle userFollowerRange4;
 
 UserLocationCircle userLocationCircle1;
 
+TextCircle textTime1;
+TextCircle textTime2;
+TextCircle textTime3;
+TextCircle textTime4;
+
 PFont f;
 PImage userImage;
 PImage userTime;
@@ -100,7 +105,7 @@ void setup()
 
   getNewTweets();
   userTimeRange1 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=10:00:00.000000", (height * sizeModLarge), widthPosMod, heightPosMod, 30, 60); 
-  userTimeRange2 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=b0", (height * sizeModMed), widthPosMod, heightPosMod, 40, 60); 
+  userTimeRange2 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=10:00:01.000000&end=14:00:00.000000", (height * sizeModMed), widthPosMod, heightPosMod, 40, 60); 
   userTimeRange3 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=14:00:01.000000&end=18:00:00.000000", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
   userTimeRange4 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=18:00:01.000000&end=23:59:59.000000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
 
@@ -111,92 +116,51 @@ void setup()
 
   userLocationCircle1 = new UserLocationCircle("https://i7226684.budmd.uk/intimacy/dumper/location.php", "https://i7226684.budmd.uk/intimacy/dumper/retrieve.php", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
 
+  textTime1 = new TextCircle("00:00 - 10:00", (height * sizeModXS) / 2);
+  textTime2 = new TextCircle("10:00 - 14:00", (height * sizeModSmall) / 2);
+  textTime3 = new TextCircle("14:00 - 18:00", (height * sizeModMed) / 2);
+  textTime4 = new TextCircle("18:00 - 00:00", (height * sizeModLarge) / 2);
+  
   thread("refreshTweets");
   //thread("userTimeRange");
   //thread("mousePressed");
   //thread("dump");
+  getNewTweets();
   background(0);
 }
 
 void draw()
 {
-  //int[] depth = kinect.getRawDepth();
-  //Colour thresholds
-  //for (int i=0; i < depth.length; i++) {
-  //  if (depth[i] < 900) {
-  //    println("Case 0 switch");
-  //    switchData = 1;
-  //    break;
-  //  } else if (depth[i] < 1200 && depth[i] > 901) {
-  //    println("Case 1 switch");
-  //    switchData = 2;
-  //    break;
-  //  } else if (depth[i] < 1600 && depth[i] > 1201) {
-  //    switchData = 3;
-  //    println("Case 2 switch");
-  //    break;
-  //  } else {
-  //    switchData = 4;
-  //    println("Case 3 switch");
-  //    break;
-  //  }
-  //}
-
-  //if (switchData == 1) {
-  //  userFollowerRangeBackground();
-  //  userFollowerRange();
-  //} else if (switchData == 2) {
-  //  userTimeRangeBackground();
-  //  userTimeRange();
-  //} else if (switchData == 3) {
-  //  println("switchData is 3");
-  //} else {
-  //  println("switchData is 4");
-  //  userTimeRangeBackground();
-  //  userTimeRange();
-  //}
-
+  
+  //kinectControl();
+  //refreshTweets();
+  
+  userTimeRangeBackground();
+  userTimeRange();
+  
   //userFollowerRangeBackground();
   //userFollowerRange();
-
-  userLocationCircle1.buildUserRange();
-
-
-  //take logic from kinect prototype... if/else, and, if depth range 1, then int switch = 0, depth range 2, int switch = 1, range 3, int switch = 2, etc
-  //each switch changes the data visualisation being shown
-
-  //switch(switchData) {
-  //case 0: 
-  // userFollowerRangeBackground();
-  // userFollowerRange();
-  // break;
-  //case 1: 
-  // userTimeRangeBackground();
-  // userTimeRange();
-  // break;
-  //case 2:
-  // //userLocationBackground();
-  // //userLocation();
-  // println("Case 2 switch");
-  // break;
-  //case 3:
-  // //userLocationBackground();
-  // //userLocation();
-  // println("Case 3 switch");
-  //}
-
-  //refreshTweets();
-
-
+  
+  //userLocationRange();
+  
+  textTime1.buildText();
+  textTime2.buildText();
+  textTime3.buildText();
+  textTime4.buildText();
+  
   //dump();
-  //listUsers();
   //getTweet();
   //getDetails();
   //getImage();
   //getScreenName();
 }
 
+void userLocationRange() {
+  userLocationCircle1.buildUserRange();
+}
+
 void userTimeRangeBackground() {
+  background(0);
   noFill();
   stroke(153);
   ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
@@ -228,22 +192,83 @@ void userFollowerRange() {
   userFollowerRange4.buildRange();
 }
 
+//void kinectControl() {
+//  int[] depth = kinect.getRawDepth();
+//  //Colour thresholds
+//  for (int i=0; i < depth.length; i++) {
+//   if (depth[i] < 900) {
+//     println("Case 0 switch");
+//     switchData = 1;
+//     break;
+//   } else if (depth[i] < 1200 && depth[i] > 901) {
+//     println("Case 1 switch");
+//     switchData = 2;
+//     break;
+//   } else if (depth[i] < 1600 && depth[i] > 1201) {
+//     switchData = 3;
+//     println("Case 2 switch");
+//     break;
+//   } else {
+//     switchData = 4;
+//     println("Case 3 switch");
+//     break;
+//   }
+//  }
+
+//  if (switchData == 1) {
+//   userFollowerRangeBackground();
+//   userFollowerRange();
+//  } else if (switchData == 2) {
+//   userTimeRangeBackground();
+//   userTimeRange();
+//  } else if (switchData == 3) {
+//   println("switchData is 3");
+//  } else {
+//   println("switchData is 4");
+//   userTimeRangeBackground();
+//   userTimeRange();
+//  }
+
+//  //take logic from kinect prototype... if/else, and, if depth range 1, then int switch = 0, depth range 2, int switch = 1, range 3, int switch = 2, etc
+//  //each switch changes the data visualisation being shown
+
+//  switch(switchData) {
+//  case 0: 
+//  userFollowerRangeBackground();
+//  userFollowerRange();
+//  break;
+//  case 1: 
+//  userTimeRangeBackground();
+//  userTimeRange();
+//  break;
+//  case 2:
+//  //userLocationBackground();
+//  //userLocation();
+//  println("Case 2 switch");
+//  break;
+//  case 3:
+//  //userLocationBackground();
+//  //userLocation();
+//  println("Case 3 switch");
+//  }
+//}
+
 void getNewTweets()
 {
-  try
-  {
-    println("Initialising...");
+ try
+ {
+   println("Initialising...");
 
-    Query query = new Query(searchString);
-    QueryResult result = twitter.search(query);
-    currentTweet = result.getTweets().get(0);
-    user = currentTweet.getUser();
-  }
-  catch (TwitterException te)
-  {
-    System.out.println("Failed to search tweets: " + te.getMessage());
-    System.exit(-1);
-  }
+   Query query = new Query(searchString);
+   QueryResult result = twitter.search(query);
+   currentTweet = result.getTweets().get(0);
+   user = currentTweet.getUser();
+ }
+ catch (TwitterException te)
+ {
+   System.out.println("Failed to search tweets: " + te.getMessage());
+   System.exit(-1);
+ }
 }
 
 void refreshTweets()
@@ -389,6 +414,8 @@ void mousePressed() {
   String encodedImg = URLEncoder.encode(profile);
 
   //--- DEVELOPMENT CODE GOES BELOW--
+  
+
 }
 
 //void keyPressed() {
