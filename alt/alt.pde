@@ -63,9 +63,9 @@ float iconRadiMod;
 int widthPosMod = 600;
 int heightPosMod = 310;
 int switchData = 0;
-float sizeModLarge = 0.85;
-float sizeModMed = 0.65;
-float sizeModSmall = 0.45;
+float sizeModLarge = 1;
+float sizeModMed = 0.75;
+float sizeModSmall = 0.5;
 float sizeModXS = 0.25;
 
 boolean depth = true;
@@ -116,11 +116,11 @@ void setup()
 
   userLocationCircle1 = new UserLocationCircle("https://i7226684.budmd.uk/intimacy/dumper/location.php", "https://i7226684.budmd.uk/intimacy/dumper/retrieve.php", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
 
-  textTime1 = new TextCircle("00:00 - 10:00", (height * sizeModXS) / 2);
-  textTime2 = new TextCircle("10:00 - 14:00", (height * sizeModSmall) / 2);
-  textTime3 = new TextCircle("14:00 - 18:00", (height * sizeModMed) / 2);
-  textTime4 = new TextCircle("18:00 - 00:00", (height * sizeModLarge) / 2);
-  
+  textTime1 = new TextCircle("00:00 - 10:00", (height * sizeModXS) / 2 + 33);
+  textTime2 = new TextCircle("10:00 - 14:00", (height * sizeModSmall) / 2 + 33);
+  textTime3 = new TextCircle("14:00 - 18:00", (height * sizeModMed) / 2 + 33);
+  textTime4 = new TextCircle("18:00 - 00:00", (height * sizeModLarge) / 2 + 33);
+
   thread("refreshTweets");
   //thread("userTimeRange");
   //thread("mousePressed");
@@ -131,23 +131,23 @@ void setup()
 
 void draw()
 {
-  
+
   //kinectControl();
   //refreshTweets();
-  
+
   userTimeRangeBackground();
   userTimeRange();
-  
+
   //userFollowerRangeBackground();
   //userFollowerRange();
-  
+
   //userLocationRange();
-  
+  translate(628, 338);
   textTime1.buildText();
   textTime2.buildText();
   textTime3.buildText();
   textTime4.buildText();
-  
+
   //dump();
   //getTweet();
   //getDetails();
@@ -255,20 +255,20 @@ void userFollowerRange() {
 
 void getNewTweets()
 {
- try
- {
-   println("Initialising...");
+  try
+  {
+    println("Initialising...");
 
-   Query query = new Query(searchString);
-   QueryResult result = twitter.search(query);
-   currentTweet = result.getTweets().get(0);
-   user = currentTweet.getUser();
- }
- catch (TwitterException te)
- {
-   System.out.println("Failed to search tweets: " + te.getMessage());
-   System.exit(-1);
- }
+    Query query = new Query(searchString);
+    QueryResult result = twitter.search(query);
+    currentTweet = result.getTweets().get(0);
+    user = currentTweet.getUser();
+  }
+  catch (TwitterException te)
+  {
+    System.out.println("Failed to search tweets: " + te.getMessage());
+    System.exit(-1);
+  }
 }
 
 void refreshTweets()
@@ -414,8 +414,6 @@ void mousePressed() {
   String encodedImg = URLEncoder.encode(profile);
 
   //--- DEVELOPMENT CODE GOES BELOW--
-  
-
 }
 
 //void keyPressed() {

@@ -13,7 +13,6 @@ class TextCircle {
 
   void buildText() {
 
-    translate(width / 2, height / 2);
 
     // We must keep track of our position along the curve
     float arclength = 0;
@@ -43,11 +42,12 @@ class TextCircle {
 
       // Display the character
       fill(255);
+      textSize(18);
       text(currentChar, 0, 0);
       popMatrix();
 
       // Move halfway again
-      arclength += w/2;
+      arclength += w/2 + 2;
     }
   }
 }
