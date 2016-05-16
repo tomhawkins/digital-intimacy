@@ -2,18 +2,20 @@ class UserLocationCircle {
   String getlink;
   String locList;
   String locString;
+  String message;
   float lg_diam;
   float cx;
   float cy;
   int threshold;
   int staticIconSize;
   int count;
+  int r;
   float angle;
   processing.data.JSONArray values;
   processing.data.JSONArray locArray;
 
   // The Constructor is defined with arguments.
-  UserLocationCircle(String link, String locLink, float diam, float locX, float locY, int t, int s) {
+  UserLocationCircle(String link, String locLink, float diam, float locX, float locY, int t, int s, String message_, int r_) {
     getlink = link;
     locList = locLink;
     lg_diam = diam;
@@ -21,6 +23,8 @@ class UserLocationCircle {
     cy = locY;
     threshold = t;
     staticIconSize = s;
+    message = message_;
+    r = r_;
   }
 
   void buildUserRange() {
@@ -137,6 +141,47 @@ class UserLocationCircle {
       }
     }
   }
+  
+    void buildText() {
+
+
+    // We must keep track of our position along the curve
+    float arclength = 0;
+
+
+    for (int i = 0; i < message.length(); i++)
+    {
+      // Instead of a constant width, we check the width of each character.
+      char currentChar = message.charAt(i);
+      float w = textWidth(currentChar);
+
+      // Each box is centered so we move half the width
+      arclength += w/2;
+
+      // Angle in radians is the arclength divided by the radius
+
+      // Starting on the left side of the circle by adding PI
+      float theta = PI + arclength / r;    
+
+      pushMatrix();
+
+      // Polar to cartesian coordinate conversion
+      translate(r*cos(theta), r*sin(theta));
+
+      // Rotate the box
+      rotate(theta+PI/2); // rotation is offset by 90 degrees
+
+      // Display the character
+      fill(255);
+      textSize(18);
+      text(currentChar, 0, 0);
+      popMatrix();
+
+      // Move halfway again
+      arclength += w/2 + 2;
+    }
+  }
+  
 }
 
 //

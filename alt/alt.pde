@@ -114,7 +114,7 @@ void setup()
   userFollowerRange3 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=401&end=700", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
   userFollowerRange4 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=1000&end=2000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
 
-  userLocationCircle1 = new UserLocationCircle("https://i7226684.budmd.uk/intimacy/dumper/location.php", "https://i7226684.budmd.uk/intimacy/dumper/retrieve.php", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
+  userLocationCircle1 = new UserLocationCircle("https://i7226684.budmd.uk/intimacy/dumper/location.php", "https://i7226684.budmd.uk/intimacy/dumper/retrieve.php", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60, "Bournemouth", (height * sizeModXS) / 2 + 33); 
 
   textTime1 = new TextCircle("00:00 - 10:00", (height * sizeModXS) / 2 + 33);
   textTime2 = new TextCircle("10:00 - 14:00", (height * sizeModSmall) / 2 + 33);
