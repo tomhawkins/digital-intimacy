@@ -68,9 +68,6 @@ class UserLocationCircle {
 
       for (int ii = 0; ii < locEntry.size(); ii++) {
 
-        fill(0, 5);
-        rect(0, 0, width, height);
-        fill(0);
 
         //println(locEntry);
 

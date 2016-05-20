@@ -29,9 +29,9 @@ void draw() {
   background(255);
 
   // Run the tracking analysis
-  //tracker.track();
+  tracker.track();
   // Show the image
-  //tracker.display();
+  tracker.display();
 
   // Let's draw the raw location
   PVector v1 = tracker.getPos();

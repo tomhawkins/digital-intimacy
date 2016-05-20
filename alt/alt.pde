@@ -50,6 +50,11 @@ TextCircle textTime2;
 TextCircle textTime3;
 TextCircle textTime4;
 
+TextCircle textFollower1;
+TextCircle textFollower2;
+TextCircle textFollower3;
+TextCircle textFollower4;
+
 PFont f;
 PImage userImage;
 PImage userTime;
@@ -112,14 +117,19 @@ void setup()
   userFollowerRange1 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=0&end=100", (height * sizeModLarge), widthPosMod, heightPosMod, 30, 60); 
   userFollowerRange2 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=101&end=400", (height * sizeModMed), widthPosMod, heightPosMod, 40, 60); 
   userFollowerRange3 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=401&end=700", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
-  userFollowerRange4 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=1000&end=2000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
+  userFollowerRange4 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=701&end=2000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
 
-  userLocationCircle1 = new UserLocationCircle("https://i7226684.budmd.uk/intimacy/dumper/location.php", "https://i7226684.budmd.uk/intimacy/dumper/retrieve.php", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60, "Bournemouth", (height * sizeModXS) / 2 + 33); 
+  userLocationCircle1 = new UserLocationCircle("https://i7226684.budmd.uk/intimacy/dumper/location.php", "https://i7226684.budmd.uk/intimacy/dumper/retrieve.php", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60, "Bournemouth", (height * sizeModXS)); 
 
   textTime1 = new TextCircle("00:00 - 10:00", (height * sizeModXS) / 2 + 33);
   textTime2 = new TextCircle("10:00 - 14:00", (height * sizeModSmall) / 2 + 33);
   textTime3 = new TextCircle("14:00 - 18:00", (height * sizeModMed) / 2 + 33);
   textTime4 = new TextCircle("18:00 - 00:00", (height * sizeModLarge) / 2 + 33);
+
+  textFollower1 = new TextCircle("0 - 100 FOLLOWERS", (height * sizeModXS) / 2 + 33);
+  textFollower2 = new TextCircle("101 - 400 FOLLOWERS", (height * sizeModSmall) / 2 + 33);
+  textFollower3 = new TextCircle("401 - 700 FOLLOWERS", (height * sizeModMed) / 2 + 33);
+  textFollower4 = new TextCircle("701 - 2000 FOLLOWERS", (height * sizeModLarge) / 2 + 33);
 
   //thread("refreshTweets");
   //thread("userTimeRange");
@@ -143,11 +153,7 @@ void draw()
   //userFollowerRange();
 
   //userLocationRange();
-  //translate(628, 338);
-  //textTime1.buildText();
-  //textTime2.buildText();
-  //textTime3.buildText();
-  //textTime4.buildText();
+
 
   //dump();
   //getTweet();
@@ -184,6 +190,11 @@ void userTimeRange() {
   userTimeRange2.buildRange();
   userTimeRange3.buildRange();
   userTimeRange4.buildRange();
+  translate(628, 338);
+  textTime1.buildText();
+  textTime2.buildText();
+  textTime3.buildText();
+  textTime4.buildText();
 }
 
 void userFollowerRange() {
@@ -191,6 +202,11 @@ void userFollowerRange() {
   userFollowerRange2.buildRange();
   userFollowerRange3.buildRange();
   userFollowerRange4.buildRange();
+  translate(628, 338);
+  textFollower1.buildText();
+  textFollower2.buildText();
+  textFollower3.buildText();
+  textFollower4.buildText();
 }
 
 
