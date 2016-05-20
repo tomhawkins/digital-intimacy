@@ -93,9 +93,9 @@ class UserTimeCircle {
 
       if (count < threshold == true) {
 
-        image(userTime, x, y, staticIconSize, staticIconSize);
+        graphics.image(userTime, x, y, staticIconSize, staticIconSize);
       } else {
-        image(userTime, x, y, masksize, masksize);
+        graphics.image(userTime, x, y, masksize, masksize);
       }
     }
   }

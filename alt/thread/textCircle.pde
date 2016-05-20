@@ -41,9 +41,9 @@ class TextCircle {
       rotate(theta+PI/2); // rotation is offset by 90 degrees
 
       // Display the character
-      fill(255);
-      textSize(18);
-      text(currentChar, 0, 0);
+      graphics.fill(255);
+      graphics.textSize(18);
+      graphics.text(currentChar, 0, 0);
       popMatrix();
 
       // Move halfway again

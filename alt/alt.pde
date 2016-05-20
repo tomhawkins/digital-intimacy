@@ -131,8 +131,7 @@ void setup()
   textFollower3 = new TextCircle("401 - 700 FOLLOWERS", (height * sizeModMed) / 2 + 33);
   textFollower4 = new TextCircle("701 - 2000 FOLLOWERS", (height * sizeModLarge) / 2 + 33);
 
-  //thread("refreshTweets");
-  //thread("userTimeRange");
+  thread("refreshTweets");
   //thread("mousePressed");
   //thread("dump");
   getNewTweets();
@@ -144,7 +143,7 @@ void draw()
   background(0);
   tracker.track();
 
-  //refreshTweets();
+  refreshTweets();
 
   //userTimeRangeBackground();
   //userTimeRange();
@@ -252,6 +251,7 @@ void refreshTweets()
       println("Focus currentTweet Updated");
       dump();
     }
+    delay(7000);
   }
   catch (TwitterException te)
   {

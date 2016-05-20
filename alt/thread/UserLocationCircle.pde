@@ -53,9 +53,9 @@ class UserLocationCircle {
       processing.data.JSONObject locObject = locArray.getJSONObject(i);
       String locString = locObject.getString("intimacy_location");
 
-      noFill();
-      stroke(153);
-      ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
+      graphics.noFill();
+      graphics.stroke(153);
+      graphics.ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
       circleSizeMod += 0.2;
       iconRadiMod += 0.393;
 
@@ -131,9 +131,9 @@ class UserLocationCircle {
 
         if (count < threshold == true) {
 
-          image(userLocation, x, y, staticIconSize, staticIconSize);
+          graphics.image(userLocation, x, y, staticIconSize, staticIconSize);
         } else {
-          image(userLocation, x, y, masksize, masksize);
+          graphics.image(userLocation, x, y, masksize, masksize);
         }
       }
     }
@@ -169,9 +169,9 @@ class UserLocationCircle {
       rotate(theta+PI/2); // rotation is offset by 90 degrees
 
       // Display the character
-      fill(255);
-      textSize(18);
-      text(currentChar, 0, 0);
+      graphics.fill(255);
+      graphics.textSize(18);
+      graphics.text(currentChar, 0, 0);
       popMatrix();
 
       // Move halfway again

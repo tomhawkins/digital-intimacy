@@ -129,7 +129,7 @@ void setup() {
 
   //init window
   size(1280,700); //creates a new window
-  graphics = createGraphics(window_x, window_y);//creates the draw area
+  graphics = createGraphics(1280, 700);//creates the draw area
   frameRate(framerateRender); //tells the draw function to run
 
   /*
@@ -191,7 +191,7 @@ void setup() {
   //thread("mousePressed");
   //thread("dump");
   getNewTweets();
-  graphics.background(0);
+  background(0);
 
   //start Threads
   //Start a Thread for Logic!
@@ -223,7 +223,7 @@ void draw() {
   //-------------
 
   graphics.background(0);
-  tracker.track();
+  
 
 
   //dump();
@@ -253,7 +253,8 @@ Thread logicThread = new Thread(new Runnable() {
 
       countLogicCalls++;
       //------------
-      refreshTweets();
+      tracker.track();
+
 
       //------------
       //framelimiter
@@ -313,10 +314,7 @@ you can access all variables that are defined in main!
       //-------------      
 
 
-      /*
-    This is a thread for miscellaneaous calculations like fps etc.
-       i moved it into an own thread to reduce slow downs
-       */
+      refreshTweets();
 
 
       //fps calculation goes here
@@ -464,6 +462,7 @@ void refreshTweets()
       println("Focus currentTweet Updated");
       dump();
     }
+    delay(7000);
   }
   catch (TwitterException te)
   {

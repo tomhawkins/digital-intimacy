@@ -92,9 +92,9 @@ class UserFollowerCircle {
 
       if (count < threshold == true) {
 
-        image(userFollowers, x, y, staticIconSize, staticIconSize);
+        graphics.image(userFollowers, x, y, staticIconSize, staticIconSize);
       } else {
-        image(userFollowers, x, y, masksize, masksize);
+        graphics.image(userFollowers, x, y, masksize, masksize);
       }
     }
   }
