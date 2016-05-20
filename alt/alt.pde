@@ -1,5 +1,4 @@
-import http.requests.*; //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
-
+import http.requests.*; //<>//
 import twitter4j.conf.*;
 import twitter4j.*;
 import twitter4j.auth.*;
@@ -19,10 +18,11 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 
 import java.util.*;
-//import org.openkinect.*;
-//import org.openkinect.processing.*;
+import org.openkinect.*;
+import org.openkinect.processing.*;
 
-//Kinect kinect;
+Kinect kinect;
+KinectTracker tracker;
 
 Twitter twitter;
 URL url;
@@ -86,12 +86,12 @@ void setup()
   textAlign(CENTER);
   ellipseMode(CENTER);
 
-  //kinect = new Kinect(this);
+  kinect = new Kinect(this);
   //kinect.start();
-  //kinect.enableDepth(depth);
   //kinect.enableRGB(rgb);
   //kinect.enableIR(ir);
   //kinect.tilt(deg);
+  tracker = new KinectTracker();
 
   ConfigurationBuilder cb = new ConfigurationBuilder();
 
@@ -121,7 +121,7 @@ void setup()
   textTime3 = new TextCircle("14:00 - 18:00", (height * sizeModMed) / 2 + 33);
   textTime4 = new TextCircle("18:00 - 00:00", (height * sizeModLarge) / 2 + 33);
 
-  thread("refreshTweets");
+  //thread("refreshTweets");
   //thread("userTimeRange");
   //thread("mousePressed");
   //thread("dump");
@@ -131,22 +131,23 @@ void setup()
 
 void draw()
 {
+  background(0);
+  tracker.track();
 
-  //kinectControl();
   //refreshTweets();
 
-  userTimeRangeBackground();
-  userTimeRange();
+  //userTimeRangeBackground();
+  //userTimeRange();
 
   //userFollowerRangeBackground();
   //userFollowerRange();
 
   //userLocationRange();
-  translate(628, 338);
-  textTime1.buildText();
-  textTime2.buildText();
-  textTime3.buildText();
-  textTime4.buildText();
+  //translate(628, 338);
+  //textTime1.buildText();
+  //textTime2.buildText();
+  //textTime3.buildText();
+  //textTime4.buildText();
 
   //dump();
   //getTweet();
@@ -192,66 +193,6 @@ void userFollowerRange() {
   userFollowerRange4.buildRange();
 }
 
-//void kinectControl() {
-//  int[] depth = kinect.getRawDepth();
-//  //Colour thresholds
-//  for (int i=0; i < depth.length; i++) {
-//   if (depth[i] < 900) {
-//     println("Case 0 switch");
-//     switchData = 1;
-//     break;
-//   } else if (depth[i] < 1200 && depth[i] > 901) {
-//     println("Case 1 switch");
-//     switchData = 2;
-//     break;
-//   } else if (depth[i] < 1600 && depth[i] > 1201) {
-//     switchData = 3;
-//     println("Case 2 switch");
-//     break;
-//   } else {
-//     switchData = 4;
-//     println("Case 3 switch");
-//     break;
-//   }
-//  }
-
-//  if (switchData == 1) {
-//   userFollowerRangeBackground();
-//   userFollowerRange();
-//  } else if (switchData == 2) {
-//   userTimeRangeBackground();
-//   userTimeRange();
-//  } else if (switchData == 3) {
-//   println("switchData is 3");
-//  } else {
-//   println("switchData is 4");
-//   userTimeRangeBackground();
-//   userTimeRange();
-//  }
-
-//  //take logic from kinect prototype... if/else, and, if depth range 1, then int switch = 0, depth range 2, int switch = 1, range 3, int switch = 2, etc
-//  //each switch changes the data visualisation being shown
-
-//  switch(switchData) {
-//  case 0: 
-//  userFollowerRangeBackground();
-//  userFollowerRange();
-//  break;
-//  case 1: 
-//  userTimeRangeBackground();
-//  userTimeRange();
-//  break;
-//  case 2:
-//  //userLocationBackground();
-//  //userLocation();
-//  println("Case 2 switch");
-//  break;
-//  case 3:
-//  //userLocationBackground();
-//  //userLocation();
-//  println("Case 3 switch");
-//  }
-//}
 
 void getNewTweets()
 {
@@ -416,25 +357,25 @@ void mousePressed() {
   //--- DEVELOPMENT CODE GOES BELOW--
 }
 
-//void keyPressed() {
-//  if (key == 'd') {
-//    depth = !depth;
-//    kinect.enableDepth(depth);
-//  } else if (key == 'r') {
-//    rgb = !rgb;
-//    if (rgb) ir = false;
-//    kinect.enableRGB(rgb);
-//  } else if (key == 'i') {
-//    ir = !ir;
-//    if (ir) rgb = false;
-//    kinect.enableIR(ir);
-//  } else if (key == CODED) {
-//    if (keyCode == UP) {
-//      deg++;
-//    } else if (keyCode == DOWN) {
-//      deg--;
-//    }
-//    deg = constrain(deg, 0, 30);
-//    kinect.tilt(deg);
-//  }
-//}
+void keyPressed() {
+  if (key == 'd') {
+    depth = !depth;
+    kinect.enableDepth(depth);
+  } else if (key == 'r') {
+    rgb = !rgb;
+    if (rgb) ir = false;
+    kinect.enableRGB(rgb);
+  } else if (key == 'i') {
+    ir = !ir;
+    if (ir) rgb = false;
+    kinect.enableIR(ir);
+  } else if (key == CODED) {
+    if (keyCode == UP) {
+      deg++;
+    } else if (keyCode == DOWN) {
+      deg--;
+    }
+    deg = constrain(deg, 0, 30);
+    kinect.tilt(deg);
+  }
+}

@@ -9,13 +9,13 @@ class UserLocationCircle {
   int threshold;
   int staticIconSize;
   int count;
-  int r;
+  float r;
   float angle;
   processing.data.JSONArray values;
   processing.data.JSONArray locArray;
 
   // The Constructor is defined with arguments.
-  UserLocationCircle(String link, String locLink, float diam, float locX, float locY, int t, int s, String message_, int r_) {
+  UserLocationCircle(String link, String locLink, float diam, float locX, float locY, int t, int s, String message_, float r_) {
     getlink = link;
     locList = locLink;
     lg_diam = diam;
@@ -77,7 +77,7 @@ class UserLocationCircle {
         processing.data.JSONObject imgObject = locEntry.getJSONObject(ii);
         String imgURL = imgObject.getString("intimacy_img");
 
-        println(imgURL);
+        //println(imgURL);
         userLocation = loadImage(imgURL);
 
 
