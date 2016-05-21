@@ -226,20 +226,32 @@ void setup() {
 void draw() {
 
   countRenderCalls++;
-  
-    switch(switchData) {
+
+  switch(switchData) {
   case 1: 
     println("1");  // Does not execute
+    userFollowerRangeBackground();
+    userFollowerRange1.render();
+    userFollowerRange2.render();
+    userFollowerRange3.render();
+    userFollowerRange4.render();
     break;
   case 2: 
     println("2");  // Prints "One"
+    userLocationCircle1.rangeRender();
+    userLocationCircle1.render();
     break;
   case 3: 
     println("3");  // Does not execute
+    userTimeRangeBackground();
+    userTimeRange1.render();
+    userTimeRange2.render();
+    userTimeRange3.render();
+    userTimeRange4.render();
     break;
   }
-  
-    println(switchData);
+
+  println(switchData);
 
   graphics.beginDraw();
 
