@@ -139,6 +139,8 @@ class UserLocationCircle {
   }
 
 void render() {
+  
+  rangeRender();
 
   if (count < threshold == true) {
         graphics.image(userLocation, x, y, staticIconSize, staticIconSize);

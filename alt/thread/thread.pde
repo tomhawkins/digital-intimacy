@@ -226,18 +226,6 @@ void setup() {
 void draw() {
 
   countRenderCalls++;
-  textSwitch = false;
-
-  userTimeLowThreshold = false;
-  userTimeHighThreshold = false;
-
-  userLocationRangeSwitch = false;
-  userLocationLowThreshold = false;
-  userLocationHighThreshold = false;
-  userLocationTextSwitch = false;
-
-  userFollowerLowThreshold = false;
-  userFollowerHighThreshold = false;
 
   graphics.beginDraw();
 
@@ -250,12 +238,22 @@ void draw() {
   //-------------
 
   graphics.background(0);
-  graphics.ellipse(50,50,50,50);
+
+  switch(switchData) {
+  case 1: 
+    println("1");  // Does not execute
+    break;
+  case 2: 
+    println("2");  // Prints "One"
+    break;
+  case 3: 
+    println("3");  // Does not execute
+    break;
+  }
 
   //-------------
   graphics.endDraw();
-  println(switchData);
-  //graphics.image(graphics, 0, 0);
+  graphics.image(graphics, 0, 0);
   //no sleep calculation here because processing  is doing  it for us already
 }
 
@@ -392,42 +390,6 @@ you can access all variables that are defined in main!
 
 void userLocationRange() {
   userLocationCircle1.buildUserRange();
-}
-
-void locationRender() {
-
-  userLocationCircle1.rangeRender();
-  userLocationCircle1.lowRender();
-  userLocationCircle1.highRender();
-  userLocationCircle1.textRender();
-}
-
-void timeRenderLow() {
-  userTimeRange1.lowRender();
-  userTimeRange2.lowRender();
-  userTimeRange3.lowRender();
-  userTimeRange4.lowRender();
-}
-
-void timeRenderHigh() {
- userTimeRange1.highRender();
- userTimeRange2.highRender();
- userTimeRange3.highRender();
- userTimeRange4.highRender();
-}
-
-void followerRenderLow() {
-userFollowerRange1.lowRender();
-userFollowerRange2.lowRender();
-userFollowerRange3.lowRender();
-userFollowerRange4.lowRender();
-}
-
-void followerRenderHigh() {
-  userFollowerRange1.highRender();
-  userFollowerRange1.highRender();
-  userFollowerRange1.highRender();
-  userFollowerRange1.highRender();
 }
 
 void userTimeRangeBackground() {

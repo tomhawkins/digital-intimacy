@@ -98,6 +98,8 @@ class UserFollowerCircle {
   }
 
   void render() {
+    
+    userFollowerRangeBackground();
 
     if (count < threshold == true) {
       //println("userTimeLowThreshold is True");

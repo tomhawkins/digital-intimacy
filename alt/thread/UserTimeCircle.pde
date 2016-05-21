@@ -99,6 +99,8 @@ class UserTimeCircle {
   }
 
   void render() {
+    
+    userTimeRangeBackground();
 
     if (count < threshold == true) {
       //println("userTimeLowThreshold is True");
