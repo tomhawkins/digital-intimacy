@@ -11,6 +11,12 @@ class UserLocationCircle {
   int count;
   float r;
   float angle;
+  float arclength;
+  float w;
+  float x;
+  float y;
+  int masksize;
+  char currentChar;
   processing.data.JSONArray values;
   processing.data.JSONArray locArray;
 
@@ -53,9 +59,7 @@ class UserLocationCircle {
       processing.data.JSONObject locObject = locArray.getJSONObject(i);
       String locString = locObject.getString("intimacy_location");
 
-      graphics.noFill();
-      graphics.stroke(153);
-      graphics.ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
+      userLocationRangeSwitch = true;
       circleSizeMod += 0.2;
       iconRadiMod += 0.393;
 
@@ -80,11 +84,11 @@ class UserLocationCircle {
 
 
         angle = ii * TWO_PI / count;
-        float x = cx + cos(angle) * (lg_diam * iconRadiMod);
-        float y = cy + sin(angle) * (lg_diam * iconRadiMod);
+        x = cx + cos(angle) * (lg_diam * iconRadiMod);
+        y = cy + sin(angle) * (lg_diam * iconRadiMod);
 
         float sm_diam = (lg_circ / count);
-        int masksize = (int)sm_diam;
+        masksize = (int)sm_diam;
 
         int imgX;
         int imgY;
@@ -130,27 +134,26 @@ class UserLocationCircle {
         userLocation.mask(graphicalMask);
 
         if (count < threshold == true) {
-
-          graphics.image(userLocation, x, y, staticIconSize, staticIconSize);
+          userLocationLowThreshold = true;
         } else {
-          graphics.image(userLocation, x, y, masksize, masksize);
+          userLocationHighThreshold = true;
         }
       }
     }
   }
-  
-    void buildText() {
+
+  void buildText() {
 
 
     // We must keep track of our position along the curve
-    float arclength = 0;
+    arclength = 0;
 
 
     for (int i = 0; i < message.length(); i++)
     {
       // Instead of a constant width, we check the width of each character.
-      char currentChar = message.charAt(i);
-      float w = textWidth(currentChar);
+      currentChar = message.charAt(i);
+      w = textWidth(currentChar);
 
       // Each box is centered so we move half the width
       arclength += w/2;
@@ -169,16 +172,34 @@ class UserLocationCircle {
       rotate(theta+PI/2); // rotation is offset by 90 degrees
 
       // Display the character
-      graphics.fill(255);
-      graphics.textSize(18);
-      graphics.text(currentChar, 0, 0);
-      popMatrix();
-
-      // Move halfway again
-      arclength += w/2 + 2;
+      userLocationTextSwitch = true;
     }
   }
-  
+
+  void lowRender() {
+    graphics.image(userLocation, x, y, staticIconSize, staticIconSize);
+  }
+
+  void highRender() {
+    graphics.image(userLocation, x, y, masksize, masksize);
+  }
+
+  void textRender() {
+
+    graphics.fill(255);
+    graphics.textSize(18);
+    graphics.text(currentChar, 0, 0);
+    popMatrix();
+
+    // Move halfway again
+    arclength += w/2 + 2;
+  }
+
+  void rangeRender() {
+    graphics.noFill();
+    graphics.stroke(153);
+    graphics.ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
+  }
 }
 
 //

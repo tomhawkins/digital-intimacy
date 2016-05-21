@@ -80,6 +80,19 @@ boolean depth = true;
 boolean rgb = false;
 boolean ir = false;
 
+boolean textSwitch;
+
+boolean userTimeLowThreshold;
+boolean userTimeHighThreshold;
+
+boolean userLocationRangeSwitch;
+boolean userLocationLowThreshold;
+boolean userLocationHighThreshold;
+boolean userLocationTextSwitch;
+
+boolean userFollowerLowThreshold;
+boolean userFollowerHighThreshold;
+
 int minDepth =  60;
 int maxDepth = 820;
 
@@ -110,6 +123,7 @@ int countRenderCalls = 0;
 int countLogicCallsOld = 0;
 int countRenderCallsOld = 0;
 
+int interval = 12000;
 
 /*
 Warning! Vsync of your graphics card could reduce your logic fps or your render  fps to your monitor refresh rate!
@@ -128,19 +142,19 @@ int framerateMisc = 1; //how often the framerate display will be updated
 void setup() {
 
   //init window
-  size(1280,700); //creates a new window
+  size(1280, 700); //creates a new window
   graphics = createGraphics(1280, 700);//creates the draw area
   frameRate(framerateRender); //tells the draw function to run
 
   /*
   why we use createGraphics:
-
+   
    Unlike the main drawing surface which is completely opaque, surfaces created with createGraphics() can have transparency. 
    This makes it possible to draw into a graphics and maintain the alpha channel. By using save() to write a PNG or TGA file,
    the transparency of the graphics object will be honored. 
-
+   
    from: https://www.processing.org/reference/createGraphics_.html
-
+   
    */
   f = createFont("Raleway-ExtraLight.vlw", 32, true);
   textAlign(CENTER);
@@ -212,6 +226,18 @@ void setup() {
 void draw() {
 
   countRenderCalls++;
+  textSwitch = false;
+
+  userTimeLowThreshold = false;
+  userTimeHighThreshold = false;
+
+  userLocationRangeSwitch = false;
+  userLocationLowThreshold = false;
+  userLocationHighThreshold = false;
+  userLocationTextSwitch = false;
+
+  userFollowerLowThreshold = false;
+  userFollowerHighThreshold = false;
 
   graphics.beginDraw();
 
@@ -223,19 +249,12 @@ void draw() {
   //-------------
 
   graphics.background(0);
-  
-
-
-  //dump();
-  //getTweet();
-  //getDetails();
-  //getImage();
-  //getScreenName();
-
+  graphics.ellipse(50,50,50,50);
 
   //-------------
   graphics.endDraw();
-  image(graphics, 0, 0);
+  println(userTimeLowThreshold);
+  //graphics.image(graphics, 0, 0);
   //no sleep calculation here because processing  is doing  it for us already
 }
 
@@ -255,7 +274,17 @@ Thread logicThread = new Thread(new Runnable() {
       //------------
       tracker.track();
 
+if (userTimeLowThreshold == true) {
+  userTimeRange();
+  timeRenderLow();
+} else {
+};
 
+if (userTimeHighThreshold == true) {
+  userTimeRange();
+  timeRenderHigh();
+} else {
+};
       //------------
       //framelimiter
       int timeToWait = 1000/framerateLogic - (millis()-lastCallLogic); // set framerateLogic to -1 to not limit;
@@ -272,18 +301,18 @@ Thread logicThread = new Thread(new Runnable() {
       }
       /*
       example why we wait excactly: 1000/framerate - (millis-lastcall)
-
+       
        framerate = 100 //framerate we want
        1000/framerate = 10 //time for one loop
        millis = 1952 //current time
        last call logic = 1949 //time when last logic loop finished
-
+       
        how  long should the programm wait??
-
+       
        millis-lastcall = 3 -> the whole loop took 3ms
-
+       
        1000/framerate - (millis-lastcall) = 7ms -> we will have to wait 7ms to keep a framerate of 100
-
+       
        */
 
       //remember when the last logic loop finished
@@ -346,20 +375,20 @@ you can access all variables that are defined in main!
       }
       /*
       example why we wait excactly: 1000/framerate - (millis-lastcall)
-
+       
        framerate = 100
-
+       
        1000/framerate = 10
-
+       
        millis = 1952
        lastcall = 1949
-
+       
        how  long should the programm wait??
-
+       
        millis-lastcall = 3 -> the whole excetion took 3ms
-
+       
        1000/framerate - (millis-lastcall) = 7ms -> we will have to wait 7ms to keep a framerate of 100
-
+       
        */
 
 
@@ -374,6 +403,42 @@ you can access all variables that are defined in main!
 
 void userLocationRange() {
   userLocationCircle1.buildUserRange();
+}
+
+void locationRender() {
+
+  userLocationCircle1.rangeRender();
+  userLocationCircle1.lowRender();
+  userLocationCircle1.highRender();
+  userLocationCircle1.textRender();
+}
+
+void timeRenderLow() {
+  userTimeRange1.lowRender();
+  userTimeRange2.lowRender();
+  userTimeRange3.lowRender();
+  userTimeRange4.lowRender();
+}
+
+void timeRenderHigh() {
+ userTimeRange1.highRender();
+ userTimeRange2.highRender();
+ userTimeRange3.highRender();
+ userTimeRange4.highRender();
+}
+
+void followerRenderLow() {
+userFollowerRange1.lowRender();
+userFollowerRange2.lowRender();
+userFollowerRange3.lowRender();
+userFollowerRange4.lowRender();
+}
+
+void followerRenderHigh() {
+  userFollowerRange1.highRender();
+  userFollowerRange1.highRender();
+  userFollowerRange1.highRender();
+  userFollowerRange1.highRender();
 }
 
 void userTimeRangeBackground() {
@@ -401,10 +466,10 @@ void userTimeRange() {
   userTimeRange3.buildRange();
   userTimeRange4.buildRange();
   graphics.translate(628, 338);
-  textTime1.buildText();
-  textTime2.buildText();
-  textTime3.buildText();
-  textTime4.buildText();
+  //textTime1.buildText();
+  //textTime2.buildText();
+  //textTime3.buildText();
+  //textTime4.buildText();
 }
 
 void userFollowerRange() {
@@ -443,34 +508,38 @@ void refreshTweets()
 {
   try
   {
-    //println(currentTweet.getText());
+    println("Running refreshTweets function...");
+    if (millis() > interval) {
+      println("Interval reached - API call");
+      Query query = new Query(searchString);
+      QueryResult result = twitter.search(query);
+      newTweet = result.getTweets().get(0);
 
-    Query query = new Query(searchString);
-    QueryResult result = twitter.search(query);
+      println("Comparing tweets");
+      println("Current tweet: " + currentTweet.getText());
+      println("Received tweet: " + newTweet.getText());
+      println("Next API call in 12s...");
+      interval += 12000;
 
-    newTweet = result.getTweets().get(0);
-
-    println(currentTweet.getText());
-    println(newTweet.getText());
-
-    if (currentTweet.getText().equals(newTweet.getText()) == true) {
-      println("No New Tweets");
+      if (currentTweet.getText().equals(newTweet.getText()) == true) {
+        println("No new tweets found");
+      } else {
+        println("New tweet found");
+        currentTweet = newTweet;
+        user = currentTweet.getUser();
+        println("Focus of currentTweet updated");
+        dump();
+      }
     } else {
-      println("New Tweet Found");
-      currentTweet = newTweet;
-      user = currentTweet.getUser();
-      println("Focus currentTweet Updated");
-      dump();
+      println("Interval not reached - Waiting 12s");
+      draw();
     }
-    delay(7000);
   }
   catch (TwitterException te)
   {
     System.out.println("Failed to search tweets: " + te.getMessage());
     System.exit(-1);
   }
-
-  println("Updated Tweets");
 }
 
 

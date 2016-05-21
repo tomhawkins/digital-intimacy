@@ -7,6 +7,9 @@ class UserTimeCircle {
   int staticIconSize;
   int count;
   float angle;
+  float x;
+  float y;
+  int masksize;
   processing.data.JSONArray values;
 
   // The Constructor is defined with arguments.
@@ -38,11 +41,11 @@ class UserTimeCircle {
       userTime = loadImage(imgURL);
 
       angle = i * TWO_PI / count;
-      float x = cx + cos(angle) * lg_rad;
-      float y = cy + sin(angle) * lg_rad;
+      x = cx + cos(angle) * lg_rad;
+      y = cy + sin(angle) * lg_rad;
 
       float sm_diam = (lg_circ / count);
-      int masksize = (int)sm_diam;
+      masksize = (int)sm_diam;
 
       int imgX;
       int imgY;
@@ -92,11 +95,22 @@ class UserTimeCircle {
       //fill(0);
 
       if (count < threshold == true) {
-
-        graphics.image(userTime, x, y, staticIconSize, staticIconSize);
+        //println("userTimeLowThreshold is True");
+        userTimeLowThreshold = true;
       } else {
-        graphics.image(userTime, x, y, masksize, masksize);
+        //println("userTimeHighThreshold is True");
+        userTimeHighThreshold = true;
       }
     }
+  }
+
+  void lowRender() {
+
+    graphics.image(userTime, x, y, staticIconSize, staticIconSize);
+  }
+
+  void highRender() {
+
+    graphics.image(userTime, x, y, masksize, masksize);
   }
 }

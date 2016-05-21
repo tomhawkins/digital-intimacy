@@ -7,6 +7,9 @@ class UserFollowerCircle {
   int staticIconSize;
   int count;
   float angle;
+  float x;
+  float y;
+  int masksize;
   processing.data.JSONArray values;
 
   // The Constructor is defined with arguments.
@@ -37,11 +40,11 @@ class UserFollowerCircle {
       userFollowers = loadImage(imgURL);
 
       angle = i * TWO_PI / count;
-      float x = cx + cos(angle) * lg_rad;
-      float y = cy + sin(angle) * lg_rad;
+      x = cx + cos(angle) * lg_rad;
+      y = cy + sin(angle) * lg_rad;
 
       float sm_diam = (lg_circ / count);
-      int masksize = (int)sm_diam;
+      masksize = (int)sm_diam;
 
       int imgX;
       int imgY;
@@ -91,11 +94,20 @@ class UserFollowerCircle {
       //fill(0);
 
       if (count < threshold == true) {
-
-        graphics.image(userFollowers, x, y, staticIconSize, staticIconSize);
+        userFollowerLowThreshold = true;
       } else {
-        graphics.image(userFollowers, x, y, masksize, masksize);
+        userFollowerHighThreshold = true;
       }
     }
+  }
+
+  void lowRender() {
+
+    graphics.image(userFollowers, x, y, staticIconSize, staticIconSize);
+  }
+
+  void highRender() {
+
+    graphics.image(userFollowers, x, y, masksize, masksize);
   }
 }

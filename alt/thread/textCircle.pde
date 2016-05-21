@@ -5,6 +5,8 @@ class TextCircle {
 
   String message;
   float r;
+  float w;
+  char currentChar;
 
   TextCircle(String text, float radius) {
     message = text;
@@ -21,8 +23,8 @@ class TextCircle {
     for (int i = 0; i < message.length(); i++)
     {
       // Instead of a constant width, we check the width of each character.
-      char currentChar = message.charAt(i);
-      float w = textWidth(currentChar);
+      currentChar = message.charAt(i);
+      w = textWidth(currentChar);
 
       // Each box is centered so we move half the width
       arclength += w/2;
@@ -41,13 +43,18 @@ class TextCircle {
       rotate(theta+PI/2); // rotation is offset by 90 degrees
 
       // Display the character
-      graphics.fill(255);
-      graphics.textSize(18);
-      graphics.text(currentChar, 0, 0);
-      popMatrix();
-
-      // Move halfway again
-      arclength += w/2 + 2;
+      textSwitch = true;
     }
+  }
+
+  void render() {
+
+    graphics.fill(255);
+    graphics.textSize(18);
+    graphics.text(currentChar, 0, 0);
+    popMatrix();
+
+    // Move halfway again
+    arclength += w/2 + 2;
   }
 }
