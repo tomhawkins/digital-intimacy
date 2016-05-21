@@ -94,23 +94,18 @@ class UserTimeCircle {
       //rect(0, 0, width, height);
       //fill(0);
 
-      if (count < threshold == true) {
-        //println("userTimeLowThreshold is True");
-        userTimeLowThreshold = true;
-      } else {
-        //println("userTimeHighThreshold is True");
-        userTimeHighThreshold = true;
-      }
+      switchData = 3;
     }
   }
 
-  void lowRender() {
+  void render() {
 
-    graphics.image(userTime, x, y, staticIconSize, staticIconSize);
-  }
-
-  void highRender() {
-
-    graphics.image(userTime, x, y, masksize, masksize);
+    if (count < threshold == true) {
+      //println("userTimeLowThreshold is True");
+      graphics.image(userTime, x, y, staticIconSize, staticIconSize);
+    } else {
+      //println("userTimeHighThreshold is True");
+      graphics.image(userTime, x, y, masksize, masksize);
+    }
   }
 }

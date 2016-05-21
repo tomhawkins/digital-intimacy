@@ -132,15 +132,20 @@ class UserLocationCircle {
         }
 
         userLocation.mask(graphicalMask);
-
-        if (count < threshold == true) {
-          userLocationLowThreshold = true;
-        } else {
-          userLocationHighThreshold = true;
-        }
+        
+        switchData = 2;
       }
     }
   }
+
+void render() {
+
+  if (count < threshold == true) {
+        graphics.image(userLocation, x, y, staticIconSize, staticIconSize);
+  } else {
+        graphics.image(userLocation, x, y, masksize, masksize);
+  }
+}
 
   void buildText() {
 
@@ -174,14 +179,6 @@ class UserLocationCircle {
       // Display the character
       userLocationTextSwitch = true;
     }
-  }
-
-  void lowRender() {
-    graphics.image(userLocation, x, y, staticIconSize, staticIconSize);
-  }
-
-  void highRender() {
-    graphics.image(userLocation, x, y, masksize, masksize);
   }
 
   void textRender() {

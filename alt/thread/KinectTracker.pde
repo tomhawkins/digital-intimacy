@@ -99,11 +99,9 @@ class KinectTracker {
     // As long as we found something
     if (count1 != 0) {
       loc = new PVector(sum1X/count1, sum1Y/count1);
-      userTimeRangeBackground();
       userTimeRange();
     } else if (count2 != 0) {
       loc = new PVector(sum2X/count2, sum2Y/count2);
-      userFollowerRangeBackground();
       userFollowerRange();
     } else if (count3 != 0) {
       loc = new PVector(sum3X/count3, sum3Y/count3);

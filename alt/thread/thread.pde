@@ -70,7 +70,7 @@ float iconRadiMod;
 
 int widthPosMod = 600;
 int heightPosMod = 310;
-int switchData = 0;
+int switchData = 1;
 float sizeModLarge = 1;
 float sizeModMed = 0.75;
 float sizeModSmall = 0.5;
@@ -241,6 +241,7 @@ void draw() {
 
   graphics.beginDraw();
 
+  println(switchData);
 
   /*
       all drawing calls have to be called from the graphics object.
@@ -253,7 +254,7 @@ void draw() {
 
   //-------------
   graphics.endDraw();
-  println(userTimeLowThreshold);
+  println(switchData);
   //graphics.image(graphics, 0, 0);
   //no sleep calculation here because processing  is doing  it for us already
 }
@@ -273,18 +274,6 @@ Thread logicThread = new Thread(new Runnable() {
       countLogicCalls++;
       //------------
       tracker.track();
-
-if (userTimeLowThreshold == true) {
-  userTimeRange();
-  timeRenderLow();
-} else {
-};
-
-if (userTimeHighThreshold == true) {
-  userTimeRange();
-  timeRenderHigh();
-} else {
-};
       //------------
       //framelimiter
       int timeToWait = 1000/framerateLogic - (millis()-lastCallLogic); // set framerateLogic to -1 to not limit;
@@ -465,7 +454,7 @@ void userTimeRange() {
   userTimeRange2.buildRange();
   userTimeRange3.buildRange();
   userTimeRange4.buildRange();
-  graphics.translate(628, 338);
+  //graphics.translate(628, 338);
   //textTime1.buildText();
   //textTime2.buildText();
   //textTime3.buildText();
@@ -477,11 +466,11 @@ void userFollowerRange() {
   userFollowerRange2.buildRange();
   userFollowerRange3.buildRange();
   userFollowerRange4.buildRange();
-  graphics.translate(628, 338);
-  textFollower1.buildText();
-  textFollower2.buildText();
-  textFollower3.buildText();
-  textFollower4.buildText();
+  //graphics.translate(628, 338);
+  //textFollower1.buildText();
+  //textFollower2.buildText();
+  //textFollower3.buildText();
+  //textFollower4.buildText();
 }
 
 
