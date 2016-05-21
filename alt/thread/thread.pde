@@ -226,20 +226,8 @@ void setup() {
 void draw() {
 
   countRenderCalls++;
-
-  graphics.beginDraw();
-
-  println(switchData);
-
-  /*
-      all drawing calls have to be called from the graphics object.
-   so graphics.line(0,0,100,100) instead of line(0,0,100,100)
-   */
-  //-------------
-
-  graphics.background(0);
-
-  switch(switchData) {
+  
+    switch(switchData) {
   case 1: 
     println("1");  // Does not execute
     break;
@@ -250,10 +238,24 @@ void draw() {
     println("3");  // Does not execute
     break;
   }
+  
+    println(switchData);
+
+  graphics.beginDraw();
+
+
+
+  /*
+      all drawing calls have to be called from the graphics object.
+   so graphics.line(0,0,100,100) instead of line(0,0,100,100)
+   */
+  //-------------
+
+  graphics.background(0);
 
   //-------------
   graphics.endDraw();
-  graphics.image(graphics, 0, 0);
+  //graphics.image(graphics, 0, 0);
   //no sleep calculation here because processing  is doing  it for us already
 }
 
