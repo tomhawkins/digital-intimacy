@@ -98,14 +98,14 @@ class KinectTracker {
     }
     // As long as we found something
     if (count1 != 0) {
-      loc = new PVector(sum1X/count1, sum1Y/count1);
-      userTimeRange();
+      //loc = new PVector(sum1X/count1, sum1Y/count1);
+      switchData = 1;
     } else if (count2 != 0) {
-      loc = new PVector(sum2X/count2, sum2Y/count2);
-      userFollowerRange();
+      //loc = new PVector(sum2X/count2, sum2Y/count2);
+      switchData = 2;
     } else if (count3 != 0) {
-      loc = new PVector(sum3X/count3, sum3Y/count3);
-      userLocationRange();
+      //loc = new PVector(sum3X/count3, sum3Y/count3);
+      switchData = 3;
     } else if (count4 != 0) {
       loc = new PVector(sum4X/count4, sum4Y/count4);
       ellipse(height/2, width/2, 200, 200);

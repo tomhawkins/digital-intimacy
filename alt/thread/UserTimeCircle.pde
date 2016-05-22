@@ -53,9 +53,9 @@ class UserTimeCircle {
 
       //static sizes------------
       if (count < threshold == true) {
-        graphicalMask=createGraphics(staticIconSize, staticIconSize);
+       graphicalMask=createGraphics(staticIconSize, staticIconSize);
       } else {
-        graphicalMask=createGraphics(masksize, masksize);
+       graphicalMask=createGraphics(masksize, masksize);
       }
 
       graphicalMask.beginDraw();
@@ -63,51 +63,45 @@ class UserTimeCircle {
       graphicalMask.background(0);
 
       if (count < threshold == true) {
-        imgX = staticIconSize/2;
-        imgY = staticIconSize/2;
+       imgX = staticIconSize/2;
+       imgY = staticIconSize/2;
       } else {
-        imgX = masksize/2;
-        imgY = masksize/2;
+       imgX = masksize/2;
+       imgY = masksize/2;
       }
 
       graphicalMask.fill(255);
       graphicalMask.noStroke();
 
       if (count < threshold == true) {
-        graphicalMask.ellipse(imgX, imgY, staticIconSize, staticIconSize);
+       graphicalMask.ellipse(imgX, imgY, staticIconSize, staticIconSize);
       } else {
-        graphicalMask.ellipse(imgX, imgY, masksize, masksize);
+       graphicalMask.ellipse(imgX, imgY, masksize, masksize);
       }
 
       graphicalMask.endDraw();
 
       if (count < threshold == true) {
 
-        userTime.resize(staticIconSize, staticIconSize);
+       userTime.resize(staticIconSize, staticIconSize);
       } else {
-        userTime.resize(masksize, masksize);
+       userTime.resize(masksize, masksize);
       }
+
+
+      ////fill(0, 10);
+      ////rect(0, 0, width, height);
+      ////fill(0);
 
       userTime.mask(graphicalMask);
 
-      //fill(0, 10);
-      //rect(0, 0, width, height);
-      //fill(0);
-
-      switchData = 3;
-    }
-  }
-
-  void render() {
-    
-    userTimeRangeBackground();
-
-    if (count < threshold == true) {
-      //println("userTimeLowThreshold is True");
-      graphics.image(userTime, x, y, staticIconSize, staticIconSize);
-    } else {
-      //println("userTimeHighThreshold is True");
-      graphics.image(userTime, x, y, masksize, masksize);
+      if (count < threshold == true) {
+        //println("userTimeLowThreshold is True");
+        graphics.image(userTime, x, y, staticIconSize, staticIconSize);
+      } else {
+        //println("userTimeHighThreshold is True");
+        graphics.image(userTime, x, y, masksize, masksize);
+      }
     }
   }
 }

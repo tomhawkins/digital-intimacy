@@ -1,3 +1,7 @@
+// Maybe consider buffering some more things like GET requests etc
+// Improve image loading, probably why its so slow, or thread it maybe. 
+// Consider pre-masking images somehow, through PHP or something else other than processing
+// Maybe each visualisation of icons creates it's own PGraphics object, which is called from render thread?
 //import and generate Semaphores
 import java.util.concurrent.Semaphore;
 static Semaphore semaphoreExample = new Semaphore( 1 );  
@@ -142,8 +146,8 @@ int framerateMisc = 1; //how often the framerate display will be updated
 void setup() {
 
   //init window
-  size(1280, 700); //creates a new window
-  graphics = createGraphics(1280, 700);//creates the draw area
+  size(1280, 700, JAVA2D); //creates a new window
+  graphics = createGraphics(1280, 700, JAVA2D);//creates the draw area
   frameRate(framerateRender); //tells the draw function to run
 
   /*
@@ -227,31 +231,6 @@ void draw() {
 
   countRenderCalls++;
 
-  switch(switchData) {
-  case 1: 
-    println("1");  // Does not execute
-    userFollowerRangeBackground();
-    userFollowerRange1.render();
-    userFollowerRange2.render();
-    userFollowerRange3.render();
-    userFollowerRange4.render();
-    break;
-  case 2: 
-    println("2");  // Prints "One"
-    userLocationCircle1.rangeRender();
-    userLocationCircle1.render();
-    break;
-  case 3: 
-    println("3");  // Does not execute
-    userTimeRangeBackground();
-    userTimeRange1.render();
-    userTimeRange2.render();
-    userTimeRange3.render();
-    userTimeRange4.render();
-    break;
-  }
-
-  println(switchData);
 
   graphics.beginDraw();
 
@@ -262,12 +241,15 @@ void draw() {
    so graphics.line(0,0,100,100) instead of line(0,0,100,100)
    */
   //-------------
+  userTimeRangeBackground();
 
-  graphics.background(0);
-
+  userTimeRange1.buildRange();
+  userTimeRange2.buildRange();
+  userTimeRange3.buildRange();
+  userTimeRange4.buildRange();
   //-------------
   graphics.endDraw();
-  //graphics.image(graphics, 0, 0);
+  image(graphics, 0, 0);
   //no sleep calculation here because processing  is doing  it for us already
 }
 
@@ -286,6 +268,8 @@ Thread logicThread = new Thread(new Runnable() {
       countLogicCalls++;
       //------------
       tracker.track();
+      //println(switchData);
+
       //------------
       //framelimiter
       int timeToWait = 1000/framerateLogic - (millis()-lastCallLogic); // set framerateLogic to -1 to not limit;
@@ -407,22 +391,22 @@ void userLocationRange() {
 }
 
 void userTimeRangeBackground() {
-  graphics.background(0);
-  graphics.noFill();
-  graphics.stroke(153);
-  graphics.ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
-  graphics.ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
-  graphics.ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
-  graphics.ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
+  background(0);
+  noFill();
+  stroke(153);
+  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
+  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
+  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
+  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
 }
 
 void userFollowerRangeBackground() {
-  graphics.noFill();
-  graphics.stroke(153);
-  graphics.ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
-  graphics.ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
-  graphics.ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
-  graphics.ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
+  noFill();
+  stroke(153);
+  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
+  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
+  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
+  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
 }
 
 void userTimeRange() {

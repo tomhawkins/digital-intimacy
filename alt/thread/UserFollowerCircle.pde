@@ -51,43 +51,43 @@ class UserFollowerCircle {
 
 
       //static sizes------------
-      if (count < threshold == true) {
-        graphicalMask=createGraphics(staticIconSize, staticIconSize);
-      } else {
-        graphicalMask=createGraphics(masksize, masksize);
-      }
+      //if (count < threshold == true) {
+      //  graphicalMask=createGraphics(staticIconSize, staticIconSize);
+      //} else {
+      //  graphicalMask=createGraphics(masksize, masksize);
+      //}
 
-      graphicalMask.beginDraw();
+      //graphicalMask.beginDraw();
 
-      graphicalMask.background(0);
+      //graphicalMask.background(0);
 
-      if (count < threshold == true) {
-        imgX = staticIconSize/2;
-        imgY = staticIconSize/2;
-      } else {
-        imgX = masksize/2;
-        imgY = masksize/2;
-      }
+      //if (count < threshold == true) {
+      //  imgX = staticIconSize/2;
+      //  imgY = staticIconSize/2;
+      //} else {
+      //  imgX = masksize/2;
+      //  imgY = masksize/2;
+      //}
 
-      graphicalMask.fill(255);
-      graphicalMask.noStroke();
+      //graphicalMask.fill(255);
+      //graphicalMask.noStroke();
 
-      if (count < threshold == true) {
-        graphicalMask.ellipse(imgX, imgY, staticIconSize, staticIconSize);
-      } else {
-        graphicalMask.ellipse(imgX, imgY, masksize, masksize);
-      }
+      //if (count < threshold == true) {
+      //  graphicalMask.ellipse(imgX, imgY, staticIconSize, staticIconSize);
+      //} else {
+      //  graphicalMask.ellipse(imgX, imgY, masksize, masksize);
+      //}
 
-      graphicalMask.endDraw();
+      //graphicalMask.endDraw();
 
-      if (count < threshold == true) {
+      //if (count < threshold == true) {
 
-        userFollowers.resize(staticIconSize, staticIconSize);
-      } else {
-        userFollowers.resize(masksize, masksize);
-      }
+      //  userFollowers.resize(staticIconSize, staticIconSize);
+      //} else {
+      //  userFollowers.resize(masksize, masksize);
+      //}
 
-      userFollowers.mask(graphicalMask);
+      //userFollowers.mask(graphicalMask);
 
       //fill(0, 10);
       //rect(0, 0, width, height);
@@ -98,8 +98,6 @@ class UserFollowerCircle {
   }
 
   void render() {
-    
-    userFollowerRangeBackground();
 
     if (count < threshold == true) {
       //println("userTimeLowThreshold is True");
