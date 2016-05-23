@@ -21,8 +21,8 @@ import java.util.*;
 import org.openkinect.*;
 import org.openkinect.processing.*;
 
-Kinect kinect;
-KinectTracker tracker;
+//Kinect kinect;
+//KinectTracker tracker;
 
 Twitter twitter;
 URL url;
@@ -79,6 +79,7 @@ boolean ir = false;
 
 int minDepth =  60;
 int maxDepth = 820;
+int interval = 12000;
 
 float deg;
 
@@ -91,12 +92,12 @@ void setup()
   textAlign(CENTER);
   ellipseMode(CENTER);
 
-  kinect = new Kinect(this);
+  //kinect = new Kinect(this);
   //kinect.start();
   //kinect.enableRGB(rgb);
   //kinect.enableIR(ir);
   //kinect.tilt(deg);
-  tracker = new KinectTracker();
+  //tracker = new KinectTracker();
 
   ConfigurationBuilder cb = new ConfigurationBuilder();
 
@@ -141,12 +142,12 @@ void setup()
 void draw()
 {
   background(0);
-  tracker.track();
+  //tracker.track();
 
-  refreshTweets();
+  //refreshTweets();
 
-  //userTimeRangeBackground();
-  //userTimeRange();
+  userTimeRangeBackground();
+  userTimeRange();
 
   //userFollowerRangeBackground();
   //userFollowerRange();
@@ -227,31 +228,33 @@ void getNewTweets()
   }
 }
 
-void refreshTweets()
-
-{
+void refreshTweets() {
+  while (true) {
+    if (millis() > interval) {
   try
   {
-    //println(currentTweet.getText());
+    if (millis() > interval) {
+      Query query = new Query(searchString);
+      QueryResult result = twitter.search(query);
+      newTweet = result.getTweets().get(0);
+      println(currentTweet.getText());
+      println(newTweet.getText());
+      interval += 12000;
 
-    Query query = new Query(searchString);
-    QueryResult result = twitter.search(query);
-
-    newTweet = result.getTweets().get(0);
-
-    println(currentTweet.getText());
-    println(newTweet.getText());
-
-    if (currentTweet.getText().equals(newTweet.getText()) == true) {
-      println("No New Tweets");
+      if (currentTweet.getText().equals(newTweet.getText()) == true) {
+        println("No New Tweets");
+      } else {
+        println("New Tweet Found");
+        currentTweet = newTweet;
+        user = currentTweet.getUser();
+        println("Focus currentTweet Updated");
+        dump();
+      }
+      
     } else {
-      println("New Tweet Found");
-      currentTweet = newTweet;
-      user = currentTweet.getUser();
-      println("Focus currentTweet Updated");
-      dump();
+      println("Interval not reached, waiting " + interval + "ms");
     }
-    delay(7000);
+    
   }
   catch (TwitterException te)
   {
@@ -260,6 +263,8 @@ void refreshTweets()
   }
 
   println("Updated Tweets");
+}
+}
 }
 
 
@@ -373,25 +378,25 @@ void mousePressed() {
   //--- DEVELOPMENT CODE GOES BELOW--
 }
 
-void keyPressed() {
-  if (key == 'd') {
-    depth = !depth;
-    kinect.enableDepth(depth);
-  } else if (key == 'r') {
-    rgb = !rgb;
-    if (rgb) ir = false;
-    kinect.enableRGB(rgb);
-  } else if (key == 'i') {
-    ir = !ir;
-    if (ir) rgb = false;
-    kinect.enableIR(ir);
-  } else if (key == CODED) {
-    if (keyCode == UP) {
-      deg++;
-    } else if (keyCode == DOWN) {
-      deg--;
-    }
-    deg = constrain(deg, 0, 30);
-    kinect.tilt(deg);
-  }
-}
+//void keyPressed() {
+//  if (key == 'd') {
+//    depth = !depth;
+//    kinect.enableDepth(depth);
+//  } else if (key == 'r') {
+//    rgb = !rgb;
+//    if (rgb) ir = false;
+//    kinect.enableRGB(rgb);
+//  } else if (key == 'i') {
+//    ir = !ir;
+//    if (ir) rgb = false;
+//    kinect.enableIR(ir);
+//  } else if (key == CODED) {
+//    if (keyCode == UP) {
+//      deg++;
+//    } else if (keyCode == DOWN) {
+//      deg--;
+//    }
+//    deg = constrain(deg, 0, 30);
+//    kinect.tilt(deg);
+//  }
+//}

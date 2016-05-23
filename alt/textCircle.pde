@@ -35,15 +35,15 @@ class TextCircle {
       pushMatrix();
 
       // Polar to cartesian coordinate conversion
-      graphics.translate(r*cos(theta), r*sin(theta));
+      translate(r*cos(theta), r*sin(theta));
 
       // Rotate the box
       rotate(theta+PI/2); // rotation is offset by 90 degrees
 
       // Display the character
-      graphics.fill(255);
-      graphics.textSize(18);
-      graphics.text(currentChar, 0, 0);
+      fill(255);
+      textSize(18);
+      text(currentChar, 0, 0);
       popMatrix();
 
       // Move halfway again
