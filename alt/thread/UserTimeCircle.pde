@@ -7,9 +7,6 @@ class UserTimeCircle {
   int staticIconSize;
   int count;
   float angle;
-  float x;
-  float y;
-  int masksize;
   processing.data.JSONArray values;
 
   // The Constructor is defined with arguments.
@@ -24,7 +21,6 @@ class UserTimeCircle {
 
   void buildRange()
   {
-
     GetRequest get = new GetRequest(getlink);
     get.send();
     get.addHeader("Accept", "application/json");
@@ -35,24 +31,18 @@ class UserTimeCircle {
     processing.data.JSONArray values = processing.data.JSONArray.parse(get.getContent());
     int count = values.size();
 
+    times.beginDraw();
     for (int i = 0; i < count; i++) {
       processing.data.JSONObject timesObject = values.getJSONObject(i);
       String imgURL = timesObject.getString("intimacy_img");
       userTime = loadImage(imgURL);
 
       angle = i * TWO_PI / count;
-      x = cx + cos(angle) * lg_rad;
-      y = cy + sin(angle) * lg_rad;
+      float x = cx + cos(angle) * lg_rad;
+      float y = cy + sin(angle) * lg_rad;
 
       float sm_diam = (lg_circ / count);
-      masksize = (int)sm_diam;
-
-      if (count < threshold == true) {
-
-        userTime.resize(staticIconSize, staticIconSize);
-      } else {
-        userTime.resize(masksize, masksize);
-      }
+      int masksize = (int)sm_diam;
 
       int imgX;
       int imgY;
@@ -88,22 +78,26 @@ class UserTimeCircle {
 
       //graphicalMask.endDraw();
 
+      //if (count < threshold == true) {
 
-
-
-      //////fill(0, 10);
-      //////rect(0, 0, width, height);
-      //////fill(0);
+      //  userTime.resize(staticIconSize, staticIconSize);
+      //} else {
+      //  userTime.resize(masksize, masksize);
+      //}
 
       //userTime.mask(graphicalMask);
 
+      //fill(0, 10);
+      //rect(0, 0, width, height);
+      //fill(0);
+
       if (count < threshold == true) {
-        //println("userTimeLowThreshold is True");
-        graphics.image(userTime, x, y, staticIconSize, staticIconSize);
+
+        times.image(userTime, x, y, staticIconSize, staticIconSize);
       } else {
-        //println("userTimeHighThreshold is True");
-        graphics.image(userTime, x, y, masksize, masksize);
+        times.image(userTime, x, y, masksize, masksize);
       }
     }
+    times.endDraw();
   }
 }

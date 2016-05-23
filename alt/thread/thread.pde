@@ -2,7 +2,9 @@
 // Improve image loading, probably why its so slow, or thread it maybe. 
 // Consider pre-masking images somehow, through PHP or something else other than processing
 // Maybe each visualisation of icons creates it's own PGraphics object, which is called from render thread?
+// ^^^ this seems to work well, maybe consider running the "buildrange" functions in logic, and then calling the PGraphics objects they create from render? 
 //import and generate Semaphores
+
 import java.util.concurrent.Semaphore;
 static Semaphore semaphoreExample = new Semaphore( 1 );  
 import http.requests.*;
@@ -74,7 +76,6 @@ float iconRadiMod;
 
 int widthPosMod = 600;
 int heightPosMod = 310;
-int switchData = 3;
 float sizeModLarge = 1;
 float sizeModMed = 0.75;
 float sizeModSmall = 0.5;
@@ -85,11 +86,14 @@ boolean rgb = false;
 boolean ir = false;
 
 boolean followerReady;
+boolean graphicsReady;
 
 int minDepth =  60;
 int maxDepth = 820;
 
 float deg;
+
+int switchData = 2;
 /*
   Semaphores are locks that lock specific parts of code so only a specific amount of Threads can enter the code.
  You can use them for critical parts of code.
@@ -97,7 +101,9 @@ float deg;
  */
 
 //graphics object we will use to buffer our drawing
-PGraphics graphics;
+PGraphics followers;
+PGraphics locations;
+PGraphics times;
 
 
 int lastCallLogic = 0; //absolute time when logic thread was called
@@ -136,19 +142,11 @@ void setup() {
 
   //init window
   size(1280, 700, JAVA2D); //creates a new window
-  graphics = createGraphics(1280, 700, JAVA2D);//creates the draw area
+  locations = createGraphics(1280, 700, JAVA2D);
+  followers = createGraphics(1280, 700, JAVA2D);
+  times = createGraphics(1280, 700, JAVA2D);//creates the draw area
   frameRate(framerateRender); //tells the draw function to run
 
-  /*
-  why we use createGraphics:
-   
-   Unlike the main drawing surface which is completely opaque, surfaces created with createGraphics() can have transparency. 
-   This makes it possible to draw into a graphics and maintain the alpha channel. By using save() to write a PNG or TGA file,
-   the transparency of the graphics object will be honored. 
-   
-   from: https://www.processing.org/reference/createGraphics_.html
-   
-   */
   f = createFont("Raleway-ExtraLight.vlw", 32, true);
   textAlign(CENTER);
   ellipseMode(CENTER);
@@ -217,27 +215,25 @@ void setup() {
 
 //draw function. This is our Render Thread
 void draw() {
-  boolean followerReady = true;
   countRenderCalls++;
-
-
-    graphics.beginDraw();
-  if (followerReady == true) {
-
-    //-------------
-
-  userFollowerRangeBackground();
-
-  userFollowerRange1.buildRange();
-  userFollowerRange2.buildRange();
-  userFollowerRange3.buildRange();
-  userFollowerRange4.buildRange();
-    //-------------
-    graphics.endDraw();
+  //---------------
+  if (switchData == 1) {
+    userFollowerRangeBackground();
+    userFollowerRange1.buildRange();
+    userFollowerRange2.buildRange();
+    userFollowerRange3.buildRange();
+    userFollowerRange4.buildRange();
+  } else if (switchData == 2) {
+    userTimeRangeBackground();
+    userTimeRange1.buildRange();
+    userTimeRange2.buildRange();
+    userTimeRange3.buildRange();
+    userTimeRange4.buildRange();
+    image(times,0,0);
   } else {
-    graphics.endDraw();
-  };
-  image(graphics, 0, 0);
+    userLocationRange();
+  }
+  //---------------
   //no sleep calculation here because processing  is doing  it for us already
 }
 
@@ -375,6 +371,7 @@ you can access all variables that are defined in main!
 );
 
 void userLocationRange() {
+  background(0);
   userLocationCircle1.buildUserRange();
 }
 
@@ -389,6 +386,7 @@ void userTimeRangeBackground() {
 }
 
 void userFollowerRangeBackground() {
+  background(0);
   noFill();
   stroke(153);
   ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
@@ -499,7 +497,7 @@ void getScreenName()
 void getTweet()
 {
   String userTweet = currentTweet.getText();
-  graphics.text(userTweet, (width/2), 300, 700, 250);
+  text(userTweet, (width/2), 300, 700, 250);
 }
 
 void getDetails()
@@ -516,11 +514,11 @@ void getDetails()
 
   userImage = loadImage(profile, "png");
 
-  graphics.text("@" + userName, (width/2), 350);
-  graphics.text(userLocation, (width/2), 400, 200);
-  graphics.text(userFollowers + " followers", (width/2), 450);
-  graphics.text(reportDate, width/2, 500);
-  graphics.image(userImage, width/2, 100);
+  text("@" + userName, (width/2), 350);
+  text(userLocation, (width/2), 400, 200);
+  text(userFollowers + " followers", (width/2), 450);
+  text(reportDate, width/2, 500);
+  image(userImage, width/2, 100);
 }
 
 void dump() {

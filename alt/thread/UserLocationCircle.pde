@@ -11,12 +11,6 @@ class UserLocationCircle {
   int count;
   float r;
   float angle;
-  float arclength;
-  float w;
-  float x;
-  float y;
-  int masksize;
-  char currentChar;
   processing.data.JSONArray values;
   processing.data.JSONArray locArray;
 
@@ -34,10 +28,6 @@ class UserLocationCircle {
   }
 
   void buildUserRange() {
-
-
-    background(0);
-
     circleSizeMod = 0.2;
     iconRadiMod = 0.01;
 
@@ -59,6 +49,9 @@ class UserLocationCircle {
       processing.data.JSONObject locObject = locArray.getJSONObject(i);
       String locString = locObject.getString("intimacy_location");
 
+      noFill();
+      stroke(153);
+      ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
       circleSizeMod += 0.2;
       iconRadiMod += 0.393;
 
@@ -83,76 +76,77 @@ class UserLocationCircle {
 
 
         angle = ii * TWO_PI / count;
-        x = cx + cos(angle) * (lg_diam * iconRadiMod);
-        y = cy + sin(angle) * (lg_diam * iconRadiMod);
+        float x = cx + cos(angle) * (lg_diam * iconRadiMod);
+        float y = cy + sin(angle) * (lg_diam * iconRadiMod);
 
         float sm_diam = (lg_circ / count);
-        masksize = (int)sm_diam;
+        int masksize = (int)sm_diam;
 
         int imgX;
         int imgY;
 
 
         //static sizes------------
+        //if (count < threshold == true) {
+        //  graphicalMask=createGraphics(staticIconSize, staticIconSize);
+        //} else {
+        //  graphicalMask=createGraphics(masksize, masksize);
+        //}
+
+        //graphicalMask.beginDraw();
+
+        //graphicalMask.background(0);
+
+        //if (count < threshold == true) {
+        //  imgX = staticIconSize/2;
+        //  imgY = staticIconSize/2;
+        //} else {
+        //  imgX = masksize/2;
+        //  imgY = masksize/2;
+        //}
+
+        //graphicalMask.fill(255);
+        //graphicalMask.noStroke();
+
+        //if (count < threshold == true) {
+        //  graphicalMask.ellipse(imgX, imgY, staticIconSize, staticIconSize);
+        //} else {
+        //  graphicalMask.ellipse(imgX, imgY, masksize, masksize);
+        //}
+
+        //graphicalMask.endDraw();
+
+        //if (count < threshold == true) {
+
+        //  userLocation.resize(staticIconSize, staticIconSize);
+        //} else {
+        //  userLocation.resize(masksize, masksize);
+        //}
+
+        //userLocation.mask(graphicalMask);
+
         if (count < threshold == true) {
-          graphicalMask=createGraphics(staticIconSize, staticIconSize);
+
+          image(userLocation, x, y, staticIconSize, staticIconSize);
         } else {
-          graphicalMask=createGraphics(masksize, masksize);
-        }
-
-        graphicalMask.beginDraw();
-
-        graphicalMask.background(0);
-
-        if (count < threshold == true) {
-          imgX = staticIconSize/2;
-          imgY = staticIconSize/2;
-        } else {
-          imgX = masksize/2;
-          imgY = masksize/2;
-        }
-
-        graphicalMask.fill(255);
-        graphicalMask.noStroke();
-
-        if (count < threshold == true) {
-          graphicalMask.ellipse(imgX, imgY, staticIconSize, staticIconSize);
-        } else {
-          graphicalMask.ellipse(imgX, imgY, masksize, masksize);
-        }
-
-        graphicalMask.endDraw();
-
-        if (count < threshold == true) {
-
-          userLocation.resize(staticIconSize, staticIconSize);
-        } else {
-          userLocation.resize(masksize, masksize);
-        }
-
-        userLocation.mask(graphicalMask);
-
-        if (count < threshold == true) {
-          graphics.image(userLocation, x, y, staticIconSize, staticIconSize);
-        } else {
-          graphics.image(userLocation, x, y, masksize, masksize);
+          image(userLocation, x, y, masksize, masksize);
         }
       }
     }
   }
-
-  void buildText() {
+  
+    void buildText() {
 
 
     // We must keep track of our position along the curve
-    arclength = 0;
+    float arclength = 0;
 
 
     for (int i = 0; i < message.length(); i++)
     {
       // Instead of a constant width, we check the width of each character.
-      currentChar = message.charAt(i);
-      w = textWidth(currentChar);
+      char currentChar = message.charAt(i);
+      float w = textWidth(currentChar);
 
       // Each box is centered so we move half the width
       arclength += w/2;
@@ -171,25 +165,16 @@ class UserLocationCircle {
       rotate(theta+PI/2); // rotation is offset by 90 degrees
 
       // Display the character
+      fill(255);
+      textSize(18);
+      text(currentChar, 0, 0);
+      popMatrix();
+
+      // Move halfway again
+      arclength += w/2 + 2;
     }
   }
-
-  void textRender() {
-
-    graphics.fill(255);
-    graphics.textSize(18);
-    graphics.text(currentChar, 0, 0);
-    popMatrix();
-
-    // Move halfway again
-    arclength += w/2 + 2;
-  }
-
-  void rangeRender() {
-    graphics.noFill();
-    graphics.stroke(153);
-    graphics.ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
-  }
+  
 }
 
 //

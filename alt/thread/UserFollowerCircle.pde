@@ -7,9 +7,6 @@ class UserFollowerCircle {
   int staticIconSize;
   int count;
   float angle;
-  float x;
-  float y;
-  int masksize;
   processing.data.JSONArray values;
 
   // The Constructor is defined with arguments.
@@ -23,7 +20,6 @@ class UserFollowerCircle {
   }
   void buildRange()
   {
-
     GetRequest get = new GetRequest(getlink);
     get.send();
     get.addHeader("Accept", "application/json");
@@ -40,11 +36,11 @@ class UserFollowerCircle {
       userFollowers = loadImage(imgURL);
 
       angle = i * TWO_PI / count;
-      x = cx + cos(angle) * lg_rad;
-      y = cy + sin(angle) * lg_rad;
+      float x = cx + cos(angle) * lg_rad;
+      float y = cy + sin(angle) * lg_rad;
 
       float sm_diam = (lg_circ / count);
-      masksize = (int)sm_diam;
+      int masksize = (int)sm_diam;
 
       int imgX;
       int imgY;
@@ -93,13 +89,11 @@ class UserFollowerCircle {
       //rect(0, 0, width, height);
       //fill(0);
 
-      switchData = 1;
       if (count < threshold == true) {
-        //println("userTimeLowThreshold is True");
-        graphics.image(userTime, x, y, staticIconSize, staticIconSize);
+
+        image(userFollowers, x, y, staticIconSize, staticIconSize);
       } else {
-        //println("userTimeHighThreshold is True");
-        graphics.image(userTime, x, y, masksize, masksize);
+        image(userFollowers, x, y, masksize, masksize);
       }
     }
   }
