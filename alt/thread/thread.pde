@@ -219,19 +219,15 @@ void draw() {
   //---------------
   if (switchData == 1) {
     userFollowerRangeBackground();
-    userFollowerRange1.buildRange();
-    userFollowerRange2.buildRange();
-    userFollowerRange3.buildRange();
-    userFollowerRange4.buildRange();
+    userFollowerRange();
+    image(followers, 0, 0);
   } else if (switchData == 2) {
     userTimeRangeBackground();
-    userTimeRange1.buildRange();
-    userTimeRange2.buildRange();
-    userTimeRange3.buildRange();
-    userTimeRange4.buildRange();
-    image(times,0,0);
+    userTimeRange();
+    image(times, 0, 0);
   } else {
     userLocationRange();
+    image(locations, 0, 0);
   }
   //---------------
   //no sleep calculation here because processing  is doing  it for us already
@@ -253,7 +249,6 @@ Thread logicThread = new Thread(new Runnable() {
       //------------
       //tracker.track();
       //println(switchData);
-
       //------------
       //framelimiter
       int timeToWait = 1000/framerateLogic - (millis()-lastCallLogic); // set framerateLogic to -1 to not limit;
@@ -322,9 +317,6 @@ you can access all variables that are defined in main!
 
       //----------
 
-
-
-
       //-------------
 
 
@@ -370,29 +362,34 @@ you can access all variables that are defined in main!
 }
 );
 
-void userLocationRange() {
-  background(0);
-  userLocationCircle1.buildUserRange();
-}
-
 void userTimeRangeBackground() {
-  background(0);
-  noFill();
-  stroke(153);
-  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
-  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
-  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
-  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
+  times.beginDraw();
+  times.background(0);
+  times.noFill();
+  times.stroke(153);
+  times.ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
+  times.ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
+  times.ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
+  times.ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
+  times.endDraw();
 }
 
 void userFollowerRangeBackground() {
-  background(0);
-  noFill();
-  stroke(153);
-  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
-  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
-  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
-  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
+  followers.beginDraw();
+  followers.background(0);
+  followers.noFill();
+  followers.stroke(153);
+  followers.ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
+  followers.ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
+  followers.ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
+  followers.ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
+  followers.endDraw();
+}
+
+void userLocationRange() {
+  locations.beginDraw();
+  locations.background(0);
+  locations.endDraw();
 }
 
 void userTimeRange() {
@@ -400,7 +397,7 @@ void userTimeRange() {
   userTimeRange2.buildRange();
   userTimeRange3.buildRange();
   userTimeRange4.buildRange();
-  //graphics.translate(628, 338);
+  //translate(628, 338);
   //textTime1.buildText();
   //textTime2.buildText();
   //textTime3.buildText();
@@ -412,7 +409,7 @@ void userFollowerRange() {
   userFollowerRange2.buildRange();
   userFollowerRange3.buildRange();
   userFollowerRange4.buildRange();
-  //graphics.translate(628, 338);
+  //translate(628, 338);
   //textFollower1.buildText();
   //textFollower2.buildText();
   //textFollower3.buildText();

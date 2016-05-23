@@ -44,7 +44,7 @@ class UserLocationCircle {
     processing.data.JSONObject values = processing.data.JSONObject.parse(get.getContent());
     processing.data.JSONArray locArray = processing.data.JSONArray.parse(locationRequest.getContent());
 
-
+    locations.beginDraw();
     for (int i = 0; i < locArray.size(); i++) {
       processing.data.JSONObject locObject = locArray.getJSONObject(i);
       String locString = locObject.getString("intimacy_location");
@@ -133,9 +133,6 @@ class UserLocationCircle {
         }
       }
     }
-  }
-  
-    void buildText() {
 
 
     // We must keep track of our position along the curve

@@ -21,6 +21,7 @@ class UserTimeCircle {
 
   void buildRange()
   {
+    times.beginDraw();
     GetRequest get = new GetRequest(getlink);
     get.send();
     get.addHeader("Accept", "application/json");
@@ -30,8 +31,7 @@ class UserTimeCircle {
 
     processing.data.JSONArray values = processing.data.JSONArray.parse(get.getContent());
     int count = values.size();
-
-    times.beginDraw();
+    background(0);
     for (int i = 0; i < count; i++) {
       processing.data.JSONObject timesObject = values.getJSONObject(i);
       String imgURL = timesObject.getString("intimacy_img");

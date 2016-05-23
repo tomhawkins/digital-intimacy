@@ -30,6 +30,7 @@ class UserFollowerCircle {
     processing.data.JSONArray values = processing.data.JSONArray.parse(get.getContent());
     int count = values.size();
 
+    followers.beginDraw();
     for (int i = 0; i < count; i++) {
       processing.data.JSONObject followersObject = values.getJSONObject(i);
       String imgURL = followersObject.getString("intimacy_img");
@@ -91,10 +92,11 @@ class UserFollowerCircle {
 
       if (count < threshold == true) {
 
-        image(userFollowers, x, y, staticIconSize, staticIconSize);
+        followers.image(userFollowers, x, y, staticIconSize, staticIconSize);
       } else {
-        image(userFollowers, x, y, masksize, masksize);
+        followers.image(userFollowers, x, y, masksize, masksize);
       }
     }
+    followers.endDraw();
   }
 }
