@@ -59,7 +59,6 @@ class UserLocationCircle {
       processing.data.JSONObject locObject = locArray.getJSONObject(i);
       String locString = locObject.getString("intimacy_location");
 
-      userLocationRangeSwitch = true;
       circleSizeMod += 0.2;
       iconRadiMod += 0.393;
 
@@ -132,22 +131,15 @@ class UserLocationCircle {
         }
 
         userLocation.mask(graphicalMask);
-        
-        switchData = 2;
+
+        if (count < threshold == true) {
+          graphics.image(userLocation, x, y, staticIconSize, staticIconSize);
+        } else {
+          graphics.image(userLocation, x, y, masksize, masksize);
+        }
       }
     }
   }
-
-void render() {
-  
-  rangeRender();
-
-  if (count < threshold == true) {
-        graphics.image(userLocation, x, y, staticIconSize, staticIconSize);
-  } else {
-        graphics.image(userLocation, x, y, masksize, masksize);
-  }
-}
 
   void buildText() {
 
@@ -179,7 +171,6 @@ void render() {
       rotate(theta+PI/2); // rotation is offset by 90 degrees
 
       // Display the character
-      userLocationTextSwitch = true;
     }
   }
 

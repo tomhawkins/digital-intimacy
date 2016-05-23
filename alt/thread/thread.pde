@@ -28,8 +28,8 @@ import java.util.*;
 import org.openkinect.*;
 import org.openkinect.processing.*;
 
-Kinect kinect;
-KinectTracker tracker;
+//Kinect kinect;
+//KinectTracker tracker;
 
 Twitter twitter;
 URL url;
@@ -74,7 +74,7 @@ float iconRadiMod;
 
 int widthPosMod = 600;
 int heightPosMod = 310;
-int switchData = 1;
+int switchData = 3;
 float sizeModLarge = 1;
 float sizeModMed = 0.75;
 float sizeModSmall = 0.5;
@@ -84,18 +84,7 @@ boolean depth = true;
 boolean rgb = false;
 boolean ir = false;
 
-boolean textSwitch;
-
-boolean userTimeLowThreshold;
-boolean userTimeHighThreshold;
-
-boolean userLocationRangeSwitch;
-boolean userLocationLowThreshold;
-boolean userLocationHighThreshold;
-boolean userLocationTextSwitch;
-
-boolean userFollowerLowThreshold;
-boolean userFollowerHighThreshold;
+boolean followerReady;
 
 int minDepth =  60;
 int maxDepth = 820;
@@ -164,12 +153,12 @@ void setup() {
   textAlign(CENTER);
   ellipseMode(CENTER);
 
-  kinect = new Kinect(this);
+  //kinect = new Kinect(this);
   //kinect.start();
   //kinect.enableRGB(rgb);
   //kinect.enableIR(ir);
   //kinect.tilt(deg);
-  tracker = new KinectTracker();
+  //tracker = new KinectTracker();
 
   ConfigurationBuilder cb = new ConfigurationBuilder();
 
@@ -228,27 +217,26 @@ void setup() {
 
 //draw function. This is our Render Thread
 void draw() {
-
+  boolean followerReady = true;
   countRenderCalls++;
 
 
-  graphics.beginDraw();
+    graphics.beginDraw();
+  if (followerReady == true) {
 
+    //-------------
 
+  userFollowerRangeBackground();
 
-  /*
-      all drawing calls have to be called from the graphics object.
-   so graphics.line(0,0,100,100) instead of line(0,0,100,100)
-   */
-  //-------------
-  userTimeRangeBackground();
-
-  userTimeRange1.buildRange();
-  userTimeRange2.buildRange();
-  userTimeRange3.buildRange();
-  userTimeRange4.buildRange();
-  //-------------
-  graphics.endDraw();
+  userFollowerRange1.buildRange();
+  userFollowerRange2.buildRange();
+  userFollowerRange3.buildRange();
+  userFollowerRange4.buildRange();
+    //-------------
+    graphics.endDraw();
+  } else {
+    graphics.endDraw();
+  };
   image(graphics, 0, 0);
   //no sleep calculation here because processing  is doing  it for us already
 }
@@ -267,7 +255,7 @@ Thread logicThread = new Thread(new Runnable() {
 
       countLogicCalls++;
       //------------
-      tracker.track();
+      //tracker.track();
       //println(switchData);
 
       //------------
@@ -596,25 +584,25 @@ void mousePressed() {
   //--- DEVELOPMENT CODE GOES BELOW--
 }
 
-void keyPressed() {
-  if (key == 'd') {
-    depth = !depth;
-    kinect.enableDepth(depth);
-  } else if (key == 'r') {
-    rgb = !rgb;
-    if (rgb) ir = false;
-    kinect.enableRGB(rgb);
-  } else if (key == 'i') {
-    ir = !ir;
-    if (ir) rgb = false;
-    kinect.enableIR(ir);
-  } else if (key == CODED) {
-    if (keyCode == UP) {
-      deg++;
-    } else if (keyCode == DOWN) {
-      deg--;
-    }
-    deg = constrain(deg, 0, 30);
-    kinect.tilt(deg);
-  }
-}
+//void keyPressed() {
+//  if (key == 'd') {
+//    depth = !depth;
+//    kinect.enableDepth(depth);
+//  } else if (key == 'r') {
+//    rgb = !rgb;
+//    if (rgb) ir = false;
+//    kinect.enableRGB(rgb);
+//  } else if (key == 'i') {
+//    ir = !ir;
+//    if (ir) rgb = false;
+//    kinect.enableIR(ir);
+//  } else if (key == CODED) {
+//    if (keyCode == UP) {
+//      deg++;
+//    } else if (keyCode == DOWN) {
+//      deg--;
+//    }
+//    deg = constrain(deg, 0, 30);
+//    kinect.tilt(deg);
+//  }
+//}

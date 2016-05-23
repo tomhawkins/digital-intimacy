@@ -43,7 +43,6 @@ class TextCircle {
       rotate(theta+PI/2); // rotation is offset by 90 degrees
 
       // Display the character
-      textSwitch = true;
     }
   }
 

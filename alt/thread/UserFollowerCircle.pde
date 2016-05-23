@@ -94,17 +94,13 @@ class UserFollowerCircle {
       //fill(0);
 
       switchData = 1;
-    }
-  }
-
-  void render() {
-
-    if (count < threshold == true) {
-      //println("userTimeLowThreshold is True");
-      graphics.image(userTime, x, y, staticIconSize, staticIconSize);
-    } else {
-      //println("userTimeHighThreshold is True");
-      graphics.image(userTime, x, y, masksize, masksize);
+      if (count < threshold == true) {
+        //println("userTimeLowThreshold is True");
+        graphics.image(userTime, x, y, staticIconSize, staticIconSize);
+      } else {
+        //println("userTimeHighThreshold is True");
+        graphics.image(userTime, x, y, masksize, masksize);
+      }
     }
   }
 }
