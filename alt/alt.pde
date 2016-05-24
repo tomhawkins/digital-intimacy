@@ -1,4 +1,6 @@
-import http.requests.*; //<>//
+//maybe introduce a separate thread just for transitions? using timers/switches or variable sets; when draw finishes it sets a flag for some pgraphics object to be drawn or something //<>//
+
+import http.requests.*;
 import twitter4j.conf.*;
 import twitter4j.*;
 import twitter4j.auth.*;
@@ -21,8 +23,8 @@ import java.util.*;
 import org.openkinect.*;
 import org.openkinect.processing.*;
 
-//Kinect kinect;
-//KinectTracker tracker;
+Kinect kinect;
+KinectTracker tracker;
 
 Twitter twitter;
 URL url;
@@ -82,6 +84,7 @@ int maxDepth = 820;
 int interval = 12000;
 
 float deg;
+String tweetscreen = "TWEET #i7226684 TO ENGAGE";
 
 void setup()
 {
@@ -92,12 +95,14 @@ void setup()
   textAlign(CENTER);
   ellipseMode(CENTER);
 
-  //kinect = new Kinect(this);
-  //kinect.start();
-  //kinect.enableRGB(rgb);
-  //kinect.enableIR(ir);
-  //kinect.tilt(deg);
-  //tracker = new KinectTracker();
+  kinect = new Kinect(this);
+  kinect.start();
+  println("Camera running");
+  kinect.enableRGB(rgb);
+  kinect.enableIR(ir);
+  kinect.tilt(deg);
+  println("Control enabled, UP/DOWN to angle camera");
+  tracker = new KinectTracker();
 
   ConfigurationBuilder cb = new ConfigurationBuilder();
 
@@ -133,6 +138,7 @@ void setup()
   textFollower4 = new TextCircle("701 - 2000 FOLLOWERS", (height * sizeModLarge) / 2 + 33);
 
   thread("refreshTweets");
+  println("Thread running - user tracking");
   //thread("mousePressed");
   //thread("dump");
   getNewTweets();
@@ -142,24 +148,30 @@ void setup()
 void draw()
 {
   background(0);
-  //tracker.track();
+  
+  if (switchData = 1) {
+    tweetScreen();
+  } else if (switchData = 2) {
+    userTimeRangeBackground();
+    userTimeRange();
+  } else if (switchData = 2) {
+    userFollowerRangeBackground();
+    userFollowerRange();
+  } else { 
+    userLocationRange();
+  }
 
   //refreshTweets();
 
-  userTimeRangeBackground();
-  userTimeRange();
+  //tweetScreen();
+
+  //userTimeRangeBackground();
+  //userTimeRange();
 
   //userFollowerRangeBackground();
   //userFollowerRange();
 
   //userLocationRange();
-
-
-  //dump();
-  //getTweet();
-  //getDetails();
-  //getImage();
-  //getScreenName();
 }
 
 void userLocationRange() {
@@ -230,91 +242,40 @@ void getNewTweets()
 
 void refreshTweets() {
   while (true) {
+    tracker.track();
     if (millis() > interval) {
-  try
-  {
-    if (millis() > interval) {
-      Query query = new Query(searchString);
-      QueryResult result = twitter.search(query);
-      newTweet = result.getTweets().get(0);
-      println(currentTweet.getText());
-      println(newTweet.getText());
-      interval += 12000;
+      try
+      {
+        if (millis() > interval) {
+          Query query = new Query(searchString);
+          QueryResult result = twitter.search(query);
+          newTweet = result.getTweets().get(0);
+          println(currentTweet.getText());
+          println(newTweet.getText());
+          interval += 12000;
 
-      if (currentTweet.getText().equals(newTweet.getText()) == true) {
-        println("No New Tweets");
-      } else {
-        println("New Tweet Found");
-        currentTweet = newTweet;
-        user = currentTweet.getUser();
-        println("Focus currentTweet Updated");
-        dump();
+          if (currentTweet.getText().equals(newTweet.getText()) == true) {
+            println("No New Tweets");
+          } else {
+            println("New Tweet Found");
+            currentTweet = newTweet;
+            user = currentTweet.getUser();
+            println("Focus currentTweet Updated");
+            dump();
+          }
+        } else {
+          println("Interval not reached, waiting " + interval + "ms");
+        }
       }
-      
-    } else {
-      println("Interval not reached, waiting " + interval + "ms");
+      catch (TwitterException te)
+      {
+        System.out.println("Failed to search tweets: " + te.getMessage());
+        System.exit(-1);
+      }
+
+      println("Updated Tweets");
     }
-    
   }
-  catch (TwitterException te)
-  {
-    System.out.println("Failed to search tweets: " + te.getMessage());
-    System.exit(-1);
-  }
-
-  println("Updated Tweets");
-}
-}
-}
-
-
-void getScreenName()
-{
-
-  currentTweet.getUser();
-  user.getLocation();
-  user.getFollowersCount();
-  currentTweet.getText();
-  currentTweet.getCreatedAt();
-
-  println(user.getScreenName());
-  println(user.getLocation());
-  println(user.getFollowersCount() + " followers");
-  println(currentTweet.getText());
-  println(currentTweet.getCreatedAt());
-}
-
-void getTweet()
-{
-  String userTweet = currentTweet.getText();
-  text(userTweet, (width/2), 300, 700, 250);
-  redraw();
-}
-
-void getDetails()
-{
-
-  DateFormat df = new SimpleDateFormat("HH:mm:ss");  
-  Date tweetTime = currentTweet.getCreatedAt();   
-
-  String userName = user.getScreenName();
-  String userLocation = user.getLocation();
-  int userFollowers = user.getFollowersCount();
-  String reportDate = df.format(tweetTime);
-  String profile = user.getBiggerProfileImageURL();
-
-  userImage = loadImage(profile, "png");
-
-  text("@" + userName, (width/2), 350);
-  text(userLocation, (width/2), 400, 200);
-  text(userFollowers + " followers", (width/2), 450);
-  text(reportDate, width/2, 500);
-  image(userImage, width/2, 100);
-  redraw();
-}
-
-void getImage()
-{
 }
 
 void dump() {
@@ -352,6 +313,24 @@ void dump() {
   println("Dumped");
 }
 
+void tweetScreen() {
+  background(0);
+  noFill();
+  stroke(153);
+  float line = 0;
+  int fontXPos = 388;
+  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
+
+  // Display the character
+  fill(255);
+  textSize(22);
+
+  for (int i = 0; i < tweetscreen.length(); i++) {
+    text(tweetscreen.charAt(i), fontXPos, 338);
+    fontXPos += 20;
+  }
+}
+
 void mousePressed() {
 
   currentTweet.getUser();
@@ -378,25 +357,25 @@ void mousePressed() {
   //--- DEVELOPMENT CODE GOES BELOW--
 }
 
-//void keyPressed() {
-//  if (key == 'd') {
-//    depth = !depth;
-//    kinect.enableDepth(depth);
-//  } else if (key == 'r') {
-//    rgb = !rgb;
-//    if (rgb) ir = false;
-//    kinect.enableRGB(rgb);
-//  } else if (key == 'i') {
-//    ir = !ir;
-//    if (ir) rgb = false;
-//    kinect.enableIR(ir);
-//  } else if (key == CODED) {
-//    if (keyCode == UP) {
-//      deg++;
-//    } else if (keyCode == DOWN) {
-//      deg--;
-//    }
-//    deg = constrain(deg, 0, 30);
-//    kinect.tilt(deg);
-//  }
-//}
+void keyPressed() {
+ if (key == 'd') {
+   depth = !depth;
+   kinect.enableDepth(depth);
+ } else if (key == 'r') {
+   rgb = !rgb;
+   if (rgb) ir = false;
+   kinect.enableRGB(rgb);
+ } else if (key == 'i') {
+   ir = !ir;
+   if (ir) rgb = false;
+   kinect.enableIR(ir);
+ } else if (key == CODED) {
+   if (keyCode == UP) {
+     deg++;
+   } else if (keyCode == DOWN) {
+     deg--;
+   }
+   deg = constrain(deg, 0, 30);
+   kinect.tilt(deg);
+ }
+}
