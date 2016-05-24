@@ -69,7 +69,7 @@ float iconRadiMod;
 
 int widthPosMod = 600;
 int heightPosMod = 310;
-int switchData = 0;
+int switchData = 4;
 float sizeModLarge = 1;
 float sizeModMed = 0.75;
 float sizeModSmall = 0.5;
@@ -81,7 +81,7 @@ boolean ir = false;
 
 int minDepth =  60;
 int maxDepth = 820;
-int interval = 12000;
+int interval = 7000;
 
 float deg;
 String tweetscreen = "TWEET #i7226684 TO ENGAGE";
@@ -96,11 +96,11 @@ void setup()
   ellipseMode(CENTER);
 
   kinect = new Kinect(this);
-  kinect.start();
+  //kinect.start();
   println("Camera running");
-  kinect.enableRGB(rgb);
-  kinect.enableIR(ir);
-  kinect.tilt(deg);
+  //kinect.enableRGB(rgb);
+  //kinect.enableIR(ir);
+  //kinect.tilt(deg);
   println("Control enabled, UP/DOWN to angle camera");
   tracker = new KinectTracker();
 
@@ -149,17 +149,18 @@ void draw()
 {
   background(0);
   
-  if (switchData = 1) {
+  if (switchData == 1) {
     tweetScreen();
-  } else if (switchData = 2) {
+  } else if (switchData == 2) {
     userTimeRangeBackground();
     userTimeRange();
-  } else if (switchData = 2) {
+  } else if (switchData == 3) {
     userFollowerRangeBackground();
     userFollowerRange();
-  } else { 
+  } else if (switchData == 4) { 
     userLocationRange();
   }
+  println(switchData);
 
   //refreshTweets();
 
@@ -252,7 +253,7 @@ void refreshTweets() {
           newTweet = result.getTweets().get(0);
           println(currentTweet.getText());
           println(newTweet.getText());
-          interval += 12000;
+          interval += 7000;
 
           if (currentTweet.getText().equals(newTweet.getText()) == true) {
             println("No New Tweets");

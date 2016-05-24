@@ -7,16 +7,16 @@ class KinectTracker {
   int kh = 480;
 
   int case1ThresholdEnter = 330;
-  int case1ThresholdExit = 780;
+  int case1ThresholdExit = 540;
 
-  int case2ThresholdEnter = 781;
-  int case2ThresholdExit = 880;
+  int case2ThresholdEnter = 541;
+  int case2ThresholdExit = 740;
 
-  int case3ThresholdEnter = 881;
-  int case3ThresholdExit = 940;
+  int case3ThresholdEnter = 741;
+  int case3ThresholdExit = 840;
 
-  int case4ThresholdEnter = 941;
-  int case4ThresholdExit = 1000;
+  int case4ThresholdEnter = 841;
+  int case4ThresholdExit = 900;
 
   // Raw location
   PVector loc;
@@ -89,7 +89,7 @@ class KinectTracker {
           sum3X += x;
           sum3Y += y;
           count3++;
-        } else {
+        } else if (rawDepth < case4ThresholdExit && rawDepth > case4ThresholdEnter) {
           sum4X += x;
           sum4Y += y;
           count4++;
