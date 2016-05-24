@@ -86,9 +86,7 @@ class UserFollowerCircle {
 
       userFollowers.mask(graphicalMask);
 
-      //fill(0, 10);
-      //rect(0, 0, width, height);
-      //fill(0);
+
 
       if (count < threshold == true) {
 

@@ -89,7 +89,7 @@ String tweetscreen = "TWEET #i7226684 TO ENGAGE";
 void setup()
 {
   size(1280, 700);
-  frameRate(60);
+  frameRate(120);
   smooth(8);
   f = createFont("Raleway-ExtraLight.vlw", 32, true);
   textAlign(CENTER);
@@ -147,8 +147,10 @@ void setup()
 
 void draw()
 {
-  background(0);
-  
+  //background(0);
+  fill(0, 150);
+  rect(0, 0, width, height);
+  //fill(0);
   if (switchData == 1) {
     tweetScreen();
   } else if (switchData == 2) {
@@ -160,19 +162,6 @@ void draw()
   } else if (switchData == 4) { 
     userLocationRange();
   }
-  println(switchData);
-
-  //refreshTweets();
-
-  //tweetScreen();
-
-  //userTimeRangeBackground();
-  //userTimeRange();
-
-  //userFollowerRangeBackground();
-  //userFollowerRange();
-
-  //userLocationRange();
 }
 
 void userLocationRange() {
@@ -359,24 +348,24 @@ void mousePressed() {
 }
 
 void keyPressed() {
- if (key == 'd') {
-   depth = !depth;
-   kinect.enableDepth(depth);
- } else if (key == 'r') {
-   rgb = !rgb;
-   if (rgb) ir = false;
-   kinect.enableRGB(rgb);
- } else if (key == 'i') {
-   ir = !ir;
-   if (ir) rgb = false;
-   kinect.enableIR(ir);
- } else if (key == CODED) {
-   if (keyCode == UP) {
-     deg++;
-   } else if (keyCode == DOWN) {
-     deg--;
-   }
-   deg = constrain(deg, 0, 30);
-   kinect.tilt(deg);
- }
+  if (key == 'd') {
+    depth = !depth;
+    kinect.enableDepth(depth);
+  } else if (key == 'r') {
+    rgb = !rgb;
+    if (rgb) ir = false;
+    kinect.enableRGB(rgb);
+  } else if (key == 'i') {
+    ir = !ir;
+    if (ir) rgb = false;
+    kinect.enableIR(ir);
+  } else if (key == CODED) {
+    if (keyCode == UP) {
+      deg++;
+    } else if (keyCode == DOWN) {
+      deg--;
+    }
+    deg = constrain(deg, 0, 30);
+    kinect.tilt(deg);
+  }
 }
