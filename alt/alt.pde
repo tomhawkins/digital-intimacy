@@ -1,4 +1,4 @@
-//maybe introduce a separate thread just for transitions? using timers/switches or variable sets; when draw finishes it sets a flag for some pgraphics object to be drawn or something //<>//
+//maybe introduce a separate thread just for transitions? using timers/switches or variable sets; when draw finishes it sets a flag for some pgraphics object to be drawn or something //<>// //<>//
 
 import http.requests.*;
 import twitter4j.conf.*;
@@ -23,8 +23,8 @@ import java.util.*;
 import org.openkinect.*;
 import org.openkinect.processing.*;
 
-Kinect kinect;
-KinectTracker tracker;
+//Kinect kinect;
+//KinectTracker tracker;
 
 Twitter twitter;
 URL url;
@@ -69,7 +69,9 @@ float iconRadiMod;
 
 int widthPosMod = 600;
 int heightPosMod = 310;
+
 int switchData = 4;
+
 float sizeModLarge = 1;
 float sizeModMed = 0.75;
 float sizeModSmall = 0.5;
@@ -95,14 +97,14 @@ void setup()
   textAlign(CENTER);
   ellipseMode(CENTER);
 
-  kinect = new Kinect(this);
+  //kinect = new Kinect(this);
   //kinect.start();
   println("Camera running");
   //kinect.enableRGB(rgb);
   //kinect.enableIR(ir);
   //kinect.tilt(deg);
   println("Control enabled, UP/DOWN to angle camera");
-  tracker = new KinectTracker();
+  //tracker = new KinectTracker();
 
   ConfigurationBuilder cb = new ConfigurationBuilder();
 
@@ -125,7 +127,7 @@ void setup()
   userFollowerRange3 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=401&end=700", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
   userFollowerRange4 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=701&end=2000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
 
-  userLocationCircle1 = new UserLocationCircle("https://i7226684.budmd.uk/intimacy/dumper/location.php", "https://i7226684.budmd.uk/intimacy/dumper/retrieve.php", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60, "Bournemouth", (height * sizeModXS)); 
+  userLocationCircle1 = new UserLocationCircle("https://i7226684.budmd.uk/intimacy/dumper/location.php", "https://i7226684.budmd.uk/intimacy/dumper/retrieve.php", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60, (height * sizeModXS)); 
 
   textTime1 = new TextCircle("00:00 - 10:00", (height * sizeModXS) / 2 + 33);
   textTime2 = new TextCircle("10:00 - 14:00", (height * sizeModSmall) / 2 + 33);
@@ -138,6 +140,7 @@ void setup()
   textFollower4 = new TextCircle("701 - 2000 FOLLOWERS", (height * sizeModLarge) / 2 + 33);
 
   thread("refreshTweets");
+  //thread("draw");
   println("Thread running - user tracking");
   //thread("mousePressed");
   //thread("dump");
@@ -147,28 +150,68 @@ void setup()
 
 void draw()
 {
-  //background(0);
-  fill(0, 150);
-  rect(0, 0, width, height);
-  //fill(0);
-  if (switchData == 1) {
+
+  //if (keyPressed) {
+  //  if (key == '1') {
+  //    switchData = 1;
+  //  } else if (key == '2') {
+  //    switchData = 2;
+  //  } else if (key == '3') {
+  //    switchData = 3;
+  //  } else if (key == '4') {
+  //    switchData = 4;
+  //  }
+  //}
+
+    if (switchData == 1) {
+      fader(1000, 1);
+      return;
+    } else if (switchData == 2) {
+      fader(1000, 2);
+      return;
+    } else if (switchData == 3) {
+      fader(1000, 3);
+      return;
+    } else if (switchData == 4) { 
+      fader(1000, 4);
+      return;
+    }
+  }
+
+void fader(int duration, int function) {
+  float now = millis();
+  float opacity = 0;
+
+  while (millis() <= (now + duration)) {
+    fill(0, opacity);
+    rect(width, height, 0, 0);
+    if (millis() < (now + (duration/2))) {
+      opacity += (duration/2);
+    } else {
+      opacity -= (duration /2);
+    }
+  }
+  if (function == 1) {
     tweetScreen();
-  } else if (switchData == 2) {
-    userTimeRangeBackground();
+    return;
+  } else if (function == 2) {
     userTimeRange();
-  } else if (switchData == 3) {
-    userFollowerRangeBackground();
+    return;
+  } else if (function == 3) {
     userFollowerRange();
-  } else if (switchData == 4) { 
+    return;
+  } else if (function == 4) {
     userLocationRange();
+    return;
   }
 }
 
 void userLocationRange() {
   userLocationCircle1.buildUserRange();
+  return;
 }
 
-void userTimeRangeBackground() {
+void userTimeRange() {
   background(0);
   noFill();
   stroke(153);
@@ -176,18 +219,6 @@ void userTimeRangeBackground() {
   ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
   ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
   ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
-}
-
-void userFollowerRangeBackground() {
-  noFill();
-  stroke(153);
-  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
-  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
-  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
-  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
-}
-
-void userTimeRange() {
   userTimeRange1.buildRange();
   userTimeRange2.buildRange();
   userTimeRange3.buildRange();
@@ -197,9 +228,17 @@ void userTimeRange() {
   textTime2.buildText();
   textTime3.buildText();
   textTime4.buildText();
+  return;
 }
 
 void userFollowerRange() {
+  background(0);
+  noFill();
+  stroke(153);
+  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
+  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
+  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
+  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
   userFollowerRange1.buildRange();
   userFollowerRange2.buildRange();
   userFollowerRange3.buildRange();
@@ -209,6 +248,7 @@ void userFollowerRange() {
   textFollower2.buildText();
   textFollower3.buildText();
   textFollower4.buildText();
+  return;
 }
 
 
@@ -232,7 +272,7 @@ void getNewTweets()
 
 void refreshTweets() {
   while (true) {
-    tracker.track();
+    //tracker.track();
     if (millis() > interval) {
       try
       {
@@ -319,6 +359,7 @@ void tweetScreen() {
     text(tweetscreen.charAt(i), fontXPos, 338);
     fontXPos += 20;
   }
+  return;
 }
 
 void mousePressed() {
@@ -347,25 +388,25 @@ void mousePressed() {
   //--- DEVELOPMENT CODE GOES BELOW--
 }
 
-void keyPressed() {
-  if (key == 'd') {
-    depth = !depth;
-    kinect.enableDepth(depth);
-  } else if (key == 'r') {
-    rgb = !rgb;
-    if (rgb) ir = false;
-    kinect.enableRGB(rgb);
-  } else if (key == 'i') {
-    ir = !ir;
-    if (ir) rgb = false;
-    kinect.enableIR(ir);
-  } else if (key == CODED) {
-    if (keyCode == UP) {
-      deg++;
-    } else if (keyCode == DOWN) {
-      deg--;
-    }
-    deg = constrain(deg, 0, 30);
-    kinect.tilt(deg);
-  }
-}
+//void keyPressed() {
+//  if (key == 'd') {
+//    depth = !depth;
+//    kinect.enableDepth(depth);
+//  } else if (key == 'r') {
+//    rgb = !rgb;
+//    if (rgb) ir = false;
+//    kinect.enableRGB(rgb);
+//  } else if (key == 'i') {
+//    ir = !ir;
+//    if (ir) rgb = false;
+//    kinect.enableIR(ir);
+//  } else if (key == CODED) {
+//    if (keyCode == UP) {
+//      deg++;
+//    } else if (keyCode == DOWN) {
+//      deg--;
+//    }
+//    deg = constrain(deg, 0, 30);
+//    kinect.tilt(deg);
+//  }
+//}

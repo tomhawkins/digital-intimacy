@@ -2,7 +2,6 @@ class UserLocationCircle {
   String getlink;
   String locList;
   String locString;
-  String message;
   float lg_diam;
   float cx;
   float cy;
@@ -11,11 +10,12 @@ class UserLocationCircle {
   int count;
   float r;
   float angle;
+  float arclength = 0;
   processing.data.JSONArray values;
   processing.data.JSONArray locArray;
 
   // The Constructor is defined with arguments.
-  UserLocationCircle(String link, String locLink, float diam, float locX, float locY, int t, int s, String message_, float r_) {
+  UserLocationCircle(String link, String locLink, float diam, float locX, float locY, int t, int s, float r_) {
     getlink = link;
     locList = locLink;
     lg_diam = diam;
@@ -23,7 +23,6 @@ class UserLocationCircle {
     cy = locY;
     threshold = t;
     staticIconSize = s;
-    message = message_;
     r = r_;
   }
 
@@ -48,10 +47,11 @@ class UserLocationCircle {
     processing.data.JSONObject values = processing.data.JSONObject.parse(get.getContent());
     processing.data.JSONArray locArray = processing.data.JSONArray.parse(locationRequest.getContent());
 
-
     for (int i = 0; i < locArray.size(); i++) {
       processing.data.JSONObject locObject = locArray.getJSONObject(i);
       String locString = locObject.getString("intimacy_location");
+
+      println(locString);
 
       noFill();
       stroke(153);
@@ -59,6 +59,26 @@ class UserLocationCircle {
       circleSizeMod += 0.2;
       iconRadiMod += 0.393;
 
+      for (int t = 0; t < locString.length(); t++) {
+
+        char currentChar = locString.charAt(t);
+        float w = textWidth(currentChar);
+        arclength += w/2;
+        float theta = PI + arclength / r; 
+        pushMatrix();
+        translate(628, 338);
+        translate(r*cos(theta), r*sin(theta));
+        rotate(theta+PI/2); // rotation is offset by 90 degrees
+        fill(255);
+        textSize(18);
+        text(currentChar, 0, 0);
+        popMatrix();
+        r += (circleSizeMod);
+        arclength += w/2;
+
+        println(currentChar);
+        translate(0, 0);
+      }
       String encodedLocString = URLEncoder.encode(locString);
       GetRequest locGet = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/locentry.php?location=" + encodedLocString);
       locGet.send();
@@ -138,47 +158,4 @@ class UserLocationCircle {
       }
     }
   }
-  
-    void buildText() {
-
-
-    // We must keep track of our position along the curve
-    float arclength = 0;
-
-
-    for (int i = 0; i < message.length(); i++)
-    {
-      // Instead of a constant width, we check the width of each character.
-      char currentChar = message.charAt(i);
-      float w = textWidth(currentChar);
-
-      // Each box is centered so we move half the width
-      arclength += w/2;
-
-      // Angle in radians is the arclength divided by the radius
-
-      // Starting on the left side of the circle by adding PI
-      float theta = PI + arclength / r;    
-
-      pushMatrix();
-
-      // Polar to cartesian coordinate conversion
-      translate(r*cos(theta), r*sin(theta));
-
-      // Rotate the box
-      rotate(theta+PI/2); // rotation is offset by 90 degrees
-
-      // Display the character
-      fill(255);
-      textSize(18);
-      text(currentChar, 0, 0);
-      popMatrix();
-
-      // Move halfway again
-      arclength += w/2 + 2;
-    }
-  }
-  
 }
-
-//

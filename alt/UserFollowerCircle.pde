@@ -20,7 +20,6 @@ class UserFollowerCircle {
   }
   void buildRange()
   {
-
     GetRequest get = new GetRequest(getlink);
     get.send();
     get.addHeader("Accept", "application/json");
