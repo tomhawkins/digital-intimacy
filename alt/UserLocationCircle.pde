@@ -14,6 +14,10 @@ class UserLocationCircle {
   float angle;
   float arclength = 0;
   float radiMod = 0;
+  float w;
+  float theta;
+  float arcMod = 0;
+  char currentChar;
   processing.data.JSONArray values;
   processing.data.JSONArray locArray;
 
@@ -36,6 +40,7 @@ class UserLocationCircle {
 
     circleSizeMod = 0.2;
     iconRadiMod = 0.01;
+    radiMod = 0.06;
 
     GetRequest get = new GetRequest(getlink);
     GetRequest locationRequest = new GetRequest(locList);
@@ -65,35 +70,39 @@ class UserLocationCircle {
       ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
       circleSizeMod += 0.2;
       iconRadiMod += 0.393;
-      for (int tt = 0; tt < nameArray.length; tt++) {
-        for (int t = 0; t < nameArray[i].length(); t++) {
+      radiMod += 0.085;
+      arclength -= 120;
+      arcMod += 1.2;
 
-          char currentChar = nameArray[i].charAt(t);
-          float w = textWidth(currentChar);
-          arclength += w/2 + 2;
-          float theta = PI + arclength / r; 
-          pushMatrix();
-          translate(628, 338);
-          translate(r*cos(theta), r*sin(theta));
-          rotate(theta+PI/2); // rotation is offset by 90 degrees
-          fill(255);
-          textSize(18);
-          text(currentChar, 0, 0);
-          popMatrix();
+      for (int t = 0; t < nameArray[i].length(); t++) {
 
-          arclength += w/2 + 2;
-          println(currentChar);
-          translate(0, 0);
-        }
-        r = (height * (0.15 + rr));
+        currentChar = nameArray[i].charAt(t);
+        w = textWidth(currentChar);
+        arclength += w/2 + 2;
+        theta = ((arcMod+PI) + arclength / r); 
+        pushMatrix();
+        translate(628, 338);
+        translate((height*radiMod)*cos(theta), (height*radiMod)*sin(theta));
+        rotate(theta+PI/2); // rotation is offset by 90 degrees
+        fill(255);
+        textSize(18);
+        text(currentChar, 0, 0);
+        popMatrix();
+
+        arclength += w/2 + 2;
+        println(currentChar);
       }
+      
+      arcMod += 5;
+      radiMod += 0.01;
+
       String encodedLocString = URLEncoder.encode(nameArray[i]);
       GetRequest locGet = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/locentry.php?location=" + encodedLocString);
       locGet.send();
       locGet.addHeader("Accept", "application/json");
       processing.data.JSONArray locEntry = processing.data.JSONArray.parse(locGet.getContent());
       int count = locEntry.size();
-
+      translate(0, 0);
       //for (int ii = 0; ii < locEntry.size(); ii++) {
 
 
