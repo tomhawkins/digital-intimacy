@@ -67,8 +67,8 @@ PGraphics graphicalMask;
 float circleSizeMod;
 float iconRadiMod;
 
-int widthPosMod = 600;
-int heightPosMod = 310;
+int widthPosMod = width/2;
+int heightPosMod = height/2;
 
 int switchData = 4;
 
@@ -117,15 +117,15 @@ void setup()
   twitter = tf.getInstance();
 
   getNewTweets();
-  userTimeRange1 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=10:00:00.000000", (height * sizeModLarge), widthPosMod, heightPosMod, 30, 60); 
-  userTimeRange2 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=10:00:01.000000&end=14:00:00.000000", (height * sizeModMed), widthPosMod, heightPosMod, 40, 60); 
-  userTimeRange3 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=14:00:01.000000&end=18:00:00.000000", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
-  userTimeRange4 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=18:00:01.000000&end=23:59:59.000000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
+  userTimeRange1 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=00:00:00.000000&end=10:00:00.000000", (height * sizeModLarge), widthPosMod, heightPosMod, 32, 60); 
+  userTimeRange2 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=10:00:01.000000&end=14:00:00.000000", (height * sizeModMed), widthPosMod, heightPosMod, 24, 60); 
+  userTimeRange3 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=14:00:01.000000&end=18:00:00.000000", (height * sizeModSmall), widthPosMod, heightPosMod, 16, 60); 
+  userTimeRange4 = new UserTimeCircle("https://i7226684.budmd.uk/intimacy/dumper/times.php?start=18:00:01.000000&end=23:59:59.000000", (height * sizeModXS), widthPosMod, heightPosMod, 8, 60); 
 
-  userFollowerRange1 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=0&end=100", (height * sizeModLarge), widthPosMod, heightPosMod, 30, 60); 
-  userFollowerRange2 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=101&end=400", (height * sizeModMed), widthPosMod, heightPosMod, 40, 60); 
-  userFollowerRange3 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=401&end=700", (height * sizeModSmall), widthPosMod, heightPosMod, 60, 60); 
-  userFollowerRange4 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=701&end=2000", (height * sizeModXS), widthPosMod, heightPosMod, 9, 60); 
+  userFollowerRange1 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=0&end=100", (height * sizeModLarge), widthPosMod, heightPosMod, 32, 60); 
+  userFollowerRange2 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=101&end=400", (height * sizeModMed), widthPosMod, heightPosMod, 24, 60); 
+  userFollowerRange3 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=401&end=700", (height * sizeModSmall), widthPosMod, heightPosMod, 16, 60); 
+  userFollowerRange4 = new UserFollowerCircle("https://i7226684.budmd.uk/intimacy/dumper/followers.php?start=701&end=2000", (height * sizeModXS), widthPosMod, heightPosMod, 8, 60); 
 
   userLocationCircle1 = new UserLocationCircle("https://i7226684.budmd.uk/intimacy/dumper/location.php", "https://i7226684.budmd.uk/intimacy/dumper/retrieve.php", (height * sizeModXS), width/2, height/2, 12, 60, ((height * sizeModXS) / 2)); 
 
@@ -163,20 +163,20 @@ void draw()
   //  }
   //}
 
-    if (switchData == 1) {
-      fader(1000, 1);
-      return;
-    } else if (switchData == 2) {
-      fader(1000, 2);
-      return;
-    } else if (switchData == 3) {
-      fader(1000, 3);
-      return;
-    } else if (switchData == 4) { 
-      fader(1000, 4);
-      return;
-    }
+  if (switchData == 1) {
+    fader(1000, 1);
+    return;
+  } else if (switchData == 2) {
+    fader(1000, 2);
+    return;
+  } else if (switchData == 3) {
+    fader(1000, 3);
+    return;
+  } else if (switchData == 4) { 
+    fader(1000, 4);
+    return;
   }
+}
 
 void fader(int duration, int function) {
   float now = millis();
@@ -212,18 +212,20 @@ void userLocationRange() {
 }
 
 void userTimeRange() {
+  translate(width/2, height/2);
+  ellipseMode(CENTER);
   background(0);
   noFill();
   stroke(153);
-  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
-  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
-  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
-  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
+  ellipse(widthPosMod, heightPosMod, (height * sizeModLarge), (height * sizeModLarge));
+  ellipse(widthPosMod, heightPosMod, (height * sizeModMed), (height * sizeModMed));
+  ellipse(widthPosMod, heightPosMod, (height * sizeModSmall), (height * sizeModSmall));
+  ellipse(widthPosMod, heightPosMod, (height * sizeModXS), (height * sizeModXS));
   userTimeRange1.buildRange();
   userTimeRange2.buildRange();
   userTimeRange3.buildRange();
   userTimeRange4.buildRange();
-  translate(628, 338);
+  translate(width/2, height/2);
   textTime1.buildText();
   textTime2.buildText();
   textTime3.buildText();
@@ -232,18 +234,20 @@ void userTimeRange() {
 }
 
 void userFollowerRange() {
+  translate(width/2, height/2);
+  ellipseMode(CENTER);
   background(0);
   noFill();
   stroke(153);
-  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
-  ellipse(628, 338, (height * sizeModMed), (height * sizeModMed));
-  ellipse(628, 338, (height * sizeModSmall), (height * sizeModSmall));
-  ellipse(628, 338, (height * sizeModXS), (height * sizeModXS));
+  ellipse(widthPosMod, heightPosMod, (height * sizeModLarge), (height * sizeModLarge));
+  ellipse(widthPosMod, heightPosMod, (height * sizeModMed), (height * sizeModMed));
+  ellipse(widthPosMod, heightPosMod, (height * sizeModSmall), (height * sizeModSmall));
+  ellipse(widthPosMod, heightPosMod, (height * sizeModXS), (height * sizeModXS));
   userFollowerRange1.buildRange();
   userFollowerRange2.buildRange();
   userFollowerRange3.buildRange();
   userFollowerRange4.buildRange();
-  translate(628, 338);
+  translate(width/2, height/2);
   textFollower1.buildText();
   textFollower2.buildText();
   textFollower3.buildText();
@@ -349,14 +353,14 @@ void tweetScreen() {
   stroke(153);
   float line = 0;
   int fontXPos = 388;
-  ellipse(628, 338, (height * sizeModLarge), (height * sizeModLarge));
+  ellipse(widthPosMod, heightPosMod, (height * sizeModLarge), (height * sizeModLarge));
 
   // Display the character
   fill(255);
   textSize(22);
 
   for (int i = 0; i < tweetscreen.length(); i++) {
-    text(tweetscreen.charAt(i), fontXPos, 338);
+    text(tweetscreen.charAt(i), fontXPos, heightPosMod);
     fontXPos += 20;
   }
   return;

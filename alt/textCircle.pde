@@ -16,10 +16,13 @@ class TextCircle {
 
     // We must keep track of our position along the curve
     float arclength = 0;
-
+    //ellipseMode(CENTER);
+    textMode(CORNER);
 
     for (int i = 0; i < message.length(); i++)
     {
+
+      //translate(0, 0);
       // Instead of a constant width, we check the width of each character.
       char currentChar = message.charAt(i);
       float w = textWidth(currentChar);
@@ -35,7 +38,9 @@ class TextCircle {
       pushMatrix();
 
       // Polar to cartesian coordinate conversion
-      translate(r*cos(theta), r*sin(theta));
+      translate((r)*cos(theta), (r)*sin(theta));
+
+      translate(-595, -295);
 
       // Rotate the box
       rotate(theta+PI/2); // rotation is offset by 90 degrees

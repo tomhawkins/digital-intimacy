@@ -20,6 +20,7 @@ class UserFollowerCircle {
   }
   void buildRange()
   {
+    translate(0, 0);
     GetRequest get = new GetRequest(getlink);
     get.send();
     get.addHeader("Accept", "application/json");
@@ -44,8 +45,9 @@ class UserFollowerCircle {
 
       int imgX;
       int imgY;
-
-
+      translate(0, 0);
+      imageMode(CENTER);
+      ellipseMode(CENTER);
       //static sizes------------
       if (count < threshold == true) {
         graphicalMask=createGraphics(staticIconSize, staticIconSize);
