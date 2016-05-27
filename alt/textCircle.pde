@@ -17,7 +17,7 @@ class TextCircle {
     // We must keep track of our position along the curve
     float arclength = 0;
     //ellipseMode(CENTER);
-    textMode(CORNER);
+    //textMode(CORNER);
 
     for (int i = 0; i < message.length(); i++)
     {
@@ -40,7 +40,7 @@ class TextCircle {
       // Polar to cartesian coordinate conversion
       translate((r)*cos(theta), (r)*sin(theta));
 
-      translate(-595, -295);
+      translate(width/2,height/2);
 
       // Rotate the box
       rotate(theta+PI/2); // rotation is offset by 90 degrees

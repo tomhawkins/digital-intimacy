@@ -12,12 +12,8 @@ class UserLocationCircle {
   float r;
   float rr;
   float angle;
-  float arclength = 0;
   float radiMod = 0;
-  float w;
-  float theta;
   float arcMod = 0;
-  char currentChar;
   int t = 0;
   processing.data.JSONArray values;
   processing.data.JSONArray locArray;
@@ -66,7 +62,7 @@ class UserLocationCircle {
       circleSizeMod += 0.3;
       iconRadiMod += 1.195;
       radiMod += 0.1575;
-      arclength -= 150;
+      //arclength -= 0;
       arcMod += 0.0;
 
       float lg_rad = ((height * circleSizeMod) / 2);
@@ -234,13 +230,15 @@ class UserLocationCircle {
           image(userLocation, x, y, masksize, masksize);
         }
       }
+      
+      float arclength = 0;
 
       for (int t = 0; t < nameArray[i].length(); t++) {
 
-        currentChar = nameArray[i].charAt(t);
-        w = textWidth(currentChar);
-        arclength += w/2 + 2;
-        theta = PI + arclength / lg_rad; 
+        char currentChar = nameArray[i].charAt(t);
+        float w = textWidth(currentChar);
+        arclength += w/2 + 4;
+        float theta = (PI - 12.2) + arclength / lg_rad; 
         pushMatrix();
         translate(width/2, height/2);
         translate((height*radiMod)*cos(theta), (height*radiMod)*sin(theta));
@@ -250,7 +248,7 @@ class UserLocationCircle {
         text(currentChar, 0, 0);
         popMatrix();
 
-        arclength += w/2 + 2;
+        arclength += w/2 + 4;
         //println(currentChar);
       }
     }
