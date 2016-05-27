@@ -3,7 +3,6 @@ class UserLocationCircle {
   String locList;
   String locString;
   String[] nameArray;
-  int[] thresholdArray;
   float lg_diam;
   float cx;
   float cy;
@@ -39,9 +38,9 @@ class UserLocationCircle {
 
     background(0);
 
-    circleSizeMod = 0.2;
-    iconRadiMod = -0.115;
-    radiMod = 0.06;
+    circleSizeMod = 0.3;
+    iconRadiMod -= 1.5;
+    radiMod = 0.05;
 
     GetRequest get = new GetRequest(getlink);
     GetRequest locationRequest = new GetRequest(locList);
@@ -50,61 +49,27 @@ class UserLocationCircle {
     get.addHeader("Accept", "application/json");
     locationRequest.addHeader("Accept", "application/json");
 
-    float lg_rad = lg_diam / 2;
-    float lg_circ = PI * lg_diam;
+    //float lg_circ = (2 * PI) * lg_rad;
 
     processing.data.JSONObject values = processing.data.JSONObject.parse(get.getContent());
     processing.data.JSONArray locArray = processing.data.JSONArray.parse(locationRequest.getContent());
-    rr = 0.1;
-    r = (height * (0.15));
 
     for (int i = 0; i < locArray.size(); i++) {
       processing.data.JSONObject locObject = locArray.getJSONObject(i);
       nameArray = new String[locArray.size()];
-      thresholdArray = new int[locArray.size()];
       String currentLoc = locObject.getString("intimacy_location");
       nameArray[i] = currentLoc;
-      
-      if (i < nameArray.length) {
-      thresholdArray[i] = ((i*8)+1);
-      }
-
-      println(thresholdArray[i]);
 
       noFill();
       stroke(153);
-      ellipse(628, 338, (height * circleSizeMod), (height * circleSizeMod));
-      circleSizeMod += 0.253;
-      iconRadiMod += 0.505;
-      radiMod += 0.085;
-      arclength -= 120;
-      arcMod += 1.2;
+      ellipse(width/2, height/2, (height * circleSizeMod), (height * circleSizeMod));
+      circleSizeMod += 0.3;
+      iconRadiMod += 1.195;
+      radiMod += 0.1575;
+      arclength -= 150;
+      arcMod += 0.0;
 
-
-      for (int t = 0; t < nameArray[i].length(); t++) {
-
-        currentChar = nameArray[i].charAt(t);
-        w = textWidth(currentChar);
-        arclength += w/2 + 2;
-        theta = ((arcMod+PI) + arclength / r); 
-        pushMatrix();
-        translate(628, 338);
-        translate((height*radiMod)*cos(theta), (height*radiMod)*sin(theta));
-        rotate(theta+PI/2); // rotation is offset by 90 degrees
-        fill(255);
-        textSize(18);
-        text(currentChar, 0, 0);
-        popMatrix();
-
-        arclength += w/2 + 2;
-        //println(currentChar);
-      }
-      arcMod += 5;
-      radiMod += 0.01;
-
-      if (i < nameArray.length) {
-        t ++;
-      }
+      float lg_rad = ((height * circleSizeMod) / 2);
 
       String encodedLocString = URLEncoder.encode(nameArray[i]);
       GetRequest locGet = new GetRequest("https://i7226684.budmd.uk/intimacy/dumper/locentry.php?location=" + encodedLocString);
@@ -116,7 +81,7 @@ class UserLocationCircle {
 
       for (int ii = 0; ii < locEntry.size(); ii++) {
 
-
+        imageMode(CENTER);
         //println(locEntry);
 
         processing.data.JSONObject imgObject = locEntry.getJSONObject(ii);
@@ -125,23 +90,102 @@ class UserLocationCircle {
         //println(imgURL);
         userLocation = loadImage(imgURL);
 
-        angle = ii * TWO_PI / count;
-        float x = cx + cos(angle) * (lg_diam * iconRadiMod);
-        float y = cy + sin(angle) * (lg_diam * iconRadiMod);
+        angle = ii * TWO_PI / locEntry.size();
+        //float x = cx + cos(angle) * (lg_rad * iconRadiMod);
+        //float y = cy + sin(angle) * (lg_rad * iconRadiMod);
 
-        float sm_diam = (PI * (height * circleSizeMod) / count);
+        float x = cx + cos(angle) * ((height * circleSizeMod / 2) - 105);
+        float y = cy + sin(angle) * ((height * circleSizeMod / 2) - 105);
+
+
+
+        float sm_diam = ((PI) * ((height * circleSizeMod) / 2) / locEntry.size());
+        //println(locEntry.size());
         int masksize = (int)(sm_diam);
 
         int imgX;
         int imgY;
 
-        println(t);
-
-        if (t < nameArray.length) {
-          int threshold = thresholdArray[t];
+        if (i == 0) {
+          threshold = 12;
+        } else if (i == 1) {
+          masksize = masksize *= 1.35;
+          threshold = 22;
+        } else if (i == 2) {
+          masksize = masksize *= 1.55;
+          threshold = 32;
+        } else if (i == 3) {
+          masksize = masksize *= 1.75;
+          threshold = 42;
+        } else if (i == 4) {
+          masksize = masksize *= 1.95;
+          threshold = 52;
+        } else if (i == 5) {
+          masksize = masksize *= 2.15;
+          threshold = 62;
+        } else if (i == 6) {
+          masksize = masksize *= 2.35;
+          threshold = 72;
+        } else if (i == 7) {
+          masksize = masksize *= 2.55;
+          threshold = 82;
+        } else if (i == 8) {
+          masksize = masksize *= 2.75;
+          threshold = 92;
+        } else if (i == 9) {
+          masksize = masksize *= 2.95;
+          threshold = 102;
+        } else if (i == 10) {
+          masksize = masksize *= 3.15;
+          threshold = 112;
+        } else if (i == 11) {
+          masksize = masksize *= 3.35;
+          threshold = 122;
+        } else if (i == 12) {
+          masksize = masksize *= 3.55;
+          threshold = 132;
+        } else if (i == 13) {
+          masksize = masksize *= 3.75;
+          threshold = 142;
+        } else if (i == 14) {
+          masksize = masksize *= 3.95;
+          threshold = 152;
+        } else if (i == 15) {
+          masksize = masksize *= 4.05;
+          threshold = 162;
+        } else if (i == 16) {
+          masksize = masksize *= 4.15;
+          threshold = 172;
+        } else if (i == 17) {
+          masksize = masksize *= 4.35;
+          threshold = 182;
+        } else if (i == 18) {
+          masksize = masksize *= 4.55;
+          threshold = 192;
+        } else if (i == 19) {
+          masksize = masksize *= 4.75;
+          threshold = 202;
+        } else if (i == 20) {
+          masksize = masksize *= 4.95;
+          threshold = 212;
+        } else if (i == 21) {
+          masksize = masksize *= 5.15;
+          threshold = 222;
+        } else if (i == 22) {
+          masksize = masksize *= 5.35;
+          threshold = 232;
+        } else if (i == 23) {
+          masksize = masksize *= 5.55;
+          threshold = 242;
+        } else if (i == 24) {
+          masksize = masksize *= 5.75;
+          threshold = 252;
+        } else if (i == 25) {
+          masksize = masksize *= 5.95;
+          threshold = 262;
+        } else {
+          break;
         }
-        //int threshold = 50;
-
 
 
         //static sizes------------
@@ -189,6 +233,25 @@ class UserLocationCircle {
         } else {
           image(userLocation, x, y, masksize, masksize);
         }
+      }
+
+      for (int t = 0; t < nameArray[i].length(); t++) {
+
+        currentChar = nameArray[i].charAt(t);
+        w = textWidth(currentChar);
+        arclength += w/2 + 2;
+        theta = PI + arclength / lg_rad; 
+        pushMatrix();
+        translate(width/2, height/2);
+        translate((height*radiMod)*cos(theta), (height*radiMod)*sin(theta));
+        rotate(theta+PI/2); // rotation is offset by 90 degrees
+        fill(255);
+        textSize(18);
+        text(currentChar, 0, 0);
+        popMatrix();
+
+        arclength += w/2 + 2;
+        //println(currentChar);
       }
     }
   }
