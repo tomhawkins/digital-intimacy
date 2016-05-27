@@ -112,13 +112,13 @@ class UserLocationCircle {
           masksize = masksize *= 1.35;
           threshold = 22;
         } else if (i == 2) {
-          masksize = masksize *= 1.55;
+          masksize = masksize *= 1.5;
           threshold = 32;
         } else if (i == 3) {
-          masksize = masksize *= 1.75;
+          masksize = masksize *= 1.65;
           threshold = 42;
         } else if (i == 4) {
-          masksize = masksize *= 1.95;
+          masksize = masksize *= 1.75;
           threshold = 52;
         } else if (i == 5) {
           masksize = masksize *= 2.15;
@@ -181,7 +181,7 @@ class UserLocationCircle {
           masksize = masksize *= 5.75;
           threshold = 252;
         } else if (i == 25) {
-          masksize = masksize *= 5.95;
+          masksize = masksize *= .95;
           threshold = 262;
         } else {
           break;
