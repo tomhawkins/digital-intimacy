@@ -1,10 +1,14 @@
-//maybe introduce a separate thread just for transitions? using timers/switches or variable sets; when draw finishes it sets a flag for some pgraphics object to be drawn or something //<>// //<>//
+import org.dishevelled.processing.frames.*; //<>// //<>//
+import gifAnimation.*;
+//maybe introduce a separate thread just for transitions? using timers/switches or variable sets; when draw finishes it sets a flag for some pgraphics object to be drawn or something
 
 import http.requests.*;
 import twitter4j.conf.*;
 import twitter4j.*;
 import twitter4j.auth.*;
 import twitter4j.api.*;
+
+import de.looksgood.ani.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -57,6 +61,8 @@ TextCircle textFollower2;
 TextCircle textFollower3;
 TextCircle textFollower4;
 
+Gif fade;
+
 PFont f;
 PImage userImage;
 PImage userTime;
@@ -66,6 +72,12 @@ PGraphics graphicalMask;
 
 float circleSizeMod;
 float iconRadiMod;
+
+int alphavalue = 0;
+
+float count_up;
+float count_down;
+float calc_alpha;
 
 int widthPosMod = width/2;
 int heightPosMod = height/2;
@@ -96,6 +108,8 @@ void setup()
   f = createFont("Raleway-ExtraLight.vlw", 32, true);
   textAlign(CENTER);
   ellipseMode(CENTER);
+
+  fade = new Gif(this, "fade.gif");
 
   //kinect = new Kinect(this);
   //kinect.start();
@@ -139,6 +153,8 @@ void setup()
   textFollower3 = new TextCircle("401 - 700 FOLLOWERS", (height * sizeModMed) / 2 + 33);
   textFollower4 = new TextCircle("701 - 2000 FOLLOWERS", (height * sizeModLarge) / 2 + 33);
 
+  Ani.init(this);
+
   thread("refreshTweets");
   //thread("draw");
   println("Thread running - user tracking");
@@ -163,6 +179,7 @@ void draw()
   //  }
   //}
 
+
   if (switchData == 1) {
     fader(1000, 1);
     return;
@@ -176,21 +193,13 @@ void draw()
     fader(1000, 4);
     return;
   }
+  fill(0, alphavalue);
+  rect(0, 0, width, height);
 }
 
 void fader(int duration, int function) {
-  float now = millis();
-  float opacity = 0;
 
-  while (millis() <= (now + duration)) {
-    fill(0, opacity);
-    rect(width, height, 0, 0);
-    if (millis() < (now + (duration/2))) {
-      opacity += (duration/2);
-    } else {
-      opacity -= (duration /2);
-    }
-  }
+
   if (function == 1) {
     tweetScreen();
     return;
@@ -213,6 +222,7 @@ void userLocationRange() {
 
 void userTimeRange() {
   //translate(width/2, height/2);
+  fade();
   ellipseMode(CENTER);
   background(0);
   noFill();
@@ -231,6 +241,12 @@ void userTimeRange() {
   textTime3.buildText();
   textTime4.buildText();
   return;
+}
+
+void fade()
+{
+  fade.play();
+  image(fade, 0, 0);
 }
 
 void userFollowerRange() {
@@ -356,7 +372,7 @@ void tweetScreen() {
   // Display the character
   fill(255);
   textSize(22);
-  
+
   translate(width/4 + 70, height/2);
 
   for (int i = 0; i < tweetscreen.length(); i++) {
@@ -367,7 +383,6 @@ void tweetScreen() {
 }
 
 void mousePressed() {
-
   currentTweet.getUser();
   user.getLocation();
   user.getFollowersCount();
@@ -388,6 +403,8 @@ void mousePressed() {
 
   String encodedTweet = URLEncoder.encode(tweet);
   String encodedImg = URLEncoder.encode(profile);
+
+  switchData++;  
 
   //--- DEVELOPMENT CODE GOES BELOW--
 }
